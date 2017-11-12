@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>software.netcore</groupId>
-	<artifactId>treed-parent</artifactId>
-	<version>1.0.0</version>
+    <groupId>software.netcore</groupId>
+    <artifactId>treed-parent</artifactId>
+    <version>1.0.0</version>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<name>treed-parent</name>
-	<description>Educational multi-game platform for handicap people</description>
+    <name>treed-parent</name>
+    <description>Educational multi-game platform for handicap people</description>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.8.RELEASE</version>
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.M6</version>
+    </parent>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<java.version>1.8</java.version>
+        <java.version>1.8</java.version>
 
         <packaged.file.name>Treed</packaged.file.name>
 
         <treed.version>0.1.1</treed.version>
         <vaadin.version>8.1.0</vaadin.version>
-	</properties>
+    </properties>
 
     <modules>
         <module>treed-starter</module>
-		<module>treed-data</module>
+        <module>treed-data</module>
     </modules>
 
     <dependencyManagement>
@@ -46,5 +46,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>spring-milestone</id>
+            <name>Spring Milestone Repository</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+    </repositories>
 
 </project>
