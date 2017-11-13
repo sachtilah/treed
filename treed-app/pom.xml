@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>treed-starter</artifactId>
+    <artifactId>treed-app</artifactId>
     <version>${treed.version}</version>
     <packaging>jar</packaging>
 
-    <name>treed-starter</name>
-    <description>Main treed module</description>
+    <name>Treed app</name>
+    <description>Main Treed module</description>
 
     <parent>
         <groupId>software.netcore</groupId>
@@ -20,11 +20,22 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <java.version>1.8</java.version>
+
         <vaadin.version>8.1.0</vaadin.version>
     </properties>
 
     <dependencies>
+
+        <!-- self dependencies -->
+        <dependency>
+            <groupId>software.netcore</groupId>
+            <artifactId>treed-data</artifactId>
+            <version>${treed.version}</version>
+        </dependency>
+
+        <!-- spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -44,30 +55,28 @@
             <optional>true</optional>
         </dependency>
 
-        <!--vaadin libs-->
+        <!-- vaadin libs and addons dependencies -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-push</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin</groupId>
+            <artifactId>viritin</artifactId>
+            <version>2.0</version>
+        </dependency>
 
-         <!--3rd libs-->
+        <!-- 3rd libs dependencies -->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
 
-
-        <!--test libs-->
+        <!-- test libs dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -82,7 +91,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
 
                 <configuration>
-                    <excludeDevtools>true</excludeDevtools>
                     <outputDirectory>../target</outputDirectory>
                     <finalName>${packaged.file.name}</finalName>
                 </configuration>
