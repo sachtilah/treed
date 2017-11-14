@@ -33,6 +33,9 @@
     <modules>
         <module>treed-app</module>
         <module>treed-data</module>
+        <module>treed-api</module>
+        <module>treed-puzzle</module>
+        <module>treed-sim</module>
     </modules>
 
     <dependencyManagement>
