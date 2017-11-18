@@ -1,2 +1,2 @@
 # treed
-Educational multi-game platform for handicap people
+Educational multi-game platform for handicap people.
