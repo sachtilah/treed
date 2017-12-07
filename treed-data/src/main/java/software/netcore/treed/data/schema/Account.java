@@ -23,10 +23,10 @@ public class Account extends AbstractEntity {
     public String username;
 
     @Column(name = "password", nullable = false)
-    @Convert(converter = StringToHashConverter.class)
+//    @Convert(converter = StringToHashConverter.class)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountRole role;
 
