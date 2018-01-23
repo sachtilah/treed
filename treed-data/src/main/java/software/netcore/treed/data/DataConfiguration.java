@@ -2,17 +2,19 @@ package software.netcore.treed.data;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * Data configuration class.
+ * Data layer configuration class.
  *
- * @since v. 1.4.0
+ * @since v. 1.0.0
  */
+@EntityScan
 @EnableTransactionManagement
 @EnableJpaRepositories(repositoryBaseClass = BaseRepositoryImpl.class)
-@EntityScan
+@PropertySource(value = "classpath:application-data.properties")
 @Configuration
 public class DataConfiguration {
 }

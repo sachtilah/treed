@@ -2,6 +2,7 @@ package software.netcore.treed.data;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import software.netcore.treed.data.schema.AbstractEntity;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;

@@ -4,6 +4,7 @@ package software.netcore.treed.data;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import software.netcore.treed.data.schema.AbstractEntity;
 
 import java.time.Instant;
 

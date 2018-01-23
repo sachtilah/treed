@@ -1,4 +1,4 @@
-package software.netcore.treed.data;
+package software.netcore.treed.data.schema;
 
 
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.Date;
 
 /**
- * @since v. 1.4.0
+ * @since v. 1.0.0
  */
 @Getter
 @MappedSuperclass

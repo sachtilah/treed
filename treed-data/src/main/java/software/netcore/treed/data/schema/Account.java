@@ -1,13 +1,11 @@
 package software.netcore.treed.data.schema;
 
 import lombok.*;
-import software.netcore.treed.data.AbstractEntity;
-import software.netcore.treed.data.converter.StringToHashConverter;
 
 import javax.persistence.*;
 
 /**
- * @since v. 1.4.0
+ * @since v. 1.0.0
  */
 @Getter
 @Setter
