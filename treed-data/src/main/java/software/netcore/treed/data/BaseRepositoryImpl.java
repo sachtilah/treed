@@ -2,6 +2,7 @@ package software.netcore.treed.data;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import software.netcore.treed.data.schema.AbstractEntity;
 
 import javax.persistence.EntityManager;
@@ -39,7 +40,7 @@ public class BaseRepositoryImpl<T extends AbstractEntity> extends SimpleJpaRepos
         this.em = entityManager;
     }
 
-
+    @Transactional
     @Override
     public <S extends T> S save(S entity) {
         if (this.entityInformation.isNew(entity)) {

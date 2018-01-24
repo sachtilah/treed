@@ -2,7 +2,7 @@ package software.netcore.treed.data;
 
 
 import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 import software.netcore.treed.data.schema.AbstractEntity;
 
@@ -15,17 +15,7 @@ import java.time.Instant;
  */
 @NoRepositoryBean
 @Transactional(readOnly = true)
-public interface BaseRepository<T extends AbstractEntity> extends Repository<T, Long> {
+public interface BaseRepository<T extends AbstractEntity> extends PagingAndSortingRepository<T, Long> {
 
-    /**
-     * Saves a given entity. Use the returned instance for further operations as the save operation might have
-     * changed the entity instance completely. Set {@link AbstractEntity#createTime} to
-     * {@link Instant#now()} for each new entity.
-     *
-     * @param entity entity
-     * @return the saved entity
-     */
-    @Transactional
-    <S extends T> S save(S entity);
 
 }
