@@ -34,6 +34,7 @@ public class ExampleAccountView extends CustomComponent implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        this.mainLayout = new VerticalLayout();
         setCompositionRoot(this.mainLayout);
         build();
     }

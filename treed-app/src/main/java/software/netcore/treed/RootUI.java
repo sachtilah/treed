@@ -15,6 +15,9 @@ import software.netcore.treed.business.AccountService;
 import software.netcore.treed.ui.AuthenticationProvider;
 import software.netcore.treed.ui.view.ExampleAccountView;
 
+import static com.sun.deploy.trace.TraceLevel.UI;
+import static sun.plugin.javascript.navig.JSType.Navigator;
+
 /**
  * @since v. 1.4.0
  */
