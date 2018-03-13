@@ -5,7 +5,6 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MVerticalLayout;
@@ -57,6 +56,7 @@ public class ExampleAccountView extends CustomComponent implements View {
 
     private Component buildAddAccountWidget() {
         TextField usernameField = new MTextField("Username");
+        TextField userMailField = new MTextField("E-mail");
         PasswordField passwordField = new PasswordField("Password");
 
         ComboBox<AccountRole> accountRoleComboBox = new ComboBox<>("Role",
@@ -71,16 +71,23 @@ public class ExampleAccountView extends CustomComponent implements View {
 
                     // create new account
                     Account account = new Account();
-                    account.setUsername(usernameField.getValue());
-                    account.setPassword(passwordField.getValue());
-                    account.setRole(accountRoleComboBox.getSelectedItem().get());
-                    account.setCreateTime(Date.from(Instant.now()));
+                    if(usernameField.getValue().isEmpty() || passwordField.getValue().isEmpty() ||
+                    userMailField.getValue().isEmpty()){
+                        System.out.println("PRAZDNE DACO");
+                    }
+                    else{
+                        account.setUsername(usernameField.getValue());
+                        account.setPassword(passwordField.getValue());
+                        account.setRole(accountRoleComboBox.getSelectedItem().get());
+                        account.setCreateTime(Date.from(Instant.now()));
+                        account.setUserMail(userMailField.getValue());
 
-                    // save account
-                    accountService.saveAccount(account);
+                        // save account
+                        accountService.saveAccount(account);
 
-                    // rebuild UI
-                    build();
+                        // rebuild UI
+                        build();
+                    }
                 });
 
 
@@ -88,6 +95,7 @@ public class ExampleAccountView extends CustomComponent implements View {
 
         return new MVerticalLayout()
                 .with(usernameField)
+                .with(userMailField)
                 .with(passwordField)
                 .with(accountRoleComboBox)
                 .with(createButton);
@@ -107,6 +115,7 @@ public class ExampleAccountView extends CustomComponent implements View {
         grid.addColumn(Account::getUsername).setCaption("Username");
         grid.addColumn(Account::getPassword).setCaption("Password");
         grid.addColumn(Account::getRole).setCaption("Role");
+        grid.addColumn(Account::getUserMail).setCaption("E-Mail");
 
         return grid;
     }

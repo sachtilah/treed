@@ -3,6 +3,7 @@ package software.netcore.treed.data.schema;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
  * @since v. 1.0.0
@@ -28,4 +29,6 @@ public class Account extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private AccountRole role;
 
+    @Column(name = "usermail")
+    private String userMail;
 }

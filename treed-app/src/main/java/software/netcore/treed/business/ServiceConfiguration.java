@@ -20,6 +20,4 @@ public class ServiceConfiguration {
     public AccountService accountService() {
         return new AccountService(accountRepo);
     }
-
-
 }

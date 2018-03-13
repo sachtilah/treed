@@ -12,11 +12,6 @@ import com.vaadin.ui.*;
 import lombok.RequiredArgsConstructor;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.AccountService;
-import software.netcore.treed.ui.AuthenticationProvider;
-import software.netcore.treed.ui.view.ExampleAccountView;
-
-import static com.sun.deploy.trace.TraceLevel.UI;
-import static sun.plugin.javascript.navig.JSType.Navigator;
 
 /**
  * @since v. 1.4.0
@@ -41,7 +36,7 @@ public class RootUI extends UI {
         Navigator navigator = new Navigator(this, getContent());
         navigator.addProvider(springViewProvider);
 
-        getNavigator().navigateTo(ExampleAccountView.VIEW_NAME);
+        //getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
     }
 
     @Override
