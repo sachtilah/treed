@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Table(name = "account")
 @Entity
-public class Account extends AbstractEntity {
+    public class Account extends AbstractEntity {
 
     /**
      * Unique username in the system.

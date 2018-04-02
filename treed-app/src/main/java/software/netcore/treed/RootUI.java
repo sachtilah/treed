@@ -1,5 +1,6 @@
 package software.netcore.treed;
 
+import com.jain.addon.i18N.component.I18NUI;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Title;
@@ -12,6 +13,7 @@ import com.vaadin.ui.*;
 import lombok.RequiredArgsConstructor;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.AccountService;
+import software.netcore.treed.business.OtpService;
 
 /**
  * @since v. 1.4.0
@@ -26,6 +28,7 @@ public class RootUI extends UI {
 
     /* used to manipulate with accounts */
     private final AccountService accountService;
+    private final OtpService otpService;
     private final SpringViewProvider springViewProvider;
 
     @Override

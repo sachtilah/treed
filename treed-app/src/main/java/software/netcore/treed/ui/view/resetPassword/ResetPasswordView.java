@@ -4,14 +4,13 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.vaadin.viritin.button.MButton;
 import software.netcore.treed.business.MailService;
-import software.netcore.treed.data.schema.Account;
+import software.netcore.treed.business.OtpService;
+import software.netcore.treed.data.schema.Otp;
 
-import java.sql.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
 
@@ -22,8 +21,11 @@ import java.util.Random;
 public class ResetPasswordView extends CustomComponent implements View {
 
     public static final String VIEW_NAME = "/reset/mailview";
+    private final OtpService otpService;
 
-    public ResetPasswordView() {
+
+    public ResetPasswordView(OtpService otpService) {
+        this.otpService = otpService;
         // A layout structure used for composition
         VerticalLayout panelContent = new VerticalLayout();
 
@@ -35,8 +37,10 @@ public class ResetPasswordView extends CustomComponent implements View {
         panelContent.addComponent(mailField);
 
         Button backButton = new MButton("Odoslať").withListener(clickEvent -> {
-            //backButton.witaddClickListener((Button.ClickListener) event ->
-            sendMail(mailField.getValue());
+            EmailValidator emailValidator = new EmailValidator();
+            if(emailValidator.isValid(mailField.getValue(), null))
+                sendMail(mailField.getValue());
+            else Notification.show("Nesprávna e-mailová adresa!");
         });
 
 
@@ -66,10 +70,6 @@ public class ResetPasswordView extends CustomComponent implements View {
 
             // call the email service to send the message
             MailService.send(from, to, subject, text);
-
-            //getUI().getNavigator().navigateTo(VerifyPasswordView.VIEW_NAME);
-            //addNewPass(to, resetPass);
-
             addNewPass(to, resetPass);
 
             Notification.show("Email sent");
@@ -80,16 +80,15 @@ public class ResetPasswordView extends CustomComponent implements View {
         }
     }
 
-    public static String generateOTP(int length) {
+    private static String generateOTP(int length) {
         String numbers = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random random = new Random();
 
         char[] generatedOTP = new char[length];
         for (int i = 0; i < length; i++)
             generatedOTP[i] = numbers.charAt(random.nextInt(numbers.length()));
-        String otp = String.valueOf(generatedOTP);
 
-        return otp;
+        return String.valueOf(generatedOTP);
     }
 
     @Override
@@ -98,32 +97,19 @@ public class ResetPasswordView extends CustomComponent implements View {
     }
 
 
-    public void addNewPass(String to, String otpPass) {
+    private void addNewPass(String to, String otpPass) {
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:hsqldb:file:C:${file.separator}ProgramData${file.separator}Treed${file.separator}hsql${file.separator}db", "treed", "treed");
+        Otp otp = new Otp();
+        if (to.isEmpty()) {
+            Notification.show("Zadajte emailovú adresu.");
+        } else {
+            otp.setUsermail(to);
+            otp.setOtpPass(otpPass);
+            otp.setCreateTime(Date.from(Instant.now()));
 
-            PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS otp(usermail VARCHAR(255), " +
-                    "otpPass VARCHAR (255), tstamp TIMESTAMP NOT NULL, PRIMARY KEY(usermail))");
+            // save account
+            otpService.saveOtp(otp);
 
-            //drop table if you need
-            //          PreparedStatement create = conn.prepareStatement("DROP TABLE otp");
-
-            create.executeUpdate();
-
-            PreparedStatement fill = conn.prepareStatement("INSERT INTO otp (usermail, otpPass, tstamp)" +
-                     " VALUES (?, ?, ?)");
-            fill.setString(1, to);
-            fill.setString(2, otpPass);
-            fill.setTimestamp(3, new Timestamp(new Date().getTime()));
-            fill.executeUpdate();
-
-            System.out.println("all executed");
-        } catch (SQLException d) {
-            System.out.println(d.toString());
-        } catch (ClassNotFoundException f) {
-            System.out.println(f.toString());
         }
     }
 }
