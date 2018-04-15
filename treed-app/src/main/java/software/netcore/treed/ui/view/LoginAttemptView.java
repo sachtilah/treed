@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import software.netcore.treed.business.AccountService;
+import software.netcore.treed.business.OtpService;
 import software.netcore.treed.data.schema.Account;
+import software.netcore.treed.data.schema.Otp;
 import software.netcore.treed.ui.view.resetPassword.ResetPasswordView;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class LoginAttemptView extends CustomComponent implements View {
 
     public static final String VIEW_NAME = "/login/view";
     private final AccountService accountService;
+    private final OtpService otpService;
     private VerticalLayout mainLayout;
 
     @Override
@@ -64,6 +67,8 @@ public class LoginAttemptView extends CustomComponent implements View {
 
         Button resetPasswordButton = new Button("Reset Password");
         resetPasswordButton.addClickListener((Button.ClickListener) event -> getUI().getNavigator().navigateTo(ResetPasswordView.VIEW_NAME));
+
+
         content.setSizeFull();
         content.addComponents(usernameField, passwordField, loginButton, resetPasswordButton);
         content.setComponentAlignment(usernameField, Alignment.MIDDLE_CENTER);

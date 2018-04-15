@@ -2,6 +2,7 @@ package software.netcore.treed.ui.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 
@@ -22,26 +23,22 @@ public class HomeScreenView extends CustomComponent implements View {
         build();
     }
     public void build() {
-        // A layout structure used for composition
         VerticalLayout content = this.mainLayout;
         content.removeAllComponents();
+        content.setMargin(true);
+        content.setSpacing(true);
 
-        Panel panel = new Panel("treed");
-        panel.setSizeFull();
-        content.addComponent(panel);
+        HorizontalLayout bar = new HorizontalLayout();
+        bar.addComponent(new Label("<strong>treed</strong>", ContentMode.HTML));
+        bar.setWidth("100%");
 
-        // Compose from multiple components
-        Label label = new Label("Some text");
-        content.addComponent(label);
+        Button logout = new Button("Logout");
+        logout.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
-        Button backButton = new Button("Go back");
-        backButton.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(ExampleAccountView.VIEW_NAME));
+        content.addComponent(bar);
+        bar.addComponent(logout);
 
-
-        content.addComponent(backButton);
-
-        // this is not needed for a Composite
         setSizeUndefined();
     }
 

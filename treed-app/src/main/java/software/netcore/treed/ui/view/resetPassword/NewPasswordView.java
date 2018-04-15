@@ -10,9 +10,9 @@ import software.netcore.treed.business.OtpService;
 import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * @since v. 1.0.0
@@ -47,7 +47,7 @@ public class NewPasswordView extends CustomComponent implements View {
         Button verifyButton = new MButton("Zmeniť heslo").withListener(clickEvent -> {
           newPass = passwordField.getValue();
           writePassword(parameter, newPass);
-          Notification.show("Heslo zmenené. Pokračujte na login view");
+
         });
 
         panelContent.addComponent(verifyButton);
@@ -80,17 +80,30 @@ public class NewPasswordView extends CustomComponent implements View {
         Iterator<Account> iteratorAccount = accounts.iterator();
         while(iteratorOtp.hasNext()){
             Otp iterOtp = iteratorOtp.next();
+
+            //expirationDate
+            int MILLIS_PER_DAY = 6*60*1000;
+            Calendar expirationTime = Calendar.getInstance();
+            expirationTime.setTime(iterOtp.getCreateTime());
+            expirationTime.add(Calendar.MILLISECOND, MILLIS_PER_DAY);
+            Calendar today = Calendar.getInstance();
+
             if(iterOtp.getOtpPass().equals(otpPass)){
                 while(iteratorAccount.hasNext()){
                  Account iterAccount = iteratorAccount.next();
-                 if(iterAccount.getUserMail().equals(iterOtp.getUsermail())){
+                 if((iterAccount.getUserMail().equals(iterOtp.getUsermail())) && (today.before(expirationTime))){
                      iterAccount.setPassword(newPass);
                      accountService.saveAccount(iterAccount);
+                     otpService.deleteOtp(iterOtp);
+                     Notification.show("Heslo zmenené. Pokračujte na login view");
                  }
-                 else Notification.show("Nepodarilo sa vytvoriť nové heslo.");
+                 else {
+                     otpService.deleteOtp(iterOtp);
+                     Notification.show("Platnosť odkazu vypršala.");
+                 }
                 }
             }
-            else Notification.show("Nesprávne otp heslo!");
+            else Notification.show("OTP heslo sa nenachádza v databáze.");
             iteratorOtp.remove();
         }
     }

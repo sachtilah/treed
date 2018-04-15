@@ -24,6 +24,11 @@ public class OtpService {
         otpRepository.save(otp);
     }
 
+    public void deleteOtp(Otp otp){
+        log.info("Deleting selected otp {}", otp);
+        otpRepository.delete(otp);
+    }
+
     /*public Account login(String username, String password) {
 
         Optional<Account> optionalAccount = otpRepository.findByUsername(username);

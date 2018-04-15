@@ -42,6 +42,7 @@ public class RootUI extends UI {
         //getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
     }
 
+
     @Override
     public MVerticalLayout getContent() {
         return (MVerticalLayout) super.getContent();
