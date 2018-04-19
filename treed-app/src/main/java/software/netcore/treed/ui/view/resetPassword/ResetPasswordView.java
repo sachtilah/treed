@@ -2,17 +2,18 @@ package software.netcore.treed.ui.view.resetPassword;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.vaadin.viritin.button.MButton;
 import software.netcore.treed.business.MailService;
 import software.netcore.treed.business.OtpService;
+import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @since v. 1.0.0
@@ -26,21 +27,28 @@ public class ResetPasswordView extends CustomComponent implements View {
 
     public ResetPasswordView(OtpService otpService) {
         this.otpService = otpService;
+    }
+
+    public void build(){
         // A layout structure used for composition
         VerticalLayout panelContent = new VerticalLayout();
 
+        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        this.getSession().setLocale(locale);
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+
         // Compose from multiple components
-        Label label = new Label("Zadajte mail:");
+        Label label = new Label(messages.getString("enterEmail"));
         panelContent.addComponent(label);
 
         TextField mailField = new TextField("E-mail");
         panelContent.addComponent(mailField);
 
-        Button backButton = new MButton("Odoslať").withListener(clickEvent -> {
+        Button backButton = new MButton(messages.getString("send")).withListener(clickEvent -> {
             EmailValidator emailValidator = new EmailValidator();
             if(emailValidator.isValid(mailField.getValue(), null))
                 sendMail(mailField.getValue());
-            else Notification.show("Nesprávna e-mailová adresa!");
+            else Notification.show(messages.getString("ntfWrongEmail"));
         });
 
 
@@ -59,58 +67,78 @@ public class ResetPasswordView extends CustomComponent implements View {
     }
 
     private void sendMail(String to) {
-        try {
+        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        this.getSession().setLocale(locale);
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
 
+        try {
+            boolean isHere = false;
             String resetPass = generateOTP(6);
 
             // all values as variables to clarify its usage
             String from = "filip.ondra000@gmail.com";
             String subject = "Treed Reset Password";
-            String text = "Here is link to reset password: " + "http://localhost:8080/#!/reset/verifyview/" + resetPass;
+            String text = messages.getString("emailBody") + "http://localhost:8080/#!/reset/verifyview/" + resetPass;
+
+            Iterable<Otp> otps = otpService.getOtps();
+            Collection<Otp> otpCollection = new ArrayList<>();
+            for (Otp otp : otps) {
+                otpCollection.add(otp);
+            }
+            Iterator<Otp> iteratorOtp = otps.iterator();
 
             // call the email service to send the message
-            MailService.send(from, to, subject, text);
-            addNewPass(to, resetPass);
-
-            Notification.show("Email sent");
-
-        } catch (Exception e) {
+            if (to.isEmpty()) {
+                Notification.show(messages.getString("enterEmail"));
+            } else {
+                while (iteratorOtp.hasNext()) {
+                    Otp iterOtp = iteratorOtp.next();
+                    if (iterOtp.getUsermail().contains(to)) {
+                        isHere = true;
+                        Notification.show(messages.getString("ntfOtpMailUsed"));
+                    }
+                }
+                if(!isHere){
+                    addNewPass(to, resetPass);
+                    MailService.send(from, to, subject, text);
+                    Notification.show(messages.getString("emailSent"));
+                }
+                if(otpCollection.isEmpty()){
+                    addNewPass(to, resetPass);
+                    MailService.send(from, to, subject, text);
+                    Notification.show(messages.getString("emailSent"));
+                }
+            }
+        } catch(Exception e){
             e.printStackTrace();
-            Notification.show("Error sending the email", Notification.Type.ERROR_MESSAGE);
+            Notification.show(messages.getString("emailError"), Notification.Type.ERROR_MESSAGE);
         }
     }
 
-    private static String generateOTP(int length) {
-        String numbers = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Random random = new Random();
+            private static String generateOTP ( int length){
+                String numbers = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                Random random = new Random();
 
-        char[] generatedOTP = new char[length];
-        for (int i = 0; i < length; i++)
-            generatedOTP[i] = numbers.charAt(random.nextInt(numbers.length()));
+                char[] generatedOTP = new char[length];
+                for (int i = 0; i < length; i++)
+                    generatedOTP[i] = numbers.charAt(random.nextInt(numbers.length()));
 
-        return String.valueOf(generatedOTP);
-    }
+                return String.valueOf(generatedOTP);
+            }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
+            @Override
+            public void enter (ViewChangeListener.ViewChangeEvent event){
+                build();
+            }
 
-    }
 
+            private void addNewPass (String to, String otpPass){
 
-    private void addNewPass(String to, String otpPass) {
-
-        Otp otp = new Otp();
-        if (to.isEmpty()) {
-            Notification.show("Zadajte emailovú adresu.");
-        } else {
-            otp.setUsermail(to);
-            otp.setOtpPass(otpPass);
-            otp.setCreateTime(Date.from(Instant.now()));
-
-            // save account
-            otpService.saveOtp(otp);
-
-        }
-    }
+                Otp otpAdd = new Otp();
+                otpAdd.setUsermail(to);
+                otpAdd.setOtpPass(otpPass);
+                otpAdd.setCreateTime(Date.from(Instant.now()));
+                otpService.saveOtp(otpAdd);
+            }
 }
 

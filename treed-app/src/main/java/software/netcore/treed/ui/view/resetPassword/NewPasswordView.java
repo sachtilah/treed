@@ -2,6 +2,7 @@ package software.netcore.treed.ui.view.resetPassword;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.vaadin.viritin.button.MButton;
@@ -36,15 +37,19 @@ public class NewPasswordView extends CustomComponent implements View {
         // A layout structure used for composition
         VerticalLayout panelContent = new VerticalLayout();
 
+        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        this.getSession().setLocale(locale);
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+
         // Compose from multiple components
-        Label label = new Label("Zadajte nové heslo:");
+        Label label = new Label(messages.getString("setNewPass"));
         panelContent.addComponent(label);
 
-        PasswordField passwordField = new PasswordField("Heslo: ");
+        PasswordField passwordField = new PasswordField(messages.getString("newPassword"));
         panelContent.addComponent(passwordField);
 
 
-        Button verifyButton = new MButton("Zmeniť heslo").withListener(clickEvent -> {
+        Button verifyButton = new MButton(messages.getString("changePass")).withListener(clickEvent -> {
           newPass = passwordField.getValue();
           writePassword(parameter, newPass);
 
@@ -64,6 +69,12 @@ public class NewPasswordView extends CustomComponent implements View {
     }
 
     public void writePassword(String otpPass, String newPass) {
+        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        this.getSession().setLocale(locale);
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+
+        boolean isHere = false;
+
         Iterable<Otp> otps = otpService.getOtps();
         Collection<Otp> otpCollection = new ArrayList<>();
         for (Otp otp : otps) {
@@ -80,9 +91,8 @@ public class NewPasswordView extends CustomComponent implements View {
         Iterator<Account> iteratorAccount = accounts.iterator();
         while(iteratorOtp.hasNext()){
             Otp iterOtp = iteratorOtp.next();
-
             //expirationDate
-            int MILLIS_PER_DAY = 6*60*1000;
+            int MILLIS_PER_DAY = 2*60*1000;
             Calendar expirationTime = Calendar.getInstance();
             expirationTime.setTime(iterOtp.getCreateTime());
             expirationTime.add(Calendar.MILLISECOND, MILLIS_PER_DAY);
@@ -90,21 +100,23 @@ public class NewPasswordView extends CustomComponent implements View {
 
             if(iterOtp.getOtpPass().equals(otpPass)){
                 while(iteratorAccount.hasNext()){
-                 Account iterAccount = iteratorAccount.next();
-                 if((iterAccount.getUserMail().equals(iterOtp.getUsermail())) && (today.before(expirationTime))){
-                     iterAccount.setPassword(newPass);
-                     accountService.saveAccount(iterAccount);
-                     otpService.deleteOtp(iterOtp);
-                     Notification.show("Heslo zmenené. Pokračujte na login view");
-                 }
-                 else {
-                     otpService.deleteOtp(iterOtp);
-                     Notification.show("Platnosť odkazu vypršala.");
-                 }
+                    Account iterAccount = iteratorAccount.next();
+                    if((iterAccount.getUserMail().equals(iterOtp.getUsermail())) && (today.before(expirationTime))){
+                        iterAccount.setPassword(newPass);
+                        accountService.saveAccount(iterAccount);
+                        otpService.deleteOtp(iterOtp);
+                        Notification.show(messages.getString("passChanged"));
+                    }
+                    else {
+                        otpService.deleteOtp(iterOtp);
+//                        Notification.show(messages.getString("otpExpired"));
+                    }
                 }
             }
-            else Notification.show("OTP heslo sa nenachádza v databáze.");
-            iteratorOtp.remove();
+            if (!isHere) {
+                Notification.show(messages.getString("otpNotFound"));
+                iteratorOtp.remove();
+            }
         }
     }
 

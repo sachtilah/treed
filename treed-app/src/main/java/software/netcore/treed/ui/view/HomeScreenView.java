@@ -2,9 +2,13 @@ package software.netcore.treed.ui.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * @since v. 1.0.0
@@ -28,11 +32,15 @@ public class HomeScreenView extends CustomComponent implements View {
         content.setMargin(true);
         content.setSpacing(true);
 
+        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        this.getSession().setLocale(locale);
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+
         HorizontalLayout bar = new HorizontalLayout();
         bar.addComponent(new Label("<strong>treed</strong>", ContentMode.HTML));
         bar.setWidth("100%");
 
-        Button logout = new Button("Logout");
+        Button logout = new Button(messages.getString("logout"));
         logout.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
