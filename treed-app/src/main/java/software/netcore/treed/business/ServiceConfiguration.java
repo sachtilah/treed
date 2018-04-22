@@ -3,7 +3,10 @@ package software.netcore.treed.business;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import software.netcore.treed.data.converter.StringToHashConverter;
 import software.netcore.treed.data.repository.AccountRepository;
 import software.netcore.treed.data.repository.OtpRepository;
 
@@ -22,12 +25,23 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public AccountService accountService() {
-        return new AccountService(accountRepo);
+        return new AccountService(passwordEncoder(), accountRepo);
     }
 
     @Bean
     public OtpService otpService() {
         return new OtpService(otpRepo);
+    }
+
+    /**
+     * Bean used to compare human readable password with hashed one from database during login attempt.
+     *
+     * @return password encoder
+     * @see StringToHashConverter
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

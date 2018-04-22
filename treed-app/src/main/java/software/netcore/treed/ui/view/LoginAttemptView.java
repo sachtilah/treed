@@ -2,23 +2,14 @@ package software.netcore.treed.ui.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
-import software.netcore.treed.business.AccountService;
-import software.netcore.treed.business.OtpService;
-import software.netcore.treed.data.schema.Account;
-import software.netcore.treed.data.schema.Otp;
+import software.netcore.treed.ui.AuthenticationProvider;
 import software.netcore.treed.ui.TreedCustomComponent;
 import software.netcore.treed.ui.view.resetPassword.ResetPasswordView;
-
-import java.util.*;
 
 /**
  * @since v. 1.0.0
@@ -29,7 +20,7 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
 
     public static final String VIEW_NAME = "/login/view";
 
-    private final AccountService accountService;
+    private final AuthenticationProvider authenticationProvider;
     private VerticalLayout mainLayout;
 
     @Override
@@ -66,23 +57,21 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
         content.setComponentAlignment(resetPasswordButton, Alignment.MIDDLE_CENTER);
     }
 
+    /**
+     * Login user. After successful login redirect to the home page. Unsuccessful login attempt
+     * show notification popup.
+     *
+     * @param username username
+     * @param password password
+     */
     private void login(String username, String password) {
+        boolean isLoggedIn = authenticationProvider.login(username, password);
 
-        Iterable<Account> accounts = accountService.getAccounts();
-        Collection<Account> accountCollection = new ArrayList<>();
-        for (Account account : accounts) {
-            accountCollection.add(account);
-        }
-
-        Iterator<Account> iterator = accounts.iterator();
-        while (iterator.hasNext()) {
-            Account iter = iterator.next();
-            if ((iter.getUsername().equals(username)) && (iter.getPassword().equals(password))) {
-                getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME);
-                break;
-            } else Notification.show(getString("ntfWrongPassword"));
-            iterator.remove();
-
+        if (isLoggedIn) {
+            getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME);
+        } else {
+            Notification.show(getString("ntfWrongPassword"));
         }
     }
+
 }

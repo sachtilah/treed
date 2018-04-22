@@ -1,6 +1,7 @@
 package software.netcore.treed.data.schema;
 
 import lombok.*;
+import software.netcore.treed.data.converter.StringToHashConverter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -22,7 +23,7 @@ import java.sql.Timestamp;
     public String username;
 
     @Column(name = "password", nullable = false)
-//    @Convert(converter = StringToHashConverter.class)
+    @Convert(converter = StringToHashConverter.class)
     private String password;
 
     @Column(nullable = false)
