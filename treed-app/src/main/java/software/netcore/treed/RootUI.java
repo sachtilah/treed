@@ -1,19 +1,22 @@
 package software.netcore.treed;
 
-import com.jain.addon.i18N.component.I18NUI;
-import com.vaadin.annotations.PreserveOnRefresh;
-import com.vaadin.annotations.Push;
-import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Viewport;
+import com.vaadin.annotations.*;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
+
+import java.util.Locale;
 
 /**
  * @since v. 1.4.0
@@ -33,6 +36,10 @@ public class RootUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        this.getSession().setLocale(locale);
+        System.out.println(locale);
+
         getUI().setResizeLazy(true);
         setContent(new MVerticalLayout());
 
@@ -42,10 +49,8 @@ public class RootUI extends UI {
         //getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
     }
 
-
     @Override
     public MVerticalLayout getContent() {
         return (MVerticalLayout) super.getContent();
     }
-
-    }
+}

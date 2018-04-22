@@ -38,7 +38,7 @@ public class MailService {
         email.setHostName("smtp.gmail.com");
         email.setSmtpPort(465);
         email.setSSLOnConnect(true);
-        email.setAuthentication("filip.ondra000@gmail.com","gtasanandreas");
+        email.setAuthentication("treedapplication@gmail.com","TreedApp2018");
         email.setFrom(from);
         email.addTo(recipients);
         email.setSubject(subject);
