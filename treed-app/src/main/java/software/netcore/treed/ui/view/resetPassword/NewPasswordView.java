@@ -11,6 +11,7 @@ import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
+import software.netcore.treed.ui.TreedCustomComponent;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -20,7 +21,7 @@ import java.util.*;
  * @since v. 1.0.0
  */
 @SpringView(name = NewPasswordView.VIEW_NAME)
-public class NewPasswordView extends CustomComponent implements View {
+public class NewPasswordView extends TreedCustomComponent implements View {
 
     public static final String VIEW_NAME = "/reset/verifyview";
     private final OtpService otpService;
@@ -38,18 +39,15 @@ public class NewPasswordView extends CustomComponent implements View {
         // A layout structure used for composition
         VerticalLayout panelContent = new VerticalLayout();
 
-        Locale locale = VaadinSession.getCurrent().getLocale();
-        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
-
         // Compose from multiple components
-        Label label = new Label(messages.getString("setNewPass"));
+        Label label = new Label(getString("setNewPass"));
         panelContent.addComponent(label);
 
-        PasswordField passwordField = new PasswordField(messages.getString("newPassword"));
+        PasswordField passwordField = new PasswordField(getString("newPassword"));
         panelContent.addComponent(passwordField);
 
 
-        Button verifyButton = new MButton(messages.getString("changePass")).withListener(clickEvent -> {
+        Button verifyButton = new MButton(getString("changePass")).withListener(clickEvent -> {
           newPass = passwordField.getValue();
           writePassword(parameter, newPass);
 

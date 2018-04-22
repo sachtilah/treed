@@ -12,6 +12,7 @@ import software.netcore.treed.business.MailService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
+import software.netcore.treed.ui.TreedCustomComponent;
 
 import java.time.Instant;
 import java.util.*;
@@ -20,7 +21,7 @@ import java.util.*;
  * @since v. 1.0.0
  */
 @SpringView(name = ResetPasswordView.VIEW_NAME)
-public class ResetPasswordView extends CustomComponent implements View {
+public class ResetPasswordView extends TreedCustomComponent implements View {
 
     public static final String VIEW_NAME = "/reset/mailview";
     private final OtpService otpService;
@@ -34,21 +35,18 @@ public class ResetPasswordView extends CustomComponent implements View {
         // A layout structure used for composition
         VerticalLayout panelContent = new VerticalLayout();
 
-        Locale locale = VaadinSession.getCurrent().getLocale();
-        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
-
-        // Compose from multiple components
-        Label label = new Label(messages.getString("enterEmail"));
+              // Compose from multiple components
+        Label label = new Label(getString("enterEmail"));
         panelContent.addComponent(label);
 
         TextField mailField = new TextField("E-mail");
         panelContent.addComponent(mailField);
 
-        Button backButton = new MButton(messages.getString("send")).withListener(clickEvent -> {
+        Button backButton = new MButton(getString("send")).withListener(clickEvent -> {
             EmailValidator emailValidator = new EmailValidator();
             if(emailValidator.isValid(mailField.getValue(), null))
                 sendMail(mailField.getValue());
-            else Notification.show(messages.getString("ntfWrongEmail"));
+            else Notification.show(getString("ntfWrongEmail"));
         });
 
 

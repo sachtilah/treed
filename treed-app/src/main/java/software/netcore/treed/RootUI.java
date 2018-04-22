@@ -10,6 +10,7 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -32,6 +33,8 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class RootUI extends UI {
 
+    private final MessageSource messageSource;
+
     /* used to manipulate with accounts */
     private final AccountService accountService;
     private final OtpService otpService;
@@ -39,19 +42,28 @@ public class RootUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        Locale locale = VaadinService.getCurrentRequest().getLocale();
-        this.getSession().setLocale(locale);
-        log.debug("Locale set to {}", locale);
-
         getUI().setResizeLazy(true);
         setContent(new MVerticalLayout());
 
-
+        configureSession();
 
         Navigator navigator = new Navigator(this, getContent());
         navigator.addProvider(springViewProvider);
 
         getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
+    }
+
+    /**
+     * Store {@link Locale} and {@link MessageSource} in the current session.
+     */
+    private void configureSession() {
+        log.debug("Configuring Vaadin session");
+        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        getSession().setLocale(locale);
+        log.debug("Locale set to {}", locale);
+
+        getSession().setAttribute(MessageSource.class, messageSource);
+        log.debug("MessageSource set to {}", messageSource.getClass());
     }
 
     @Override
