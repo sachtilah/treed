@@ -4,9 +4,12 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import lombok.RequiredArgsConstructor;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
+import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.ui.AuthenticationProvider;
 import software.netcore.treed.ui.TreedCustomComponent;
 import software.netcore.treed.ui.view.resetPassword.ResetPasswordView;
@@ -21,12 +24,14 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
     public static final String VIEW_NAME = "/login/view";
 
     private final AuthenticationProvider authenticationProvider;
-    private VerticalLayout mainLayout;
+    private MVerticalLayout mainLayout;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        this.mainLayout = new VerticalLayout();
+        this.mainLayout = new MVerticalLayout()
+                .withFullSize();
         setCompositionRoot(this.mainLayout);
+        setSizeFull();
         build();
     }
 
@@ -34,27 +39,28 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
      * Build page.
      */
     private void build() {
-        VerticalLayout content = this.mainLayout;
-        content.removeAllComponents();
-
-        TextField usernameField = new MTextField(getString("username"));
+        TextField usernameField = new MTextField(getString("username"))
+                .withFullSize();
         PasswordField passwordField = new PasswordField(getString("password"));
-        Button loginButton = new MButton(getString("login")).withListener(clickEvent -> {
-            login(usernameField.getValue(), passwordField.getValue());
+        passwordField.setSizeFull();
+        Button loginButton = new MButton(getString("login"))
+                .withListener(clickEvent -> {
+                    login(usernameField.getValue(), passwordField.getValue());
 
-        });
+                });
 
-        Button resetPasswordButton = new Button(getString("resetPassword"));
-        resetPasswordButton.addClickListener(
-                event -> getUI().getNavigator().navigateTo(ResetPasswordView.VIEW_NAME));
+        MButton resetPasswordButton = new MButton(getString("resetPassword"))
+                .withStyleName(ValoTheme.BUTTON_LINK)
+                .withListener(event -> getUI().getNavigator().navigateTo(ResetPasswordView.VIEW_NAME));
 
+        MVerticalLayout content = new MVerticalLayout()
+                .withUndefinedSize()
+                .add(usernameField, passwordField)
+                .add(new MHorizontalLayout()
+                        .add(resetPasswordButton, loginButton));
 
-        content.setSizeFull();
-        content.addComponents(usernameField, passwordField, loginButton, resetPasswordButton);
-        content.setComponentAlignment(usernameField, Alignment.MIDDLE_CENTER);
-        content.setComponentAlignment(passwordField, Alignment.MIDDLE_CENTER);
-        content.setComponentAlignment(loginButton, Alignment.MIDDLE_CENTER);
-        content.setComponentAlignment(resetPasswordButton, Alignment.MIDDLE_CENTER);
+        mainLayout.removeAllComponents();
+        mainLayout.add(content, Alignment.MIDDLE_CENTER);
     }
 
     /**
