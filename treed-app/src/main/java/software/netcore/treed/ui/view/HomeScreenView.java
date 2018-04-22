@@ -2,15 +2,10 @@ package software.netcore.treed.ui.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import software.netcore.treed.ui.TreedCustomComponent;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 /**
  * @since v. 1.0.0

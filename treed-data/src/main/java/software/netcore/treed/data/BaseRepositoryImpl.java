@@ -13,7 +13,7 @@ import java.util.Date;
  * Used as a base implementation for all repository instances within spring context. Auto
  * assign {@link Instant#now()} to each new entity being save.
  *
- * @since v. 1.4.0
+ * @since v. 1.0.0
  */
 public class BaseRepositoryImpl<T extends AbstractEntity> extends SimpleJpaRepository<T, Long>
         implements BaseRepository<T> {

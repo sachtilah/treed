@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 //@Import(DataConfiguration.class)
@@ -14,6 +16,11 @@ public class TreedApplication {
         SpringApplication.run(TreedApplication.class, args);
     }
 
+    /**
+     * Bean used to translate i18n keys to messages.
+     *
+     * @return message source
+     */
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

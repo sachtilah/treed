@@ -11,7 +11,7 @@ import java.time.Instant;
 /**
  * Base repository interface. Serve as a Every repo interface MUST extends this.
  *
- * @since v. 1.4.0
+ * @since v. 1.0.0
  */
 @NoRepositoryBean
 @Transactional(readOnly = true)
