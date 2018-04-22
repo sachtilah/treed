@@ -3,6 +3,7 @@ package software.netcore.treed.ui.view;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
@@ -26,13 +27,14 @@ public class HomeScreenView extends CustomComponent implements View {
         setCompositionRoot(this.mainLayout);
         build();
     }
+
     public void build() {
         VerticalLayout content = this.mainLayout;
         content.removeAllComponents();
         content.setMargin(true);
         content.setSpacing(true);
 
-        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        Locale locale = VaadinSession.getCurrent().getLocale();
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
 
         HorizontalLayout bar = new HorizontalLayout();

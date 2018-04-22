@@ -3,6 +3,7 @@ package software.netcore.treed.ui.view.resetPassword;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
@@ -33,7 +34,7 @@ public class ResetPasswordView extends CustomComponent implements View {
         // A layout structure used for composition
         VerticalLayout panelContent = new VerticalLayout();
 
-        Locale locale = VaadinService.getCurrentRequest().getLocale();
+        Locale locale = VaadinSession.getCurrent().getLocale();
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
 
         // Compose from multiple components
