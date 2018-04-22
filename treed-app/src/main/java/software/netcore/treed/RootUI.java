@@ -9,18 +9,21 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
+import software.netcore.treed.ui.view.LoginAttemptView;
 
 import java.util.Locale;
 
 /**
- * @since v. 1.4.0
+ * @since v. 1.0.0
  */
+@Slf4j
 @SpringUI
 @Title("Treed")
 @Push
@@ -38,15 +41,17 @@ public class RootUI extends UI {
     protected void init(VaadinRequest request) {
         Locale locale = VaadinService.getCurrentRequest().getLocale();
         this.getSession().setLocale(locale);
-        System.out.println(locale);
+        log.debug("Setting locale {}", locale);
 
         getUI().setResizeLazy(true);
         setContent(new MVerticalLayout());
 
+
+
         Navigator navigator = new Navigator(this, getContent());
         navigator.addProvider(springViewProvider);
 
-        //getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
+        getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
     }
 
     @Override
