@@ -41,7 +41,7 @@ public class RootUI extends UI {
     protected void init(VaadinRequest request) {
         Locale locale = VaadinService.getCurrentRequest().getLocale();
         this.getSession().setLocale(locale);
-        log.debug("Setting locale {}", locale);
+        log.debug("Locale set to {}", locale);
 
         getUI().setResizeLazy(true);
         setContent(new MVerticalLayout());
