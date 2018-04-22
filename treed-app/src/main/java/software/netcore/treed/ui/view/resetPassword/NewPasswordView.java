@@ -38,7 +38,6 @@ public class NewPasswordView extends CustomComponent implements View {
         VerticalLayout panelContent = new VerticalLayout();
 
         Locale locale = VaadinService.getCurrentRequest().getLocale();
-        this.getSession().setLocale(locale);
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
 
         // Compose from multiple components

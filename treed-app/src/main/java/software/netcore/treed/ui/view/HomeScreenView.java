@@ -33,7 +33,6 @@ public class HomeScreenView extends CustomComponent implements View {
         content.setSpacing(true);
 
         Locale locale = VaadinService.getCurrentRequest().getLocale();
-        this.getSession().setLocale(locale);
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
 
         HorizontalLayout bar = new HorizontalLayout();

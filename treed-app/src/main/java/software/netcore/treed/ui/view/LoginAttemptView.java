@@ -49,7 +49,6 @@ public class LoginAttemptView extends CustomComponent implements View {
         content.removeAllComponents();
 
         Locale locale = VaadinService.getCurrentRequest().getLocale();
-        this.getSession().setLocale(locale);
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
 
         TextField usernameField = new MTextField(messages.getString("username"));
