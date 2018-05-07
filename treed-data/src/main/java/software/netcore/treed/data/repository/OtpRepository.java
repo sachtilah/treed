@@ -1,7 +1,6 @@
 package software.netcore.treed.data.repository;
 
 import software.netcore.treed.data.BaseRepository;
-import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
 
 import java.util.Optional;

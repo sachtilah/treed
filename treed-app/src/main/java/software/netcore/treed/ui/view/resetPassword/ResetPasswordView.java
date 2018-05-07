@@ -3,14 +3,12 @@ package software.netcore.treed.ui.view.resetPassword;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.vaadin.viritin.button.MButton;
 import software.netcore.treed.business.MailService;
 import software.netcore.treed.business.OtpService;
-import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
 import software.netcore.treed.ui.TreedCustomComponent;
 
@@ -42,7 +40,7 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
         TextField mailField = new TextField("E-mail");
         panelContent.addComponent(mailField);
 
-        Button backButton = new MButton(getString("send")).withListener(clickEvent -> {
+        Button sendButton = new MButton(getString("send")).withListener(clickEvent -> {
             EmailValidator emailValidator = new EmailValidator();
             if(emailValidator.isValid(mailField.getValue(), null))
                 sendMail(mailField.getValue());
@@ -50,7 +48,7 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
         });
 
 
-        panelContent.addComponent(backButton);
+        panelContent.addComponent(sendButton);
         // The composition root MUST be set
         setCompositionRoot(panelContent);
 
@@ -59,16 +57,12 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
         // this is not needed for a Composite
         setSizeUndefined();
 
-        panelContent.setComponentAlignment(backButton, Alignment.MIDDLE_CENTER);
+        panelContent.setComponentAlignment(sendButton, Alignment.MIDDLE_CENTER);
         panelContent.setComponentAlignment(label, Alignment.MIDDLE_CENTER);
 
     }
 
     private void sendMail(String to) {
-        Locale locale = VaadinService.getCurrentRequest().getLocale();
-        this.getSession().setLocale(locale);
-        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
-
         try {
             boolean isHere = false;
             String resetPass = generateOTP(6);
@@ -76,7 +70,7 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
             // all values as variables to clarify its usage
             String from = "filip.ondra000@gmail.com";
             String subject = "Treed Reset Password";
-            String text = messages.getString("emailBody") + "http://localhost:8080/#!/reset/verifyview/" + resetPass;
+            String text = getString("emailBody") + "http://localhost:8080/#!/reset/verifyview/" + resetPass;
 
             Iterable<Otp> otps = otpService.getOtps();
             Collection<Otp> otpCollection = new ArrayList<>();
@@ -87,29 +81,29 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
 
             // call the email service to send the message
             if (to.isEmpty()) {
-                Notification.show(messages.getString("enterEmail"));
+                Notification.show(getString("enterEmail"));
             } else {
                 while (iteratorOtp.hasNext()) {
                     Otp iterOtp = iteratorOtp.next();
                     if (iterOtp.getUsermail().contains(to)) {
                         isHere = true;
-                        Notification.show(messages.getString("ntfOtpMailUsed"));
+                        Notification.show(getString("ntfOtpMailUsed"));
                     }
                 }
                 if(!isHere){
                     addNewPass(to, resetPass);
                     MailService.send(from, to, subject, text);
-                    Notification.show(messages.getString("emailSent"));
+                    Notification.show(getString("emailSent"));
                 }
                 if(otpCollection.isEmpty()){
                     addNewPass(to, resetPass);
                     MailService.send(from, to, subject, text);
-                    Notification.show(messages.getString("emailSent"));
+                    Notification.show(getString("emailSent"));
                 }
             }
         } catch(Exception e){
             e.printStackTrace();
-            Notification.show(messages.getString("emailError"), Notification.Type.ERROR_MESSAGE);
+            Notification.show(getString("emailError"), Notification.Type.ERROR_MESSAGE);
         }
     }
 

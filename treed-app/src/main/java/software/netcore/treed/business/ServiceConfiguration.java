@@ -9,8 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import software.netcore.treed.data.converter.StringToHashConverter;
 import software.netcore.treed.data.repository.AccountRepository;
 import software.netcore.treed.data.repository.OtpRepository;
-
-import java.util.Locale;
+import software.netcore.treed.data.repository.PiktogramRepository;
 
 /**
  * @author Jozef Petrik
@@ -22,6 +21,7 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
 
     private final AccountRepository accountRepo;
     private final OtpRepository otpRepo;
+    private final PiktogramRepository piktogramRepo;
 
     @Bean
     public AccountService accountService() {
@@ -31,6 +31,11 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public OtpService otpService() {
         return new OtpService(otpRepo);
+    }
+
+    @Bean
+    public PiktogramService piktogramService() {
+        return new PiktogramService(piktogramRepo);
     }
 
     /**

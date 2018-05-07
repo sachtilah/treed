@@ -3,7 +3,6 @@ package software.netcore.treed.ui.view.resetPassword;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.vaadin.viritin.button.MButton;
@@ -13,8 +12,6 @@ import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
 import software.netcore.treed.ui.TreedCustomComponent;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**

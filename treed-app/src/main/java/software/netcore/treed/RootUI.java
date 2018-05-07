@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
+import software.netcore.treed.business.PiktogramService;
 import software.netcore.treed.ui.view.LoginAttemptView;
 
 import java.util.Locale;
@@ -34,6 +35,7 @@ public class RootUI extends UI {
     /* used to manipulate with accounts */
     private final AccountService accountService;
     private final OtpService otpService;
+    private final PiktogramService piktogramService;
     private final SpringViewProvider springViewProvider;
 
     @Override
