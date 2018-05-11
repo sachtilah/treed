@@ -68,7 +68,7 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
             String resetPass = generateOTP(6);
 
             // all values as variables to clarify its usage
-            String from = "filip.ondra000@gmail.com";
+            String from = "treedapplication@gmail.com";
             String subject = "Treed Reset Password";
             String text = getString("emailBody") + "http://localhost:8080/#!/reset/verifyview/" + resetPass;
 

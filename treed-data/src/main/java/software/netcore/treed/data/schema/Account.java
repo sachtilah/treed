@@ -11,9 +11,10 @@ import java.sql.Timestamp;
  */
 @Getter
 @Setter
+@ToString
 @Table(name = "account")
 @Entity
-    public class Account extends AbstractEntity {
+public class Account extends AbstractEntity {
 
     /**
      * Unique username in the system.
@@ -31,4 +32,5 @@ import java.sql.Timestamp;
 
     @Column(name = "usermail")
     private String userMail;
+
 }

@@ -3,7 +3,6 @@ package software.netcore.treed.ui.view.gameViews;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
-import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
@@ -16,8 +15,12 @@ import software.netcore.treed.ui.view.LoginAttemptView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 
 @SpringView(name = software.netcore.treed.ui.view.gameViews.UploadPicView.VIEW_NAME)
 public class UploadPicView extends TreedCustomComponent implements View {
@@ -83,15 +86,12 @@ public class UploadPicView extends TreedCustomComponent implements View {
         final Upload upload = new Upload();
         upload.setCaption(getString("selectImage"));
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream(); // Stream to write to
+        ImageUploader receiver = new ImageUploader();
 
-        upload.setReceiver((Upload.Receiver) (filename, mimeType) -> {
-
-            return baos; // Return the output stream to write to
-        });
+        upload.setReceiver(receiver);
         upload.addSucceededListener((Upload.SucceededListener) succeededEvent -> {
             Image image = new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                    new ByteArrayInputStream(baos.toByteArray()), ""));
+                    new ByteArrayInputStream(receiver.stream.toByteArray()), ""));
             content.addComponent(image);
             content.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
             image.setWidth("300px");
@@ -111,7 +111,7 @@ public class UploadPicView extends TreedCustomComponent implements View {
             else if(upload == null)
                 Notification.show(getString("error"));
             else
-                addNewPiktogram(baos.toByteArray(), termField.getValue());
+                addNewPiktogram(receiver.stream.toByteArray(), termField.getValue());
         });
         layout.addComponents(termField, createButton);
         layout.setComponentAlignment(termField, Alignment.MIDDLE_CENTER);
@@ -126,5 +126,17 @@ public class UploadPicView extends TreedCustomComponent implements View {
         piktogramAdd.setCreateTime(Date.from(Instant.now()));
         piktogramService.savePic(piktogramAdd);
     }
+
+    private class ImageUploader implements Upload.Receiver {
+
+        private ByteArrayOutputStream stream;
+
+        @Override
+        public OutputStream receiveUpload(String filename, String mimeType) {
+            stream = new ByteArrayOutputStream();
+            return stream;
+        }
+    }
+
 }
 

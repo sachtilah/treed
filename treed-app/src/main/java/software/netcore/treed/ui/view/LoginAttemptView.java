@@ -1,7 +1,9 @@
 package software.netcore.treed.ui.view;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.osgi.themes.ValoThemeContribution;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -21,7 +23,7 @@ import software.netcore.treed.ui.view.resetPassword.ResetPasswordView;
 @SpringView(name = LoginAttemptView.VIEW_NAME)
 public class LoginAttemptView extends TreedCustomComponent implements View {
 
-    public static final String VIEW_NAME = "/login/view";
+    public static final String VIEW_NAME = "/login";
 
     private final AuthenticationProvider authenticationProvider;
     private MVerticalLayout mainLayout;
@@ -43,21 +45,31 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
                 .withFullSize();
         PasswordField passwordField = new PasswordField(getString("password"));
         passwordField.setSizeFull();
+
         Button loginButton = new MButton(getString("login"))
                 .withListener(clickEvent -> {
                     login(usernameField.getValue(), passwordField.getValue());
+                })
+                .withClickShortcut(ShortcutAction.KeyCode.ENTER);
 
-                });
+        MButton accountRegistrationButton = new MButton(getString("createAccount"))
+                .withStyleName(ValoTheme.BUTTON_LINK, ValoTheme.BUTTON_BORDERLESS, ValoTheme.BUTTON_TINY)
+                .withListener(event -> getUI().getNavigator().navigateTo(RegistrationView.VIEW_NAME));
 
         MButton resetPasswordButton = new MButton(getString("resetPassword"))
-                .withStyleName(ValoTheme.BUTTON_LINK)
+                .withStyleName(ValoTheme.BUTTON_LINK, ValoTheme.BUTTON_BORDERLESS, ValoTheme.BUTTON_TINY)
                 .withListener(event -> getUI().getNavigator().navigateTo(ResetPasswordView.VIEW_NAME));
 
         MVerticalLayout content = new MVerticalLayout()
                 .withUndefinedSize()
                 .add(usernameField, passwordField)
                 .add(new MHorizontalLayout()
-                        .add(resetPasswordButton, loginButton));
+                        .add(new MVerticalLayout()
+                                .withMargin(false)
+                                .withSpacing(false)
+                                .add(accountRegistrationButton)
+                                .add(resetPasswordButton))
+                        .add(loginButton, Alignment.MIDDLE_CENTER));
 
         mainLayout.removeAllComponents();
         mainLayout.add(content, Alignment.MIDDLE_CENTER);

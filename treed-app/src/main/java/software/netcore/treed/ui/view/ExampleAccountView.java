@@ -83,7 +83,7 @@ public class ExampleAccountView extends CustomComponent implements View {
                         account.setUserMail(userMailField.getValue());
 
                         // save account
-                        accountService.saveAccount(account);
+                        accountService.updatePasswordAccount(account);
 
                         // rebuild UI
                         build();

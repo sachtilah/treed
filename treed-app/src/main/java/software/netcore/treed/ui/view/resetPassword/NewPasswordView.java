@@ -98,7 +98,7 @@ public class NewPasswordView extends TreedCustomComponent implements View {
                     Account iterAccount = iteratorAccount.next();
                     if((iterAccount.getUserMail().equals(iterOtp.getUsermail())) && (today.before(expirationTime))){
                         iterAccount.setPassword(newPass);
-                        accountService.saveAccount(iterAccount);
+                        accountService.updatePasswordAccount(iterAccount);
                         otpService.deleteOtp(iterOtp);
                         Notification.show(messages.getString("passChanged"));
                     }

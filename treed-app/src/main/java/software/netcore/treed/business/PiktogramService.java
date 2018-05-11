@@ -28,5 +28,6 @@ public class PiktogramService {
         log.info("Deleting selected piktogram {}", piktogram);
         piktogramRepository.delete(piktogram);
     }
+
 }
 

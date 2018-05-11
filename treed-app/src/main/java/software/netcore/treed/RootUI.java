@@ -2,6 +2,7 @@ package software.netcore.treed;
 
 import com.vaadin.annotations.*;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
@@ -41,7 +42,9 @@ public class RootUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         getUI().setResizeLazy(true);
-        setContent(new MVerticalLayout());
+        setContent(new MVerticalLayout()
+                .withMargin(false)
+                .withFullSize());
 
         configureSession();
 
