@@ -9,7 +9,7 @@ import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import software.netcore.treed.business.PiktogramService;
-import software.netcore.treed.business.StoryService;
+import software.netcore.treed.business.SentenceService;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import software.netcore.treed.data.schema.sim.Sentence;
 import software.netcore.treed.ui.TreedCustomComponent;
@@ -29,11 +29,11 @@ public class CreateStoryView extends TreedCustomComponent implements View {
 
     public static final String VIEW_NAME = "/story";
     private VerticalLayout mainLayout;
-    private final StoryService storyService;
+    private final SentenceService sentenceService;
     private final PiktogramService piktogramService;
 
-    public CreateStoryView(StoryService storyService, PiktogramService piktogramService) {
-        this.storyService = storyService;
+    public CreateStoryView(SentenceService sentenceService, PiktogramService piktogramService) {
+        this.sentenceService = sentenceService;
         this.piktogramService = piktogramService;
     }
 
@@ -160,7 +160,7 @@ public class CreateStoryView extends TreedCustomComponent implements View {
         sentenceAdd.setName(name);
         sentenceAdd.setPiktograms(story);
         sentenceAdd.setCreateTime(Date.from(Instant.now()));
-        storyService.saveStory(sentenceAdd);
+        sentenceService.saveStory(sentenceAdd);
     }
 
 }
