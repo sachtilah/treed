@@ -10,6 +10,7 @@ import software.netcore.treed.data.converter.StringToHashConverter;
 import software.netcore.treed.data.repository.AccountRepository;
 import software.netcore.treed.data.repository.OtpRepository;
 import software.netcore.treed.data.repository.PiktogramRepository;
+import software.netcore.treed.data.repository.StoryRepository;
 
 /**
  * @author Jozef Petrik
@@ -22,6 +23,7 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
     private final AccountRepository accountRepo;
     private final OtpRepository otpRepo;
     private final PiktogramRepository piktogramRepo;
+    private final StoryRepository storyRepo;
 
     @Bean
     public AccountService accountService() {
@@ -36,6 +38,11 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public PiktogramService piktogramService() {
         return new PiktogramService(piktogramRepo);
+    }
+
+    @Bean
+    public StoryService storyService() {
+        return new StoryService(storyRepo);
     }
 
     /**

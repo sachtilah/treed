@@ -7,6 +7,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import software.netcore.treed.ui.TreedCustomComponent;
+import software.netcore.treed.ui.view.gameViews.CreateStoryView;
 import software.netcore.treed.ui.view.gameViews.UploadPicView;
 
 import java.util.Locale;
@@ -45,7 +46,7 @@ public class HomeScreenView extends TreedCustomComponent implements View {
 
         Button createStory = new Button(getString("createStory"));
         createStory.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
+                getUI().getNavigator().navigateTo(CreateStoryView.VIEW_NAME));
 
         Label usernameField = new Label("username");
 
