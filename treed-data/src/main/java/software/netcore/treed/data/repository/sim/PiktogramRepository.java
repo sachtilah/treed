@@ -1,7 +1,7 @@
-package software.netcore.treed.data.repository;
+package software.netcore.treed.data.repository.sim;
 
 import software.netcore.treed.data.BaseRepository;
-import software.netcore.treed.data.schema.Piktogram;
+import software.netcore.treed.data.schema.sim.Piktogram;
 
 import java.util.Optional;
 

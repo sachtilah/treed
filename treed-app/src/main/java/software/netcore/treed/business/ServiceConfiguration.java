@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import software.netcore.treed.data.converter.StringToHashConverter;
 import software.netcore.treed.data.repository.AccountRepository;
 import software.netcore.treed.data.repository.OtpRepository;
-import software.netcore.treed.data.repository.PiktogramRepository;
+import software.netcore.treed.data.repository.sim.PiktogramRepository;
 
 /**
  * @author Jozef Petrik
