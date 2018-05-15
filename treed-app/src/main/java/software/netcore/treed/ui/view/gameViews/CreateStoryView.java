@@ -60,7 +60,7 @@ public class CreateStoryView extends TreedCustomComponent implements View {
 
         Button uploadButton = new Button(getString("upload"));
         uploadButton.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
+                getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
 
         Button homeScreen = new Button(getString("homeScreen"));
         homeScreen.addClickListener((Button.ClickListener) event ->
@@ -109,7 +109,7 @@ public class CreateStoryView extends TreedCustomComponent implements View {
                 int rows = Integer.parseInt(row.getValue());
                 int columns = Integer.parseInt(column.getValue());
                 int numberOfWords = rows*columns;
-                int counter = 0;
+                int counter = 0, counterImage = 0;
 
                 String[] words = sentenceField.getValue().split("\\s+");
                 GridLayout grid = new GridLayout(columns, rows*2);
@@ -118,7 +118,6 @@ public class CreateStoryView extends TreedCustomComponent implements View {
 
                     for (int j = 0; j < rows*2; j++) {
                         for (int i = 0; i < columns; i++) {
-                            boolean wasThere = false, wasThereImage = false;
                             Iterable<Piktogram> piktograms = piktogramService.getPics();
                             Collection<Piktogram> piktogramCollection = new ArrayList<>();
                             for (Piktogram piktogram : piktograms) {
@@ -126,20 +125,21 @@ public class CreateStoryView extends TreedCustomComponent implements View {
                             }
                             Iterator<Piktogram> iteratorPic = piktograms.iterator();
 
-                            while(iteratorPic.hasNext() && (counter < numberOfWords)) {
+                            while((iteratorPic.hasNext())) {
                                 Piktogram iterPic = iteratorPic.next();
-                                if (iterPic.getTerm().equals(words[counter])) {
-                                    if (!wasThereImage &&(j % 2 == 0)) {
+                                if(j % 2 == 0){
+                                    if ((iterPic.getTerm().equals(words[counterImage])) && (counterImage < numberOfWords)) {
                                         grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
                                                 new ByteArrayInputStream(iterPic.getBytes()), "")), i, j);
-                                        wasThereImage = true;
-                                        log.info("added Image " + iterPic.getTerm() + " with counter: " + counter);
+                                        counterImage++;
+                                        break;
                                     }
-                                    if(!wasThere && (j % 2 == 1)){
+                                }
+                                if (j % 2 == 1) {
+                                    if((iterPic.getTerm().equals(words[counter])) && (counter < numberOfWords)){
                                         grid.addComponent(new TextField(words[counter]), i, j);
                                         counter++;
-                                        wasThere = true;
-                                        log.info("added Text " + iterPic.getTerm() + " with counter: " + counter);
+                                        break;
                                     }
                                 }
                             }
@@ -147,6 +147,7 @@ public class CreateStoryView extends TreedCustomComponent implements View {
                     }
                 }
                 content.addComponent(grid);
+
             }
         });
         content.addComponent(generateButton);
