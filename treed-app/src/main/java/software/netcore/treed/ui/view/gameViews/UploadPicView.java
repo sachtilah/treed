@@ -8,7 +8,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.vaadin.viritin.button.MButton;
 import software.netcore.treed.business.PiktogramService;
-import software.netcore.treed.data.schema.Piktogram;
+import software.netcore.treed.data.schema.sim.Piktogram;
 import software.netcore.treed.ui.TreedCustomComponent;
 import software.netcore.treed.ui.view.HomeScreenView;
 import software.netcore.treed.ui.view.LoginAttemptView;

@@ -2,8 +2,8 @@ package software.netcore.treed.business;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import software.netcore.treed.data.repository.PiktogramRepository;
-import software.netcore.treed.data.schema.Piktogram;
+import software.netcore.treed.data.repository.sim.PiktogramRepository;
+import software.netcore.treed.data.schema.sim.Piktogram;
 
 /**
  * @since v. 1.0.0

@@ -1,8 +1,9 @@
-package software.netcore.treed.data.schema;
+package software.netcore.treed.data.schema.sim;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import software.netcore.treed.data.schema.AbstractEntity;
 
 import javax.persistence.*;
 import java.util.Collection;
