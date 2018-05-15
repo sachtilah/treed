@@ -88,10 +88,11 @@ public class RegistrationView extends TreedCustomComponent implements View {
         binder = new BeanValidationBinder<>(Account.class);
         binder.forField(nameField)
                 .withValidator((Validator<String>) (value, context) -> {
-                    if (isValid(value)) {
+                    String errorMessage = isValid(value);
+                    if (Objects.isNull(errorMessage)) {
                         return ValidationResult.ok();
                     } else {
-                        return ValidationResult.error("Username cannot be null or empty");
+                        return ValidationResult.error(errorMessage);
                     }
                 })
                 .asRequired("Username must be set")
@@ -128,15 +129,23 @@ public class RegistrationView extends TreedCustomComponent implements View {
      * Validate given {@code username}.
      *
      * @param username username
-     * @return true if username is valid, otherwise false
+     * @return error message or null if validation passed
      */
-    private boolean isValid(String username) {
+    private String isValid(String username) {
         if (Objects.isNull(username)) {
-            return false;
+            return "Username cannot be null or empty";
         }
         username = username.trim();
 
-        return username.length() > 3 && accountService.isUsernameUnused(username);
+        if (username.length() < 3) {
+            return "Username must be at least 3 character long";
+        }
+
+        if (accountService.isUsernameUsed(username)) {
+            return "Username already used";
+        }
+
+        return null;
     }
 
 

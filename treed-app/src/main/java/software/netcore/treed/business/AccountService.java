@@ -64,8 +64,8 @@ public class AccountService {
      * @return true if NOT used, otherwise false
      */
     @Transactional
-    public boolean isUsernameUnused(String username) {
-        return !accountRepo.findByUsername(username).isPresent();
+    public boolean isUsernameUsed(String username) {
+        return accountRepo.findByUsername(username).isPresent();
     }
 
     @Transactional
