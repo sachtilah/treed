@@ -23,14 +23,11 @@
 
         <java.version>1.8</java.version>
 
-        <vaadin.version>8.1.0</vaadin.version>
+
     </properties>
 
     <repositories>
-    <repository>
-        <id>vaadin-addons</id>
-        <url>http://maven.vaadin.com/vaadin-addons</url>
-    </repository>
+
     </repositories>
 
     <dependencies>
@@ -41,7 +38,16 @@
             <artifactId>treed-data</artifactId>
             <version>${treed.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>software.netcore</groupId>
+            <artifactId>treed-api</artifactId>
+            <version>${treed.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.netcore</groupId>
+            <artifactId>treed-puzzle</artifactId>
+            <version>${treed.version}</version>
+        </dependency>
         <!-- spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,26 +67,9 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.vaadin.addons</groupId>
-            <artifactId>jain-i18N</artifactId>
-            <version>1.1.9</version>
-        </dependency>
 
-        <!-- vaadin libs and addons dependencies -->
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-push</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin</groupId>
-            <artifactId>viritin</artifactId>
-            <version>2.0</version>
-        </dependency>
+
+
 
         <!-- 3rd libs dependencies -->
         <dependency>

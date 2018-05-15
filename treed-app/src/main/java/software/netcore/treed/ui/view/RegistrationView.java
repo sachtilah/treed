@@ -17,10 +17,10 @@ import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.AccountRole;
-import software.netcore.treed.ui.TreedCustomComponent;
 
 import java.util.Objects;
 

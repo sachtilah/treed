@@ -23,6 +23,7 @@
             <groupId>software.netcore</groupId>
             <artifactId>treed-api</artifactId>
             <version>${treed.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>software.netcore</groupId>

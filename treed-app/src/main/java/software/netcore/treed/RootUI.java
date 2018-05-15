@@ -1,13 +1,15 @@
 package software.netcore.treed;
 
-import com.vaadin.annotations.*;
+import com.vaadin.annotations.PreserveOnRefresh;
+import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Title;
+import com.vaadin.annotations.Viewport;
 import com.vaadin.navigator.Navigator;
-import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.*;
+import com.vaadin.ui.UI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -15,7 +17,7 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.business.PiktogramService;
-import software.netcore.treed.ui.view.LoginAttemptView;
+import software.netcore.treed.puzzle.ui.view.CreatePuzzleView;
 
 import java.util.Locale;
 
@@ -51,7 +53,8 @@ public class RootUI extends UI {
         Navigator navigator = new Navigator(this, getContent());
         navigator.addProvider(springViewProvider);
 
-        getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
+        getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME);
+        //getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
     }
 
     /**
