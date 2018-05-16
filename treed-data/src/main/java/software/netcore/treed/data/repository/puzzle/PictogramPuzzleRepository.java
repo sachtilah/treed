@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface PictogramPuzzleRepository extends BaseRepository<PictogramPuzzle> {
 
-    //Optional<PictogramPuzzle> findByTerm(String pictPuzzle);
+    //Optional<PictogramPuzzle> findByPictPuzzle(String pictPuzzle);
 }

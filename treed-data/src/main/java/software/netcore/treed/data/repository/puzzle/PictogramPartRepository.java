@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface PictogramPartRepository  extends BaseRepository<PictogramPart> {
 
-    //Optional<PictogramPart> findByTerm(String pictPart);
+    //Optional<PictogramPart> findByPictPart(String pictPart);
 }
