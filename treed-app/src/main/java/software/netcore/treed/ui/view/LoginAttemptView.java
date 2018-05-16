@@ -41,22 +41,22 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
      * Build page.
      */
     private void build() {
-        TextField usernameField = new MTextField(getString("username"))
+        TextField usernameField = new MTextField(getString("loginAttempt-username-field"))
                 .withFullSize();
-        PasswordField passwordField = new PasswordField(getString("password"));
+        PasswordField passwordField = new PasswordField(getString("loginAttempt-password-field"));
         passwordField.setSizeFull();
 
-        Button loginButton = new MButton(getString("login"))
+        Button loginButton = new MButton(getString("loginAttempt-login-button"))
                 .withListener(clickEvent -> {
                     login(usernameField.getValue(), passwordField.getValue());
                 })
                 .withClickShortcut(ShortcutAction.KeyCode.ENTER);
 
-        MButton accountRegistrationButton = new MButton(getString("createAccount"))
+        MButton accountRegistrationButton = new MButton(getString("loginAttempt-account-registration-button"))
                 .withStyleName(ValoTheme.BUTTON_LINK, ValoTheme.BUTTON_BORDERLESS, ValoTheme.BUTTON_TINY)
                 .withListener(event -> getUI().getNavigator().navigateTo(RegistrationView.VIEW_NAME));
 
-        MButton resetPasswordButton = new MButton(getString("resetPassword"))
+        MButton resetPasswordButton = new MButton(getString("loginAttempt-reset-password-button"))
                 .withStyleName(ValoTheme.BUTTON_LINK, ValoTheme.BUTTON_BORDERLESS, ValoTheme.BUTTON_TINY)
                 .withListener(event -> getUI().getNavigator().navigateTo(ResetPasswordView.VIEW_NAME));
 
@@ -88,7 +88,7 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
         if (isLoggedIn) {
             getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME);
         } else {
-            Notification.show(getString("ntfWrongPassword"));
+            Notification.show(getString("loginAttempt-notification-wrong-inputs"));
         }
     }
 

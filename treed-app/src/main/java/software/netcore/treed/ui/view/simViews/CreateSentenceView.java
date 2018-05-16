@@ -1,4 +1,4 @@
-package software.netcore.treed.ui.view.gameViews;
+package software.netcore.treed.ui.view.simViews;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -24,15 +24,15 @@ import java.util.Date;
 import java.util.Iterator;
 
 @Slf4j
-@SpringView(name = software.netcore.treed.ui.view.gameViews.CreateStoryView.VIEW_NAME)
-public class CreateStoryView extends TreedCustomComponent implements View {
+@SpringView(name = software.netcore.treed.ui.view.simViews.CreateSentenceView.VIEW_NAME)
+public class CreateSentenceView extends TreedCustomComponent implements View {
 
-    public static final String VIEW_NAME = "/story";
+    public static final String VIEW_NAME = "/sentence";
     private VerticalLayout mainLayout;
     private final SentenceService sentenceService;
     private final PiktogramService piktogramService;
 
-    public CreateStoryView(SentenceService sentenceService, PiktogramService piktogramService) {
+    public CreateSentenceView(SentenceService sentenceService, PiktogramService piktogramService) {
         this.sentenceService = sentenceService;
         this.piktogramService = piktogramService;
     }
@@ -57,28 +57,31 @@ public class CreateStoryView extends TreedCustomComponent implements View {
         Label treed = new Label("<strong>treed</strong>", ContentMode.HTML);
 
 
-        Button uploadButton = new Button(getString("upload"));
+        Button uploadButton = new Button(getString("navigationBar-upload-button"));
         uploadButton.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
 
-        Button homeScreen = new Button(getString("homeScreen"));
+        Button homeScreen = new Button(getString("navigationBar-home-button"));
         homeScreen.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME));
 
+        Button editSentence = new Button(getString("navigationBar-edit-sentence-button"));
+        editSentence.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(EditSentenceView.VIEW_NAME));
 
         Label usernameField = new Label("username");
 
-        Button logout = new Button(getString("logout"));
+        Button logout = new Button(getString("navigationBar-logout-button"));
         logout.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
         content.addComponent(bar);
-        bar.addComponents(treed, uploadButton, homeScreen, usernameField, logout);
+        bar.addComponents(treed, uploadButton, homeScreen, editSentence, usernameField, logout);
 
-        TextField storyNameField = new TextField(getString("createStory-story-name-field"));
-        TextField row = new TextField("Number of rows");
-        TextField column = new TextField("Number of columns");
-        TextField sentenceField = new TextField("Sentence");
+        TextField sentenceNameField = new TextField(getString("createSentence-sentence-name-field"));
+        TextField row = new TextField(getString("createSentence-row-field"));
+        TextField column = new TextField(getString("createSentence-column-field"));
+        TextField sentenceField = new TextField(getString("createSentence-sentence-field"));
 
         HorizontalLayout hLayout = new HorizontalLayout();
         hLayout.removeAllComponents();
@@ -93,22 +96,31 @@ public class CreateStoryView extends TreedCustomComponent implements View {
         hLayout2.setSizeFull();
 
         content.addComponents(hLayout, hLayout2);
-        hLayout.addComponents(row, storyNameField);
+        hLayout.addComponents(row, sentenceNameField);
         hLayout2.addComponents(column, sentenceField);
         content.setComponentAlignment(hLayout, Alignment.MIDDLE_CENTER);
         content.setComponentAlignment(hLayout2, Alignment.MIDDLE_CENTER);
 
-        Button generateButton = new MButton(getString("createStory-generate-button")).withListener(clickEvent -> {
 
-            if(row.getValue().isEmpty() || column.getValue().isEmpty() || storyNameField.getValue().isEmpty()
+        Button generateButton = new MButton(getString("createSentence-generate-button")).withListener(clickEvent -> {
+
+            boolean isMissing = false;
+            if(row.getValue().isEmpty() || column.getValue().isEmpty() || sentenceNameField.getValue().isEmpty()
                     || sentenceField.getValue().isEmpty()){
-                Notification.show("createStory-notification-empty-fields");
-            }else {
+                Notification.show(getString("createSentence-notification-empty-fields"));
+            }
+            else if((!row.getValue().matches("[0-9]+")) || (!column.getValue().matches("[0-9]+"))){
+                Notification.show(getString("createSentence-notification-invalid-fields"));
+            }
+            else {
+
+
 
                 int rows = Integer.parseInt(row.getValue());
                 int columns = Integer.parseInt(column.getValue());
                 int numberOfWords = rows*columns;
                 int counter = 0, counterImage = 0;
+                Collection<Piktogram> collection = new ArrayList<>();
 
                 String[] words = sentenceField.getValue().split("\\s+");
                 GridLayout grid = new GridLayout(columns, rows*2);
@@ -130,38 +142,65 @@ public class CreateStoryView extends TreedCustomComponent implements View {
                                     if ((iterPic.getTerm().equals(words[counterImage])) && (counterImage < numberOfWords)) {
                                         grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
                                                 new ByteArrayInputStream(iterPic.getBytes()), "")), i, j);
+                                        collection.add(iterPic);
                                         counterImage++;
                                         break;
                                     }
                                 }
                                 if (j % 2 == 1) {
                                     if((iterPic.getTerm().equals(words[counter])) && (counter < numberOfWords)){
-                                        grid.addComponent(new TextField(words[counter]), i, j);
+                                        grid.addComponent(new Label(words[counter]), i, j);
                                         counter++;
                                         break;
                                     }
                                 }
+                                if(!iteratorPic.hasNext())
+                                    isMissing = true;
+                                //    Notification.show("Neni tu take");
                             }
                         }
                     }
                 }
-                content.addComponent(grid);
-
+                else
+                    Notification.show(getString("createSentence-notification-not-enough-words"));
+                if(isMissing){
+                    Notification.show(getString("createSentence-notification-upload-missing"));
+                }
+                else {
+                    addSentence(rows, columns, sentenceNameField.getValue(), collection);
+                    content.addComponent(grid);
+                }
             }
         });
         content.addComponent(generateButton);
-
     }
 
-    private void addStory (int row, int column, String name, Collection<Piktogram> story){
+    private void addSentence (int row, int column, String name, Collection<Piktogram> collection) {
+        boolean isUsed = false;
 
-        Sentence sentenceAdd = new Sentence();
-        sentenceAdd.setRowCount(row);
-        sentenceAdd.setColumnCount(column);
-        sentenceAdd.setName(name);
-        sentenceAdd.setPiktograms(story);
-        sentenceAdd.setCreateTime(Date.from(Instant.now()));
-        sentenceService.saveStory(sentenceAdd);
+        Iterable<Sentence> sentences = sentenceService.getSentences();
+        Collection<Sentence> sentenceCollection = new ArrayList<>();
+        for (Sentence sentence : sentences) {
+            sentenceCollection.add(sentence);
+        }
+        Iterator<Sentence> iteratorSentence = sentences.iterator();
+
+        while ((iteratorSentence.hasNext())) {
+            Sentence iterSentence = iteratorSentence.next();
+            if (iterSentence.getName().equals(name)) {
+                isUsed = true;
+                Notification.show("createSentence-notification-sentence-name-used");
+            }
+        }
+        if (!isUsed) {
+            Sentence sentenceAdd = new Sentence();
+            sentenceAdd.setRowCount(row);
+            sentenceAdd.setColumnCount(column);
+            sentenceAdd.setName(name);
+            sentenceAdd.setPiktograms(collection);
+            sentenceAdd.setCreateTime(Date.from(Instant.now()));
+            sentenceService.saveSentence(sentenceAdd);
+        }
     }
 
 }

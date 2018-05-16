@@ -2,16 +2,13 @@ package software.netcore.treed.ui.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import software.netcore.treed.ui.TreedCustomComponent;
-import software.netcore.treed.ui.view.gameViews.CreateStoryView;
-import software.netcore.treed.ui.view.gameViews.UploadPicView;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
+import software.netcore.treed.ui.view.simViews.CreateSentenceView;
+import software.netcore.treed.ui.view.simViews.EditSentenceView;
+import software.netcore.treed.ui.view.simViews.UploadPicView;
 
 /**
  * @since v. 1.0.0
@@ -40,22 +37,27 @@ public class HomeScreenView extends TreedCustomComponent implements View {
         bar.setWidth("100%");
         Label treed = new Label("<strong>treed</strong>", ContentMode.HTML);
 
-        Button upload = new Button(getString("upload"));
+        Button upload = new Button(getString("navigationBar-upload-button"));
         upload.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
 
-        Button createStory = new Button(getString("createStory"));
-        createStory.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(CreateStoryView.VIEW_NAME));
+        Button createSentence = new Button(getString("navigationBar-create-sentence-button"));
+        createSentence.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(CreateSentenceView.VIEW_NAME));
+
+        Button editSentence = new Button(getString("navigationBar-edit-sentence-button"));
+        editSentence.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(EditSentenceView.VIEW_NAME));
+
 
         Label usernameField = new Label("username");
 
-        Button logout = new Button(getString("logout"));
+        Button logout = new Button(getString("navigationBar-logout-button"));
         logout.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
         content.addComponent(bar);
-        bar.addComponents(treed, upload, createStory, usernameField, logout);
+        bar.addComponents(treed, upload, createSentence, editSentence, usernameField, logout);
 
         setSizeUndefined();
     }

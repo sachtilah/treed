@@ -50,16 +50,16 @@ public class RegistrationView extends TreedCustomComponent implements View {
     }
 
     private void build() {
-        MTextField nameField = new MTextField(getString("registration-name-input-field"))
+        MTextField nameField = new MTextField(getString("registration-username-field"))
                 .withWidth(20, Unit.EM);
 
         MTextField emailField = new MTextField(getString("registration-email-input-field"))
                 .withWidth(20, Unit.EM);
 
-        PasswordField passwordField = new PasswordField(getString("registration-password-input-field"));
+        PasswordField passwordField = new PasswordField(getString("registration-password-field"));
         passwordField.setWidth(20, Unit.EM);
 
-        PasswordField repeatPasswordField = new PasswordField(getString("registration-repeat-password-input-field"));
+        PasswordField repeatPasswordField = new PasswordField(getString("registration-repeat-password-field"));
         repeatPasswordField.setWidth(20, Unit.EM);
 
         MButton backToLoginViewButton = new MButton()
@@ -95,23 +95,23 @@ public class RegistrationView extends TreedCustomComponent implements View {
                         return ValidationResult.error(errorMessage);
                     }
                 })
-                .asRequired("Username must be set")
+                .asRequired(getString("registration-notification-username-required"))
                 .bind("username");
         binder.forField(emailField)
-                .withValidator(new EmailValidator("Email is not valid"))
+                .withValidator(new EmailValidator(getString("registration-notification-invalid-email")))
                 .bind("userMail");
         binder.forField(passwordField)
-                .withValidator(new StringLengthValidator("Password is required", 3, 50))
+                .withValidator(new StringLengthValidator(getString("registration-notification-password-required"), 3, 50))
                 .bind("password");
         binder.forField(repeatPasswordField)
                 .withValidator((Validator<String>) (value, context) -> {
                     if (Objects.isNull(value)) {
-                        return ValidationResult.error("Repeat password is missing");
+                        return ValidationResult.error(getString("registration-notification-repeat-password-required"));
                     }
 
                     return value.equals(passwordField.getValue()) ?
                             ValidationResult.ok() :
-                            ValidationResult.error("Repeat password does not match the password");
+                            ValidationResult.error(getString("registration-notification-repeat-password-not-match"));
                 })
                 .bind((ValueProvider<Account, String>) account -> null,
                         (Setter<Account, String>) (account, s) -> {// empty setter
@@ -133,16 +133,16 @@ public class RegistrationView extends TreedCustomComponent implements View {
      */
     private String isValid(String username) {
         if (Objects.isNull(username)) {
-            return "Username cannot be null or empty";
+            return getString("registration-notification-username-required");
         }
         username = username.trim();
 
         if (username.length() < 3) {
-            return "Username must be at least 3 character long";
+            return getString("registration-notification-length-invalid");
         }
 
         if (accountService.isUsernameUsed(username)) {
-            return "Username already used";
+            return getString("registration-notification-username-used");
         }
 
         return null;
@@ -156,10 +156,10 @@ public class RegistrationView extends TreedCustomComponent implements View {
             if (created) {
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
             } else {
-                Notification.show("Invalid");
+                Notification.show(getString("registration-notification-invalid"));
             }
         } else {
-            Notification.show("Invalid");
+            Notification.show(getString("registration-notification-invalid"));
         }
     }
 

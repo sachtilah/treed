@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import software.netcore.treed.data.repository.sim.SentenceRepository;
 import software.netcore.treed.data.schema.sim.Sentence;
 
+import javax.transaction.Transactional;
+
 /**
  * @since v. 1.0.0
  */
@@ -14,19 +16,19 @@ public class SentenceService {
 
     private final SentenceRepository sentenceRepository;
 
-    public Iterable<Sentence> getStories() {
-        log.info("Getting all stories");
+    public Iterable<Sentence> getSentences() {
+        log.info("Getting all sentences");
         return sentenceRepository.findAll();
     }
 
-    public void saveStory(Sentence story) {
-        log.info("Saving new story {}", story);
-        sentenceRepository.save(story);
+    public void saveSentence(Sentence sentence) {
+        log.info("Saving new sentence {}", sentence);
+        sentenceRepository.save(sentence);
     }
 
-    public void deleteStory(Sentence story){
-        log.info("Deleting selected story {}", story);
-        sentenceRepository.delete(story);
+    public void deleteSentence(Sentence sentence){
+        log.info("Deleting selected sentence {}", sentence);
+        sentenceRepository.delete(sentence);
     }
 
 }

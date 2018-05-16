@@ -37,14 +37,14 @@ public class NewPasswordView extends TreedCustomComponent implements View {
         VerticalLayout panelContent = new VerticalLayout();
 
         // Compose from multiple components
-        Label label = new Label(getString("setNewPass"));
+        Label label = new Label(getString("newPassword-set-password-label"));
         panelContent.addComponent(label);
 
-        PasswordField passwordField = new PasswordField(getString("newPassword"));
+        PasswordField passwordField = new PasswordField(getString("newPassword-new-password-field"));
         panelContent.addComponent(passwordField);
 
 
-        Button verifyButton = new MButton(getString("changePass")).withListener(clickEvent -> {
+        Button verifyButton = new MButton(getString("newPassword-change-password-field")).withListener(clickEvent -> {
           newPass = passwordField.getValue();
           writePassword(parameter, newPass);
 
@@ -64,9 +64,6 @@ public class NewPasswordView extends TreedCustomComponent implements View {
     }
 
     public void writePassword(String otpPass, String newPass) {
-        Locale locale = VaadinService.getCurrentRequest().getLocale();
-        this.getSession().setLocale(locale);
-        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
 
         boolean isHere = false;
 
@@ -87,7 +84,7 @@ public class NewPasswordView extends TreedCustomComponent implements View {
         while(iteratorOtp.hasNext()){
             Otp iterOtp = iteratorOtp.next();
             //expirationDate
-            int MILLIS_PER_DAY = 2*60*1000;
+            int MILLIS_PER_DAY = 20*60*1000;
             Calendar expirationTime = Calendar.getInstance();
             expirationTime.setTime(iterOtp.getCreateTime());
             expirationTime.add(Calendar.MILLISECOND, MILLIS_PER_DAY);
@@ -100,7 +97,7 @@ public class NewPasswordView extends TreedCustomComponent implements View {
                         iterAccount.setPassword(newPass);
                         accountService.updatePasswordAccount(iterAccount);
                         otpService.deleteOtp(iterOtp);
-                        Notification.show(messages.getString("passChanged"));
+                        Notification.show(getString("newPassword-notification-password-changed"));
                     }
                     else {
                         otpService.deleteOtp(iterOtp);
@@ -109,7 +106,7 @@ public class NewPasswordView extends TreedCustomComponent implements View {
                 }
             }
             if (!isHere) {
-                Notification.show(messages.getString("otpNotFound"));
+                Notification.show(getString("newPassword-notification-otp-not-found"));
                 iteratorOtp.remove();
             }
         }
