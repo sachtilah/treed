@@ -8,11 +8,11 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
+import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.business.PiktogramService;
 import software.netcore.treed.business.SentenceService;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import software.netcore.treed.data.schema.sim.Sentence;
-import software.netcore.treed.ui.TreedCustomComponent;
 import software.netcore.treed.ui.view.HomeScreenView;
 import software.netcore.treed.ui.view.LoginAttemptView;
 

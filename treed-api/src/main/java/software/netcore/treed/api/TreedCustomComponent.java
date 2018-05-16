@@ -1,4 +1,4 @@
-package software.netcore.treed.ui;
+package software.netcore.treed.api;
 
 
 import com.vaadin.server.VaadinSession;

@@ -3,7 +3,6 @@ package software.netcore.treed.ui.view;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.osgi.themes.ValoThemeContribution;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -12,8 +11,8 @@ import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.ui.AuthenticationProvider;
-import software.netcore.treed.ui.TreedCustomComponent;
 import software.netcore.treed.ui.view.resetPassword.ResetPasswordView;
 
 /**

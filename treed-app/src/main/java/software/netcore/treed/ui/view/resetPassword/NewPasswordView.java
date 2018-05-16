@@ -6,11 +6,11 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.vaadin.viritin.button.MButton;
+import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.Otp;
-import software.netcore.treed.ui.TreedCustomComponent;
 
 import java.util.*;
 
