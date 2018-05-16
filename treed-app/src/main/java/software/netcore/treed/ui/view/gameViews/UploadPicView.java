@@ -50,13 +50,13 @@ public class UploadPicView extends TreedCustomComponent implements View {
         bar.setWidth("100%");
         Label treed = new Label("<strong>treed</strong>", ContentMode.HTML);
 
-        Button uploadButton = new Button(getString("homeScreen"));
-        uploadButton.addClickListener((Button.ClickListener) event ->
+        Button homeScreen = new Button(getString("homeScreen"));
+        homeScreen.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME));
 
         Button createStory = new Button(getString("createStory"));
         createStory.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
+                getUI().getNavigator().navigateTo(CreateStoryView.VIEW_NAME));
 
         Label usernameField = new Label("username");
 
@@ -65,7 +65,7 @@ public class UploadPicView extends TreedCustomComponent implements View {
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
         content.addComponent(bar);
-        bar.addComponents(treed, uploadButton, createStory, usernameField, logout);
+        bar.addComponents(treed, homeScreen, createStory, usernameField, logout);
 
         Label text = new Label(getString("uploadText"));
         content.addComponent(text);
