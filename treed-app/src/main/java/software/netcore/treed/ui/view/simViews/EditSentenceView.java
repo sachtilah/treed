@@ -205,10 +205,10 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                     });
                     content.addComponent(editButton);
                 }
-                /*else if(findSentenceField.isEmpty())
-                    Notification.show(getString("editSentence-notification-find-sentence-empty"));*/
-                else
-                    Notification.show(getString("editSentence-notification-find-sentence-not-found"));
+                else if(findSentenceField.isEmpty())
+                    Notification.show(getString("editSentence-notification-find-sentence-empty"));
+                /*else
+                    Notification.show(getString("editSentence-notification-find-sentence-not-found"));*/
             }
             });
 
