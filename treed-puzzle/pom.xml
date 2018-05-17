@@ -29,6 +29,7 @@
             <groupId>software.netcore</groupId>
             <artifactId>treed-data</artifactId>
             <version>${treed.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

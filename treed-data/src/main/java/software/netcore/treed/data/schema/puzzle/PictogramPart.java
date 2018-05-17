@@ -18,12 +18,12 @@ import javax.persistence.Table;
 @Entity
 public class PictogramPart extends AbstractEntity {
 
-    /*@Lob
+    @Lob
     @Column(name = "bytes", nullable = false)
     private byte[] bytes;
 
     @Column(name = "pictPart", nullable = false)
-    private String pictPart;*/
+    private String pictPart;
 
 }
 

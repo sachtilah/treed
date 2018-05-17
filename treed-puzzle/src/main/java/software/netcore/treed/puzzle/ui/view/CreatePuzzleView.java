@@ -1,38 +1,51 @@
 package software.netcore.treed.puzzle.ui.view;
 
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ThemeResource;
+import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.dnd.DropEffect;
 import com.vaadin.shared.ui.dnd.EffectAllowed;
+import com.vaadin.shared.ui.grid.DropMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.dnd.event.DropEvent;
+import lombok.extern.slf4j.Slf4j;
+import com.vaadin.ui.components.grid.GridDragSource;
+import com.vaadin.ui.components.grid.GridDropTarget;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
 import com.vaadin.ui.themes.ValoTheme;
-import lombok.RequiredArgsConstructor;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
-import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.api.TreedCustomComponent;
-import software.netcore.treed.puzzle.ui.ImageUploader;
+import software.netcore.treed.data.schema.puzzle.PictogramPart;
+import software.netcore.treed.puzzle.business.PictogramPartService;
+import software.netcore.treed.puzzle.ui.PictogramShow;
 
-import java.util.Optional;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.time.Instant;
+import java.util.*;
 
-
-@RequiredArgsConstructor
+@Slf4j
 @SpringView(name =CreatePuzzleView.VIEW_NAME)
-public class CreatePuzzleView extends TreedCustomComponent implements View {
+public class CreatePuzzleView extends TreedCustomComponent implements View{
 
     public static final String VIEW_NAME = "/puzzle/create";
-
     private MVerticalLayout mainLayout;
+    private final PictogramPartService pictogramPartService;
+    //private final PictogramPuzzleService pictogramPuzzleService;
+
+    public CreatePuzzleView(PictogramPartService pictogramPartService) {
+        this.pictogramPartService = pictogramPartService;
+    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        log.info("run enter");
         this.mainLayout = new MVerticalLayout()
                 .withFullSize();
         setCompositionRoot(this.mainLayout);
@@ -40,53 +53,151 @@ public class CreatePuzzleView extends TreedCustomComponent implements View {
         build();
     }
 
+
     /**
      * Build page.
      */
     private void build() {
-        /**
+        /*
          * Objects
          */
-        Button selectButton = new MButton(getString("select-upload-puzzle-part"))
-                .withListener(clickEvent -> {
-            uploadPath();
-        });
+        log.info("run build");
+
+        MVerticalLayout skuska = new MVerticalLayout();
+
+        ImageUploader receiver = new ImageUploader();
 
         TextField pathField = new MTextField(getString("path-puzzle-part-pictogram"))
                 .withFullSize()
                 .withHeight("35px");
 
-        TextField namePartField = new MTextField(getString("name-puzzle-part-pictogram"))
+        TextField namePartField = new MTextField()
                 .withFullSize()
                 .withHeight("35px");
 
-        Button uploadButton = new MButton(getString("upload-puzzle-part"))
-                .withListener(clickEvent -> {
-                    upload(pathField.getValue(), namePartField.getValue());
-                })
-                .withListener(event -> getUI().getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME));
+        Label namePart = new Label(getString("name-puzzle-part-pictogram"));
 
-        TextField searchField = new MTextField(getString("search-puzzle-part-pictogram"))
+        Upload uploadx = new Upload();
+        uploadx.setCaption(getString("selectImage"));    //upload
+        uploadx.setReceiver(receiver);
+
+        uploadx.addSucceededListener((Upload.SucceededListener) succeededEvent -> {
+            Image image = new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                    new ByteArrayInputStream(receiver.stream.toByteArray()), ""));
+            skuska.addComponent(image);
+            skuska.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+            image.setWidth("280px");
+            image.setHeight("280px");
+        });
+
+        Button uploadButton = new MButton(getString("upload-puzzle-part")).withListener(clickEvent -> { //nahrat
+            if(namePartField.getValue().isEmpty())
+                Notification.show(getString("ntfNoTerm"));
+            else if(uploadx == null)
+                Notification.show(getString("error"));
+            else
+                addNewPictogramPart(receiver.stream.toByteArray(), namePartField.getValue());
+        });
+    //upload
+        GridLayout uploadLayout = new GridLayout(3,3);
+            uploadLayout.setSpacing(true);
+            uploadLayout.addComponent(uploadx,0,0);
+            uploadLayout.addComponent(pathField,1,0);
+            uploadLayout.addComponent(namePart,0,1);
+            uploadLayout.setComponentAlignment(namePart, Alignment.MIDDLE_RIGHT);
+            uploadLayout.addComponent(namePartField,1,1);
+            uploadLayout.addComponent(uploadButton,2,1);
+
+        Iterable<PictogramPart> pics = pictogramPartService.getPics();
+        Collection<PictogramPart> pictogramPartCollection = new ArrayList<>();
+        for (PictogramPart pictogramPart : pics) {
+            pictogramPartCollection.add(pictogramPart);
+        }
+        int sizeOfSearchPictogram = Math.round(pictogramPartCollection.size()/5)+2;
+
+
+
+
+        Label searchPart = new Label(getString("search-puzzle-part-pictogram"));
+
+        //GridLayout searchPictogram = new GridLayout(10,sizeOfSearchPictogram);
+        GridLayout searchPictogram = new GridLayout(10,10);
+            searchPictogram.setSpacing(true);
+            searchPictogram.setMargin(false);
+
+        //searchGrid(searchPictogram,"all", pics);
+
+        //Iterator<PictogramPart> iteratorPictogram = pics.iterator();
+
+        //pictogramPartCollection.iterator();
+
+
+
+
+        TextField searchField = new MTextField()
                 .withFullSize()
                 .withHeight("35px");
 
-                //-----------------------------------testing---------------------------
-        Image image = new Image(null,
-                new ThemeResource("design/puzzle/CreatePuzzleView.png"));
-        image.setSizeUndefined();
-                //-----------------------------------testing--------------------------
+        ((MTextField) searchField).withValueChangeListener(event -> {
+            /*String sk = "35px";
+            Notification.show(sk);*/
+
+           /* if (searchField.getValue().isEmpty())
+            searchGrid(searchPictogram, "all", pics);
+            else
+                searchGrid(searchPictogram, searchField.getValue(), pics);*/
+
+
+
+            Iterable<PictogramPart> picss = pictogramPartService.getPics();
+            searchPictogram.removeAllComponents();
+        Iterator<PictogramPart> iteratorPictogram = picss.iterator();
+        int k=0;
+        while (iteratorPictogram.hasNext()) {
+            k++;
+            PictogramPart iterPic = iteratorPictogram.next();
+            Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                    new ByteArrayInputStream(iterPic.getBytes()), ""));
+
+            log.info("added Image " + iterPic.getPictPart());
+
+            picture.setWidth("80px");
+            picture.setHeight("80px");
+            searchPictogram.addComponent(picture, (0+k), 0);
+            picture = null;
+            //pictogramPartService.deletePic(iterPic);
+        }
+
+
+
+
+        });
+
 
         Panel pictogram = new Panel(getString("puzzle-pictograms"));
             pictogram.setWidth("500px");
             pictogram.setHeight("300px");
-            pictogram.setContent(image);
+
+        pictogram.setContent(searchPictogram);
+
+    //search
+        MVerticalLayout searchLayout = new MVerticalLayout()
+                .withMargin(false)
+                .add(new MHorizontalLayout()
+                        .add(searchPart)
+                        .add(searchField)
+                )
+                .add(pictogram);
 
 
-        TextField nameField = new MTextField(getString("puzzle-pictogram-name"))
+
+        Label namePictogram = new Label(getString("puzzle-pictogram-name"));
+
+        TextField nameField = new MTextField()
                 .withFullSize()
                 .withHeight("35px");
 
-        //doplnit vytvaranie piktogramov grid createPictogram------------------testing
+        //GRID
         GridLayout createPictogram = new GridLayout(10,10);
         createPictogram.addComponent(new Button("R/C 1"));
         for (int i = 0; i < 9; i++) {
@@ -94,24 +205,43 @@ public class CreatePuzzleView extends TreedCustomComponent implements View {
                     (createPictogram.getCursorX() + 1)));
         }
         createPictogram.addComponent(new Button("Row "), 9, 9);
-// Fill out the first column using coordinates.
+
         for (int i = 1; i < 10; i++) {
             createPictogram.addComponent(new Button("Row " + i), 0, i);
         }
-        // Add some components of various shapes.
+
         createPictogram.addComponent(new Button("3x1 button"), 1, 1, 3, 1);
         createPictogram.addComponent(new Label("1x2 cell"), 1, 2, 1, 3);
-        /*InlineDateField date =
-                new InlineDateField("A 2x2 date field");
-        date.setResolution(DateField.RESOLUTION_DAY);
-        createPictogram.addComponent(date, 2, 2, 3, 3);*/
+        //KONIEC GRID
 
+
+
+        Button createButton = new MButton(getString("select-upload-puzzle-part"))   //vzbrat
+                .withListener(clickEvent -> {
+                    //vzbrat
+                });
+    //create
+        MHorizontalLayout path = new MHorizontalLayout()
+                .add(namePictogram)
+                .add(nameField);
+
+        MVerticalLayout createPictogramLayout = new MVerticalLayout()
+                .add(path)
+                .add(createPictogram)
+                .add(createButton);
+           createPictogramLayout.setComponentAlignment(path, Alignment.TOP_CENTER);
+            createPictogramLayout.setComponentAlignment(createButton, Alignment.TOP_CENTER);
+
+
+
+
+        /*//DND
         Label draggableLabel = new Label("You can grab and drag me");
         DragSourceExtension<Label> dragSource = new DragSourceExtension<>(draggableLabel);
 
-// set the allowed effect
+    // set the allowed effect
         dragSource.setEffectAllowed(EffectAllowed.MOVE);
-// set the text to transfer
+    // set the text to transfer
         dragSource.setDataTransferText("hello receiver");
 
         dragSource.addDragStartListener(event ->
@@ -139,109 +269,160 @@ public class CreatePuzzleView extends TreedCustomComponent implements View {
         dropTarget.setDropEffect(DropEffect.MOVE);
 // catch the drops
         dropTarget.addDropListener(event -> {
-
+            //dropTarget.get
+            //DropEvent
             // if the drag source is in the same UI as the target
             //Optional<AbstractComponent> dragSource = event.getDragSourceComponent();
 
+            Optional<AbstractComponent> dragSource1 = event.getDragSourceComponent();
+            if (dragSource1.isPresent() && dragSource1.get() instanceof Label) {
+                // move the label to the layout
+                dropTargetLayout.addComponent(dragSource1.get());
+            }
 
             // handle possible server side drag data, if the drag source was in the same UI
 
             //event.getDataTransferText();
-            String lab = event.getDragData().toString();
-            lab=event.getDataTransferText();
-            dropTargetLayout.addComponent(new Label(lab));
+            //event.getDragSourceComponent();
+            //event.getDragData();
+           //String lab = event.getDragData().toString();
+            //lab=event.getDataTransferText();
+            //dropTargetLayout.addComponent(new Label(lab));
 
         });
+        //DND*/
+
+
         //------------------------------------------------------------------------testing
 
-        Button createButton = new MButton(getString("create-puzzle-pikt"))
-                .withListener(clickEvent -> {
-                    createPikt();
-                    getUI().getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME);
-                });
+
                 //.withClickShortcut(ShortcutAction.KeyCode.ENTER);
 
 
-        /**
-         * Layouts
-         */
-        MVerticalLayout pathLayout = new MVerticalLayout()
-                .add(new MHorizontalLayout()
-                .withSpacing(true)
-                .add(selectButton)
-                .add(pathField)
-        )
-                .add(new MHorizontalLayout()
-                        .withMargin(false)
-                        .add(namePartField, uploadButton)
-                );
 
-        MVerticalLayout searchLayout = new MVerticalLayout()
-                .add(new MHorizontalLayout()
-                                .withMargin(false)
-                        .add(searchField)
-                        );
-                searchLayout.addComponent(pictogram);
-
-
-        MVerticalLayout createLayout = new MVerticalLayout();
-                createLayout.addComponent(nameField);
-                createLayout.addComponent(createPictogram);
-                createLayout.addComponent(createButton);
     //main layout
         MVerticalLayout content = new MVerticalLayout()
                 .withUndefinedSize()
-                .add(draggableLabel)
-                .add(dropTargetLayout)
-                //.withSize("100%","100%")
+                //.withSize()
+                //.withSize("800px","600px")
                 .add(new MHorizontalLayout()
-                    .add(new MVerticalLayout()
-                        .add(pathLayout)
-                        .add(searchLayout)
-                    )
-                    .add(createLayout)
-                );
+                        .add(new MVerticalLayout()
+                                .add(uploadLayout)
+                                .add(searchLayout)
+                        )
+                        .add(createPictogramLayout)
+                )
+                .add(skuska);
             content.setWidth("100%");
 
-        //ImageUploader imag = new ImageUploader();
+        //
             //imag.receiveUpload("picture", image);
                 //pictogram.setComponentAlignment(topcenter, Alignment.TOP_CENTER);
 
 
 
+
+
+
+
+
+
+        uploadx.addSucceededListener((Upload.SucceededListener) succeededEvent -> {
+            Image image = new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                    new ByteArrayInputStream(receiver.stream.toByteArray()), ""));
+
+            content.addComponent(image);
+            //content.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+            image.setWidth("100px");
+            image.setHeight("100px");
+        });
+
+
+        //content.add(draggableLabel);
+        //content.add(dropTargetLayout);
+
+        Panel panel = new Panel(getString("puzzle-pictograms"));
+        panel.setHeight("600px");
+        panel.setContent(content);
         mainLayout.removeAllComponents();
-        mainLayout.add(content, Alignment.TOP_LEFT);
+        mainLayout.add(panel, Alignment.TOP_LEFT);
     }
 
 
-    /**
-     * Upload puzzle part.
-     *
-     * @param path path to file
-     * @param name name of uploaded file
-     */
-    private void upload(String path, String name){
+    private void searchGrid(GridLayout searchPictogram, String search, Iterable<PictogramPart> picso){
+        //pics = pictogramPartService.getPics();
+        Iterable<PictogramPart> pics = pictogramPartService.getPics();
+
+        /*searchPictogram.removeAllComponents();
+        Iterator<PictogramPart> iteratorPictogram = pics.iterator();
+        int k=0;
+        while (iteratorPictogram.hasNext()) {
+            k++;
+            PictogramPart iterPic = iteratorPictogram.next();
+            Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                    new ByteArrayInputStream(iterPic.getBytes()), ""));
+            picture.setWidth("80px");
+            picture.setHeight("80px");
+            searchPictogram.addComponent(picture, (3+k), 3);
+        }*/
+
+
+        Iterator<PictogramPart> iteratorPictogramPart = pics.iterator();
+        int j=0;
+        searchPictogram.removeAllComponents();
+
+        while (iteratorPictogramPart.hasNext()) {
+            for (int i = 0; i < 5; i++) {
+
+                if (iteratorPictogramPart.hasNext()) {
+                    PictogramPart iterPic = iteratorPictogramPart.next();
+                    if (iterPic.getPictPart().equals(search) || search == "all") {
+
+
+                        Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                                new ByteArrayInputStream(iterPic.getBytes()), ""));
+                        picture.setWidth("80px");
+                        picture.setHeight("80px");
+
+                        searchPictogram.addComponent(picture, i, j);
+
+
+                        
+                        log.info("added Image " + iterPic.getPictPart() + " with counter: ");
+
+
+                        searchPictogram.addComponent(new Label(iterPic.getPictPart()), i, (j + 1));
+
+                        log.info("added Text " + iterPic.getPictPart() + " with counter: ");
+
+                    }else {i--;}
+
+                }
+            }
+            j=j+2;
+        }
+    }
+
+    private void addNewPictogramPart(byte[] bytes, String pictPartName){
+
+        PictogramPart pictogramPartAdd = new PictogramPart();
+        pictogramPartAdd.setBytes(bytes);
+        pictogramPartAdd.setPictPart(pictPartName);
+        pictogramPartAdd.setCreateTime(Date.from(Instant.now()));
+        pictogramPartService.savePic(pictogramPartAdd);
+    }
+
+    private class ImageUploader implements Upload.Receiver {
+
+        private ByteArrayOutputStream stream;
+
+        @Override
+        public OutputStream receiveUpload(String filename, String mimeType) {
+            stream = new ByteArrayOutputStream();
+            return stream;
+        }
 
     }
 
-    /**
-     * Choose path.
-     *
-     * //@param username username
-     * //@param password password
-     */
-    private void uploadPath(){
-
-    }
-
-    /**
-     * Create pictogram.
-     *
-     * //@param username username
-     * //@param password password
-     */
-    private void createPikt(){
-
-    }
 }
 

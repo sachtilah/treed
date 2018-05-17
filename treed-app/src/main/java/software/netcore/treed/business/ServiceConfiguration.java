@@ -9,8 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import software.netcore.treed.data.converter.StringToHashConverter;
 import software.netcore.treed.data.repository.AccountRepository;
 import software.netcore.treed.data.repository.OtpRepository;
+import software.netcore.treed.data.repository.puzzle.PictogramPartRepository;
+import software.netcore.treed.data.repository.puzzle.PictogramPuzzleRepository;
 import software.netcore.treed.data.repository.sim.SentenceRepository;
 import software.netcore.treed.data.repository.sim.PiktogramRepository;
+import software.netcore.treed.puzzle.business.PictogramPartService;
+import software.netcore.treed.puzzle.business.PictogramPuzzleService;
 
 
 /**
@@ -26,32 +30,32 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
     private final PiktogramRepository piktogramRepo;
     private final SentenceRepository storyRepo;
 
-    @Bean
-    public AccountService accountService() {
-        return new AccountService(passwordEncoder(), accountRepo);
-    }
+@Bean
+public AccountService accountService() {
+    return new AccountService(passwordEncoder(), accountRepo);
+}
 
-    @Bean
-    public OtpService otpService() {
-        return new OtpService(otpRepo);
-    }
+@Bean
+public OtpService otpService() {
+    return new OtpService(otpRepo);
+}
 
-    @Bean
-    public PiktogramService piktogramService() {
-        return new PiktogramService(piktogramRepo);
-    }
+@Bean
+public PiktogramService piktogramService() {
+    return new PiktogramService(piktogramRepo);
+}
 
-    @Bean
-    public SentenceService storyService() {
-        return new SentenceService(storyRepo);
-    }
+@Bean
+public SentenceService storyService() {
+    return new SentenceService(storyRepo);
+}
 
-    /**
-     * Bean used to compare human readable password with hashed one from database during login attempt.
-     *
-     * @return password encoder
-     * @see StringToHashConverter
-     */
+/**
+ * Bean used to compare human readable password with hashed one from database during login attempt.
+ *
+ * @return password encoder
+ * @see StringToHashConverter
+ */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

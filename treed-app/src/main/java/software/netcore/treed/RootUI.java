@@ -7,6 +7,7 @@ import com.vaadin.annotations.Viewport;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
@@ -18,6 +19,7 @@ import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.business.PiktogramService;
 import software.netcore.treed.puzzle.ui.view.CreatePuzzleView;
+import software.netcore.treed.ui.view.gameViews.UploadPicView;
 
 import java.util.Locale;
 
@@ -27,7 +29,7 @@ import java.util.Locale;
 @Slf4j
 @SpringUI
 @Title("Treed")
-@Push
+@Push(transport = Transport.LONG_POLLING)
 @PreserveOnRefresh
 @Viewport("user-scalable=no,initial-scale=1.0")
 @RequiredArgsConstructor

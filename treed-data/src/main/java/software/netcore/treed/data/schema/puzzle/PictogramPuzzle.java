@@ -18,10 +18,10 @@ import javax.persistence.Table;
 @Entity
 public class PictogramPuzzle extends AbstractEntity {
 
-    /*@Lob
+    @Lob
     @Column(name = "bytes", nullable = false)
     private byte[] bytes;
 
     @Column(name = "pictPuzzle", nullable = false)
-    private String pictPuzzle;*/
+    private String pictPuzzle;
 }
