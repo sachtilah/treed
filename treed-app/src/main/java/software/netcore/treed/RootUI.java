@@ -19,6 +19,7 @@ import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.business.PiktogramService;
 import software.netcore.treed.puzzle.ui.view.CreatePuzzleView;
+import software.netcore.treed.ui.view.LoginAttemptView;
 import software.netcore.treed.ui.view.gameViews.UploadPicView;
 
 import java.util.Locale;
@@ -55,8 +56,8 @@ public class RootUI extends UI {
         Navigator navigator = new Navigator(this, getContent());
         navigator.addProvider(springViewProvider);
 
-        getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME);
-        //getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
+        //getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME);
+        getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
     }
 
     /**
