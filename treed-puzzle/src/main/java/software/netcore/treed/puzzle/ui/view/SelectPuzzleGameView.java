@@ -58,7 +58,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         }
         int sizeOfSearchPictogram = Math.round(pictogramPuzzleCollection.size()/5)*2;
 
-        Label searchPart = new Label();
+        Label selectPuzzle = new Label(getString("selectPuzzleGame-select-puzzle-label"));
         GridLayout searchPictogram = new GridLayout(10,10);
         //GridLayout searchPictogram = new GridLayout(10,sizeOfSearchPictogram);
         searchPictogram.setSpacing(true);
@@ -83,6 +83,15 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
 
         });
+/*
+// A single-select radio button group
+        RadioButtonGroup<String> single =
+                new RadioButtonGroup<>("Single Selection");
+        //single.setItems("Single", "Sola", "Yksi");
+        single.setItems(selectPuzzle);*/
+
+
+
 
 
         Panel pictogram = new Panel();
@@ -91,11 +100,11 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
         pictogram.setContent(searchPictogram);
         //pictogram.setContent(new Label("puzzle-pictograms"));
-        Button selectButton = new MButton().withListener(clickEvent -> { //nahrat
+        Button selectButton = new MButton(getString("selectPuzzleGame-select-button-button")).withListener(clickEvent -> { //nahrat
             getUI().getNavigator().navigateTo(PlayPuzzleView.VIEW_NAME);
         });
         MHorizontalLayout search= new MHorizontalLayout()
-                .add(searchPart)
+                .add(selectPuzzle)
                 .add(searchField);
         //search
         MVerticalLayout searchLayout = new MVerticalLayout()
