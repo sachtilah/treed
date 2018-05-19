@@ -10,6 +10,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.sql.Select;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
@@ -81,8 +82,8 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                     }
                     //dragSource.setDataTransferData("",searchPictogram);
         );*/
-
-
+        String str = SelectPuzzleGameView.caption;
+        //SelectPuzzleGameView.getCaptionx();
 
         searchGridPart(searchPictogram,"all", pics);
 

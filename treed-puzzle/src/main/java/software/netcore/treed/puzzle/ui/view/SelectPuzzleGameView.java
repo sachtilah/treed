@@ -1,5 +1,6 @@
 package software.netcore.treed.puzzle.ui.view;
 
+import com.vaadin.event.MouseEvents;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
@@ -29,6 +30,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
     public static final String VIEW_NAME = "/puzzle/select";
     private MVerticalLayout mainLayout;
+    public static String caption;
     private String nameOfPiktogram="";
     private final PictogramPuzzleService pictogramPuzzleService;
 
@@ -56,21 +58,48 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         for (PictogramPuzzle pictogramPuzzle : pics) {
             pictogramPuzzleCollection.add(pictogramPuzzle);
         }
-        int sizeOfSearchPictogram = Math.round(pictogramPuzzleCollection.size()/5)*2;
+        int sizeOfSearchPictogram = (Math.round(pictogramPuzzleCollection.size()/5)+1)*2;
 
         Label selectPuzzle = new Label(getString("selectPuzzleGame-select-puzzle-label"));
-        GridLayout searchPictogram = new GridLayout(10,10);
-        //GridLayout searchPictogram = new GridLayout(10,sizeOfSearchPictogram);
-        searchPictogram.setSpacing(true);
-        searchPictogram.setMargin(false);
-
-
-        searchGrid(searchPictogram,"all", pics);
-
 
         TextField searchField = new MTextField()
                 .withFullSize()
                 .withHeight("35px");
+
+        GridLayout searchPictogram = new GridLayout(5,10);
+        //GridLayout searchPictogram = new GridLayout(10,sizeOfSearchPictogram);
+        searchPictogram.setSpacing(true);
+        searchPictogram.setMargin(false);
+        searchPictogram.setSizeFull();
+
+
+        searchGrid(searchPictogram,"all", pics);
+        //searchGridx(searchPictogram,"all");
+
+        //searchPictogram.addComponent(selectPuzzle,0,0);
+        //searchPictogram.addComponent(searchField,0,1);
+
+        searchPictogram.addLayoutClickListener(ClickEvent ->{
+                    int x = ClickEvent.getMouseEventDetails().getRelativeX();
+                    int y = ClickEvent.getMouseEventDetails().getRelativeY();
+                    log.info("drop at x "+ (x) + " y " + y);
+                    //int a= Math.round(searchPictogram.getComponent(0,0).getHeight());
+                    //int b = Math.round(searchPictogram.getComponent(0,1).getHeight());
+                    if (searchPictogram.getComponent(0,0)!=null && searchPictogram.getComponent(0,1)!=null) {
+                        int xp =Math.round(x/searchPictogram.getComponent(0,0).getWidth());
+                        int yp =Math.round(y/(searchPictogram.getComponent(0,0).getHeight()+searchPictogram.getComponent(0,1).getHeight()));
+
+                        //int xp = Math.round(x / 100);
+                        //int yp = Math.round(y / (100));
+                        caption = searchPictogram.getComponent(xp,yp).getCaption();
+                        log.info("drop at x " + (xp) + " y " + yp);
+                    }
+        }
+        );
+
+
+
+
 
         ((MTextField) searchField).withValueChangeListener(event -> {
             /*String sk = "35px";
@@ -95,8 +124,9 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
 
         Panel pictogram = new Panel();
-        pictogram.setWidth("500px");
-        pictogram.setHeight("300px");
+        pictogram.setWidth("800px");
+        pictogram.setHeight("500px");
+        log.info("panel w "+ (pictogram.getWidth()) + " h " + (pictogram.getHeight()));
 
         pictogram.setContent(searchPictogram);
         //pictogram.setContent(new Label("puzzle-pictograms"));
@@ -147,30 +177,15 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
                         Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
                                 new ByteArrayInputStream(iterPic.getBytes()), ""));
-                        picture.setWidth("80px");
-                        picture.setHeight("80px");
-
-                        DragSourceExtension<Image> dragSourcex = new DragSourceExtension<>(picture);    //umozny drag
-                        dragSourcex.setEffectAllowed(EffectAllowed.MOVE);                                            //sposob presunu
-
-                        dragSourcex.addDragStartListener(e -> {
-                            String name= iterPic.getPictPuzzle();
-                        });
-                        dragSourcex.addDragStartListener(e -> {
-                                    dragSourcex.setDragData(picture);
-                                    //dragSource.setDragData("bla");
-                                    nameOfPiktogram=iterPic.getPictPuzzle();
-                                }
-                                //dragSource.setDataTransferData("",searchPictogram);
-                        );
+                        picture.setWidth("100px");
+                        picture.setHeight("100px");
 
 
                         searchPictogram.addComponent(picture, i, j);
-
+                        searchPictogram.getComponent(i,j).setCaption(iterPic.getPictPuzzle());
 
 
                         log.info("added Image " + iterPic.getPictPuzzle());
-
 
                         searchPictogram.addComponent(new Label(iterPic.getPictPuzzle()), i, (j + 1));
 
@@ -183,4 +198,8 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
             j=j+2;
         }
     }
+    public String getCaptionx(){
+        return caption;
+    }
+
 }
