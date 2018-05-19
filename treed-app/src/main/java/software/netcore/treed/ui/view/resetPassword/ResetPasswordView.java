@@ -33,17 +33,17 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
         VerticalLayout panelContent = new VerticalLayout();
 
               // Compose from multiple components
-        Label label = new Label(getString("enterEmail"));
+        Label label = new Label(getString("resetPassword-enter-email-label"));
         panelContent.addComponent(label);
 
         TextField mailField = new TextField("E-mail");
         panelContent.addComponent(mailField);
 
-        Button sendButton = new MButton(getString("send")).withListener(clickEvent -> {
+        Button sendButton = new MButton(getString("resetPassword-send-button")).withListener(clickEvent -> {
             EmailValidator emailValidator = new EmailValidator();
             if(emailValidator.isValid(mailField.getValue(), null))
                 sendMail(mailField.getValue());
-            else Notification.show(getString("ntfWrongEmail"));
+            else Notification.show(getString("resetPassword-notification-wrong-email"));
         });
 
 
@@ -69,7 +69,7 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
             // all values as variables to clarify its usage
             String from = "treedapplication@gmail.com";
             String subject = "Treed Reset Password";
-            String text = getString("emailBody") + "http://localhost:8080/#!/reset/verifyview/" + resetPass;
+            String text = getString("resetPassword-email-body") + "http://localhost:8080/#!/reset/verifyview/" + resetPass;
 
             Iterable<Otp> otps = otpService.getOtps();
             Collection<Otp> otpCollection = new ArrayList<>();
@@ -80,29 +80,29 @@ public class ResetPasswordView extends TreedCustomComponent implements View {
 
             // call the email service to send the message
             if (to.isEmpty()) {
-                Notification.show(getString("enterEmail"));
+                Notification.show(getString("resetPassword-notification-empty-email"));
             } else {
                 while (iteratorOtp.hasNext()) {
                     Otp iterOtp = iteratorOtp.next();
                     if (iterOtp.getUsermail().contains(to)) {
                         isHere = true;
-                        Notification.show(getString("ntfOtpMailUsed"));
+                        Notification.show(getString("resetPassword-notification-otp-mail-used"));
                     }
                 }
                 if(!isHere){
                     addNewPass(to, resetPass);
                     MailService.send(from, to, subject, text);
-                    Notification.show(getString("emailSent"));
+                    Notification.show(getString("resetPassword-notification-email-sent"));
                 }
                 if(otpCollection.isEmpty()){
                     addNewPass(to, resetPass);
                     MailService.send(from, to, subject, text);
-                    Notification.show(getString("emailSent"));
+                    Notification.show(getString("resetPassword-notification-email-sent"));
                 }
             }
         } catch(Exception e){
             e.printStackTrace();
-            Notification.show(getString("emailError"), Notification.Type.ERROR_MESSAGE);
+            Notification.show(getString("resetPassword-notification-email-error"), Notification.Type.ERROR_MESSAGE);
         }
     }
 
