@@ -2,12 +2,14 @@ package software.netcore.treed.data.schema.puzzle;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import software.netcore.treed.data.schema.AbstractEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import java.util.Arrays;
 
 /**
 * @since v.1.7.0
@@ -25,5 +27,12 @@ public class PictogramPart extends AbstractEntity {
     @Column(name = "pictPart", nullable = false)
     private String pictPart;
 
+    @Override
+    public String toString() {
+        return "PictogramPart{" +
+                "bytes=" + bytes.length +
+                ", pictPart='" + pictPart + '\'' +
+                '}';
+    }
 }
 
