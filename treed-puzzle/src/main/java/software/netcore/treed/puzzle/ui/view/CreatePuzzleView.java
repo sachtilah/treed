@@ -57,7 +57,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        log.info("run enter");
+        //log.info("run enter");
         this.mainLayout = new MVerticalLayout()
                 .withFullSize();
         setCompositionRoot(this.mainLayout);
@@ -93,7 +93,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
         ImageUploader receiver = new ImageUploader();
 
-        TextField pathField = new MTextField(getString("path-puzzle-part-pictogram"))
+        TextField pathField = new MTextField()
                 .withFullSize()
                 .withHeight("35px");
 
@@ -101,7 +101,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 .withFullSize()
                 .withHeight("35px");
 
-        Label namePart = new Label(getString("name-puzzle-part-pictogram"));
+        Label namePart = new Label(getString("createPuzzle-name-part-label"));
 
         TextField sizeXPartField = new MTextField()
                 .withFullSize()
@@ -146,7 +146,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
         final Upload uploadx = new Upload();
-        uploadx.setCaption(getString("selectImage"));    //upload
+        //uploadx.setCaption(getString("selectImage"));    //upload
         //receiver.stream=null;
         uploadx.setReceiver(receiver);
 
@@ -166,7 +166,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
         //skuska.add(obraz);
 
-        Button uploadButton = new MButton(getString("upload-puzzle-part")).withListener(clickEvent -> { //nahrat
+        Button uploadButton = new MButton().withListener(clickEvent -> { //nahrat
             if(namePartField.getValue().isEmpty())
                 Notification.show(getString("ntfNoTerm"));
             else if(uploadx == null)
@@ -192,12 +192,12 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         for (PictogramPart pictogramPart : pics) {
             pictogramPartCollection.add(pictogramPart);
         }
-        int sizeOfSearchPictogram = Math.round(pictogramPartCollection.size()/5)+2;
+        int sizeOfSearchPictogram = Math.round(pictogramPartCollection.size()/5)*2;
 
 
 
 
-        Label searchPart = new Label(getString("search-puzzle-part-pictogram"));
+        Label searchPart = new Label();
 
         //GridLayout searchPictogram = new GridLayout(10,sizeOfSearchPictogram);
         GridLayout searchPictogram = new GridLayout(10,10);
@@ -283,7 +283,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         });
 
 
-        Panel pictogram = new Panel(getString("puzzle-pictograms"));
+        Panel pictogram = new Panel();
             pictogram.setWidth("500px");
             pictogram.setHeight("300px");
 
@@ -301,7 +301,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
 
-        Label namePictogram = new Label(getString("puzzle-pictogram-name"));
+        Label namePictogram = new Label();
 
         TextField nameField = new MTextField()
                 .withFullSize()
@@ -483,9 +483,10 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
 
-        Button createButton = new MButton(getString("select-upload-puzzle-part"))   //vzbrat
+        Button createButton = new MButton()   //vzbrat
                 .withListener(clickEvent -> {
                     //vzbrat
+                    getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME);
                 });
     //create
         MHorizontalLayout path = new MHorizontalLayout()
@@ -619,7 +620,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         //content.add(draggableLabel);
         //content.add(dropTargetLayout);
 
-        Panel panel = new Panel(getString("puzzle-pictograms"));
+        Panel panel = new Panel();
         panel.setHeight("600px");
         panel.setContent(content);
         mainLayout.removeAllComponents();
@@ -627,7 +628,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
     }
 
 
-    private void searchGrid(GridLayout searchPictogram, String search, Iterable<PictogramPart> picso){
+    public void searchGrid(GridLayout searchPictogram, String search, Iterable<PictogramPart> picso){
         //pics = pictogramPartService.getPics();
         Iterable<PictogramPart> pics = pictogramPartService.getPics();
 
