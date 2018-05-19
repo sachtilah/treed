@@ -64,7 +64,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
 
 
 
-        Label searchPart = new Label();
+        Label searchPart = new Label(getString("playPuzzle-search-part-label"));
 
         //GridLayout searchPictogram = new GridLayout(10,sizeOfSearchPictogram);
         GridLayout searchPictogram = new GridLayout(10,10);

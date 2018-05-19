@@ -25,5 +25,11 @@ public class PictogramPart extends AbstractEntity {
     @Column(name = "pictPart", nullable = false)
     private String pictPart;
 
+    @Column(name = "width", nullable = false)
+    private int width;
+
+    @Column(name = "height", nullable = false)
+    private int height;
+
 }
 
