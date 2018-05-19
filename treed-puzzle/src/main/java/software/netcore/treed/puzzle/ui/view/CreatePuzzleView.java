@@ -29,7 +29,9 @@ import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.data.schema.puzzle.PictogramPart;
+import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
 import software.netcore.treed.puzzle.business.PictogramPartService;
+import software.netcore.treed.puzzle.business.PictogramPuzzleService;
 import software.netcore.treed.puzzle.ui.PictogramShow;
 
 import javax.lang.model.element.Element;
@@ -50,11 +52,13 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
     private int heightOfPiktogram=1;
     public static final String VIEW_NAME = "/puzzle/create";
     private MVerticalLayout mainLayout;
+    private final PictogramPuzzleService pictogramPuzzleService;
     private final PictogramPartService pictogramPartService;
     //private final PictogramPuzzleService pictogramPuzzleService;
 
-    public CreatePuzzleView(PictogramPartService pictogramPartService) {
+    public CreatePuzzleView(PictogramPartService pictogramPartService, PictogramPuzzleService pictogramPuzzleService) {
         this.pictogramPartService = pictogramPartService;
+        this.pictogramPuzzleService = pictogramPuzzleService;
     }
 
     @Override
@@ -91,7 +95,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
         log.info("run build");
 
-        MVerticalLayout skuska = new MVerticalLayout();
+        //MVerticalLayout skuska = new MVerticalLayout();
 
         ImageUploader receiver = new ImageUploader();
 
@@ -179,12 +183,26 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
             if (selectHeightPart.getValue()==null)
             {selectHeightPart.setSelectedItem("1");}
 
+            Iterable<PictogramPart> pics = pictogramPartService.getPics();
+            Iterator<PictogramPart> iteratorPictogramPart = pics.iterator();
+            boolean allowed=true;
+
+
             if(namePartField.getValue().isEmpty())
-                Notification.show(getString("ntfNoTerm"));
+                Notification.show(getString("createPuzzle-name-part-field-empty-text-field"));
             else if(uploadx == null)
-                Notification.show(getString("error"));
-            else
-                addNewPictogramPart(receiver.stream.toByteArray(), namePartField.getValue(),Integer.valueOf(selectWidthPart.getValue()),Integer.valueOf(selectWidthPart.getValue()));
+                Notification.show(getString("createPuzzle-name-part-upload-empty-text-field"));
+            else {
+                while (iteratorPictogramPart.hasNext()) {
+                    PictogramPart iterPic = iteratorPictogramPart.next();
+                    if (iterPic.getPictPart().equals(namePartField.getValue()))
+                        allowed = false;
+                }
+                if(!allowed)
+                    Notification.show(getString("createPuzzle-name-part-field-name-exist"));
+                else
+                    addNewPictogramPart(receiver.stream.toByteArray(), namePartField.getValue(), Integer.valueOf(selectWidthPart.getValue()), Integer.valueOf(selectWidthPart.getValue()));
+            }
         });
     //upload
         GridLayout uploadLayout = new GridLayout(4,4);
@@ -206,6 +224,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         for (PictogramPart pictogramPart : pics) {
             pictogramPartCollection.add(pictogramPart);
         }
+        /*double c = pictogramPartCollection.size()/5;
+        Math.floor(c);*/
         int sizeOfSearchPictogram = (Math.round(pictogramPartCollection.size()/5)+1)*2;
         //if (sizeOfSearchPictogram<2) sizeOfSearchPictogram=2;
 
@@ -386,6 +406,18 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 );*/
 
 
+
+
+
+        //pictograms.
+
+        //poloha
+        //namePict[][];
+       // int redComponent = colorImage[x][y][RED];
+        //namePict[0][0]=("800px","800px");
+
+        //pictograms.add();
+
         AbsoluteLayout createPictograms = new AbsoluteLayout();
 
         /*createPictograms.getPosition();
@@ -405,8 +437,12 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         createPictograms.setHeight("800px");
         createPictograms.setWidth("800px");
 
+        //List<String[]> pictograms = new ArrayList<>();
+        String[][] pictograms = new String[10][4];
+
         DropTargetExtension<AbsoluteLayout> dropTargets = new DropTargetExtension<>(createPictograms);    //umozni prijat
         dropTargets.setDropEffect(DropEffect.MOVE);
+
         dropTargets.addDropListener(event -> {
             Optional<AbstractComponent> dragSource = event.getDragSourceComponent();
 
@@ -455,9 +491,45 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 //y= nu+1;
                //addnum();
 
+
+                int zpx=createPictograms.getComponentCount();
                 createPictograms.addComponent(picture, "left: "+80*xp+"px; top: "+80*yp+"px;");
-                int zp = createPictograms.getPosition(picture).getZIndex();
-                log.info("drop position at x "+ (xp) + " y " + yp + " z " + zp);
+                //int zp = createPictograms.getPosition(picture).getZIndex();
+
+                int zp=createPictograms.getComponentCount();
+
+
+                //String[] namePict = new String[4];
+
+
+                /*namePict[0]=(nameOfPiktogram);
+                namePict[1]=(Integer.toString(xp));
+                namePict[2]=(Integer.toString(yp));
+                namePict[3]=(Integer.toString(zp-1));*/
+
+                //int fuk = Integer.valueOf(namePict[1]);
+
+
+
+                if (zpx!=zp){
+                    pictograms[zp-1][0]=(nameOfPiktogram);
+                    pictograms[zp-1][1]=(Integer.toString(xp));
+                    pictograms[zp-1][2]=(Integer.toString(yp));
+                    pictograms[zp-1][3]=(Integer.toString(zp-1));
+                }else{
+                    for (int i=0; zp-1<i;i++){
+                        if (pictograms[i][0].equals(nameOfPiktogram)){
+                            pictograms[i][1]=(Integer.toString(xp));
+                            pictograms[i][2]=(Integer.toString(yp));
+                        }
+                    }
+
+                }
+
+                //pictograms.add(namePict);
+
+
+                log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
                 //log.info("drop at x "+ (x) + " y " + y);
                 //log.info("mouse x "+ (xm) + " y " + ym);
                 log.info("mouse relative x "+ (x) + " y " + y);
@@ -472,7 +544,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
       /*  DragSourceExtension<Image> dragSourcex = new DragSourceExtension<>(picture);    //umozny drag
-        dragSourcex.setEffectAllowed(EffectAllowed.MOVE);                                            //sposob presunu-------------------------------------
+        dragSourcex.setEffectAllowed(EffectAllowed.MOVE);                                            //sposob presunu
 
         dragSourcex.addDragStartListener(e -> {
                     dragSourcex.setDragData(picture);
@@ -503,8 +575,28 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
         Button createButton = new MButton(getString("createPuzzle-create-button-button"))   //vzbrat
                 .withListener(clickEvent -> {
-                    //vzbrat
-                    getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME);
+
+                    Iterable<PictogramPuzzle> picst = pictogramPuzzleService.getPics();
+                    Iterator<PictogramPuzzle> iteratorPictogramPuzzle = picst.iterator();
+                    boolean allowed=true;
+
+
+                    if(nameField.getValue().isEmpty())
+                        Notification.show(getString("createPuzzle-name-field-empty-text-field"));
+                    else {
+                        while (iteratorPictogramPuzzle.hasNext()) {
+                            PictogramPuzzle iterPic = iteratorPictogramPuzzle.next();
+                            if (iterPic.getPictPuzzle().equals(nameField.getValue()))
+                                allowed = false;
+                        }
+                        if(!allowed)
+                            Notification.show(getString("createPuzzle-name-field-name-exist"));
+                        else
+                            log.info(" ");
+                            //addNewPictogram(receiver.stream.toByteArray(), nameField.getValue(), pictograms);//----------------------------------------
+                    }
+
+                    getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME);//-------------------------------------------------
                 });
     //create
         MHorizontalLayout path = new MHorizontalLayout()
@@ -702,10 +794,12 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
                         searchPictogram.addComponent(picture, i, j);
+                        //searchPictogram.setCaption(iterPic.getPictPart());
 
 
                         
                         log.info("added Image " + iterPic.getPictPart());
+                        //log.info("added Image " + searchPictogram.getCaption());
 
 
                         searchPictogram.addComponent(new Label(iterPic.getPictPart()), i, (j + 1));
@@ -729,6 +823,16 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         pictogramPartAdd.setHeight(height);
         pictogramPartAdd.setCreateTime(Date.from(Instant.now()));
         pictogramPartService.savePic(pictogramPartAdd);
+    }
+
+    private void addNewPictogram(byte[] bytes, String pictPuzzleName, String[][] pictograms){
+
+        PictogramPuzzle pictogramPuzzleAdd = new PictogramPuzzle();
+        pictogramPuzzleAdd.setBytes(bytes);
+        pictogramPuzzleAdd.setPictPuzzle(pictPuzzleName);
+        pictogramPuzzleAdd.setComponents(pictograms);
+        pictogramPuzzleAdd.setCreateTime(Date.from(Instant.now()));
+        pictogramPuzzleService.savePic(pictogramPuzzleAdd);
     }
 
     /*private int addnum(){

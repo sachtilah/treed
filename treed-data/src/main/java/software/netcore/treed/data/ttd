@@ -1,20 +1,16 @@
-nahravanie overi jedinecnost mena
 nesmie presiahnut lazout potom nedropne
-ukladat po klinuti vytvorit+overit ci nie je meno praydne+jedinecnost
-
-ukladanie
-    piktogram
-    list<array(meno casti piktogramu, poloha)>
+ukladat po klinuti vytvorit
 
 
-jozo-po drope vie s nim chzbat este ???
+
+jozo-po drope vie s nim hzbat este ??? Ano
 
 
 
 
 
 
-vzhladavnie
+vzhladavanie
  poyicia pri kliknuti - vzber spravneho cez grid a vzpocitanu poyiciu gecomponentXY a z neho meno
 
 
@@ -27,4 +23,4 @@ porvnavanie poyicii a piktogramov
 
 
 
-z poyiciu poriesit ?
+z poyiciu poriesit ? cey count elementov

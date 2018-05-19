@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+//import java.util.List;
 
 /**
  * @since v.1.7.0
@@ -24,4 +25,7 @@ public class PictogramPuzzle extends AbstractEntity {
 
     @Column(name = "pictPuzzle", nullable = false)
     private String pictPuzzle;
+
+    @Column(name = "components", nullable = false)
+    private String[][] components;
 }
