@@ -85,7 +85,7 @@ public class RegistrationView extends TreedCustomComponent implements View {
                         .add(backToLoginViewButton)
                         .add(createAccountButton));
 
-        binder = new BeanValidationBinder<>(Account.class);
+        binder = new Binder<>(Account.class);
         binder.forField(nameField)
                 .withValidator((Validator<String>) (value, context) -> {
                     if (isValid(value)) {
