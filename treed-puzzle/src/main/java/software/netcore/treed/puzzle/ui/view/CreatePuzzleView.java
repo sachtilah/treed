@@ -103,7 +103,12 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
         Label namePart = new Label(getString("name-puzzle-part-pictogram"));
 
-
+        TextField sizeXPartField = new MTextField()
+                .withFullSize()
+                .withHeight("35px");
+        TextField sizeYPartField = new MTextField()
+                .withFullSize()
+                .withHeight("35px");
 
 
 
@@ -178,8 +183,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
             uploadLayout.setComponentAlignment(namePart, Alignment.MIDDLE_RIGHT);
             uploadLayout.addComponent(namePartField,1,1);
             uploadLayout.addComponent(uploadButton,2,1);
-
-        uploadLayout.addComponent(select1);uploadLayout.addComponent(select2);
+            uploadLayout.addComponent(sizeXPartField);uploadLayout.addComponent(sizeYPartField);
+        //uploadLayout.addComponent(select1);uploadLayout.addComponent(select2);
 
 
         Iterable<PictogramPart> pics = pictogramPartService.getPics();
@@ -332,8 +337,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                     //createPictogram.setCursorX(4);
                     //createPictogram.setCursorY(4);
                     Component picture = dragSource.get();
-                    picture.setWidth("80px");
-                    picture.setHeight("80px");
+                    picture.setWidth("160px");
+                    picture.setHeight("160px");
                               int w = UI.getCurrent().getPage().getBrowserWindowWidth();
                               int h = UI.getCurrent().getPage().getBrowserWindowHeight();
                               //int h = UI.getCurrent().getPage().getWebBrowser().
@@ -398,18 +403,22 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                     searchGrid(searchPictogram, searchField.getValue(), pics);
                 int xm = event.getMouseEventDetails().getClientX();
                 int ym = event.getMouseEventDetails().getClientY();
+                /*isfirstitme
+                String name=nameOfPiktogram;*/
+                int x = event.getMouseEventDetails().getRelativeX();
+                int y = event.getMouseEventDetails().getRelativeY();
                 //createPictograms.setCursorX(4);
                 //createPictograms.setCursorY(4);
 
                 Component picture = dragSource.get();
-                picture.setWidth("80px");
-                picture.setHeight("80px");
+                picture.setWidth(80*Integer.valueOf(sizeXPartField.getValue())+"px");
+                picture.setHeight(80*Integer.valueOf(sizeYPartField.getValue())+"px");
                 int w = UI.getCurrent().getPage().getBrowserWindowWidth();
                 int h = UI.getCurrent().getPage().getBrowserWindowHeight();
                 //int h = UI.getCurrent().getPage().getWebBrowser().
                 //UI.getCurrent().getPage().getWebBrowser().getScreenWidth();
                 log.info("width " + w + "heigh" + h);
-                log.info(" nazov piktogramu" + nameOfPiktogram);
+                log.info(" nazov piktogramu " + nameOfPiktogram);
                               /*PointerInfo a = MouseInfo.getPointerInfo();
                               Point b = a.getLocation();
                               int xm = (int) b.getX();
@@ -421,17 +430,19 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                               int ym = p.y;*/
                 //int x=createPictograms.getCursorX();
                 //int y=createPictograms.getCursorY();
-
-
-                int x=250;
-                int y=100;
-                x=nu;
+                int xp =Math.round(x/80);
+                int yp =Math.round(y/80);
+                //int x=250;
+                //int y=100;
+                //x=nu+1;
+                //y= nu+1;
                addnum();
-                log.info("drop def at x "+ (x) + " y " + y);
-                createPictograms.addComponent(picture, "left: "+x+"px; top: "+y+"px;");
+                log.info("drop nasobenie at x "+ (xp) + " y " + yp);
+                createPictograms.addComponent(picture, "left: "+80*xp+"px; top: "+80*yp+"px;");
                 createPictograms.getPosition(picture);
                 log.info("drop at x "+ (x) + " y " + y);
                 log.info("mouse x "+ (xm) + " y " + ym);
+                log.info("mouse relative x "+ (x) + " y " + y);
                 //log.info();
                 //addcount(createPictogram);
 
@@ -654,6 +665,9 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                         DragSourceExtension<Image> dragSourcex = new DragSourceExtension<>(picture);    //umozny drag
                         dragSourcex.setEffectAllowed(EffectAllowed.MOVE);                                            //sposob presunu
 
+                        dragSourcex.addDragStartListener(e -> {
+                                  String name= iterPic.getPictPart();
+                                });
                         dragSourcex.addDragStartListener(e -> {
                                     dragSourcex.setDragData(picture);
                                     //dragSource.setDragData("bla");
