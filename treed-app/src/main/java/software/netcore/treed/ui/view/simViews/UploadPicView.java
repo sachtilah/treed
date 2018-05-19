@@ -2,6 +2,7 @@ package software.netcore.treed.ui.view.simViews;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
@@ -110,14 +111,16 @@ public class UploadPicView extends TreedCustomComponent implements View {
         Button createButton = new MButton(getString("uploadPic-create-button")).withListener(clickEvent -> {
             if(termField.getValue().isEmpty())
                 Notification.show(getString("uploadPic-notification-no-term"));
-            else if(upload == null)
-                Notification.show(getString("uploadPic-notification-no-file"));
-            else
+            else {
                 addNewPiktogram(receiver.stream.toByteArray(), termField.getValue());
+                Page.getCurrent().reload();
+                Notification.show(getString("uploadPic-notification-successfully-saved"));
+
+            }
         });
         layout.addComponents(termField, createButton);
         layout.setComponentAlignment(termField, Alignment.MIDDLE_CENTER);
-        layout.setComponentAlignment(createButton, Alignment.MIDDLE_CENTER);
+        layout.setComponentAlignment(createButton, Alignment.BOTTOM_CENTER);
     }
 
     private void addNewPiktogram (byte[] bytes, String term){

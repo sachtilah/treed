@@ -27,7 +27,7 @@ public class Sentence extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Piktogram> piktograms;
 
 }

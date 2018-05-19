@@ -83,23 +83,11 @@ public class CreateSentenceView extends TreedCustomComponent implements View {
         TextField column = new TextField(getString("createSentence-column-field"));
         TextField sentenceField = new TextField(getString("createSentence-sentence-field"));
 
-        HorizontalLayout hLayout = new HorizontalLayout();
-        hLayout.removeAllComponents();
-        hLayout.setMargin(true);
-        hLayout.setSpacing(true);
-        hLayout.setSizeFull();
-
-        HorizontalLayout hLayout2 = new HorizontalLayout();
-        hLayout2.removeAllComponents();
-        hLayout2.setMargin(true);
-        hLayout2.setSpacing(true);
-        hLayout2.setSizeFull();
-
-        content.addComponents(hLayout, hLayout2);
-        hLayout.addComponents(row, sentenceNameField);
-        hLayout2.addComponents(column, sentenceField);
-        content.setComponentAlignment(hLayout, Alignment.MIDDLE_CENTER);
-        content.setComponentAlignment(hLayout2, Alignment.MIDDLE_CENTER);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.removeAllComponents();
+        verticalLayout.setMargin(true);
+        verticalLayout.setSpacing(true);
+        verticalLayout.setSizeFull();
 
 
         Button generateButton = new MButton(getString("createSentence-generate-button")).withListener(clickEvent -> {
@@ -113,14 +101,12 @@ public class CreateSentenceView extends TreedCustomComponent implements View {
                 Notification.show(getString("createSentence-notification-invalid-fields"));
             }
             else {
-
-
-
                 int rows = Integer.parseInt(row.getValue());
                 int columns = Integer.parseInt(column.getValue());
                 int numberOfWords = rows*columns;
                 int counter = 0, counterImage = 0;
                 Collection<Piktogram> collection = new ArrayList<>();
+
 
                 String[] words = sentenceField.getValue().split("\\s+");
                 GridLayout grid = new GridLayout(columns, rows*2);
@@ -156,7 +142,6 @@ public class CreateSentenceView extends TreedCustomComponent implements View {
                                 }
                                 if(!iteratorPic.hasNext())
                                     isMissing = true;
-                                //    Notification.show("Neni tu take");
                             }
                         }
                     }
@@ -168,11 +153,16 @@ public class CreateSentenceView extends TreedCustomComponent implements View {
                 }
                 else {
                     addSentence(rows, columns, sentenceNameField.getValue(), collection);
-                    content.addComponent(grid);
+                    HorizontalLayout horizontalLayout = new HorizontalLayout();
+                    content.addComponent(horizontalLayout);
+                    horizontalLayout.addComponents(verticalLayout, grid);
+                    content.setComponentAlignment(horizontalLayout, Alignment.BOTTOM_CENTER);
                 }
             }
         });
-        content.addComponent(generateButton);
+        content.addComponent(verticalLayout);
+        verticalLayout.addComponents(row, column, sentenceNameField, sentenceField, generateButton);
+        content.setComponentAlignment(verticalLayout, Alignment.BOTTOM_LEFT);
     }
 
     private void addSentence (int row, int column, String name, Collection<Piktogram> collection) {
@@ -189,7 +179,7 @@ public class CreateSentenceView extends TreedCustomComponent implements View {
             Sentence iterSentence = iteratorSentence.next();
             if (iterSentence.getName().equals(name)) {
                 isUsed = true;
-                Notification.show("createSentence-notification-sentence-name-used");
+                Notification.show(getString("createSentence-notification-sentence-name-used"));
             }
         }
         if (!isUsed) {

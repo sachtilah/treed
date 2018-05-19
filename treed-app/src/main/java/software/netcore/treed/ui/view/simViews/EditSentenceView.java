@@ -6,7 +6,6 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import liquibase.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import software.netcore.treed.business.PiktogramService;
@@ -120,23 +119,11 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                     TextField sentenceField = new TextField(getString("createSentence-sentence-field"));
                     sentenceField.setValue(String.join(" ", string));
 
-                    HorizontalLayout hLayout = new HorizontalLayout();
-                    hLayout.removeAllComponents();
-                    hLayout.setMargin(true);
-                    hLayout.setSpacing(true);
-                    hLayout.setSizeFull();
-
-                    HorizontalLayout hLayout2 = new HorizontalLayout();
-                    hLayout2.removeAllComponents();
-                    hLayout2.setMargin(true);
-                    hLayout2.setSpacing(true);
-                    hLayout2.setSizeFull();
-
-                    content.addComponents(hLayout, hLayout2);
-                    hLayout.addComponents(row, sentenceNameField);
-                    hLayout2.addComponents(column, sentenceField);
-                    content.setComponentAlignment(hLayout, Alignment.MIDDLE_CENTER);
-                    content.setComponentAlignment(hLayout2, Alignment.MIDDLE_CENTER);
+                    VerticalLayout verticalLayout = new VerticalLayout();
+                    verticalLayout.removeAllComponents();
+                    verticalLayout.setMargin(true);
+                    verticalLayout.setSpacing(true);
+                    verticalLayout.setSizeFull();
 
                     Button editButton = new MButton(getString("createSentence-edit-button")).withListener(clickEvent -> {
 
@@ -164,7 +151,7 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                                         Iterable<Piktogram> piktograms = piktogramService.getPics();
                                         Collection<Piktogram> piktogramCollection = new ArrayList<>();
                                         for (Piktogram piktogram : piktograms) {
-                                            piktogramCollection.add(piktogram);
+                                            collection.add(piktogram);
                                         }
                                         Iterator<Piktogram> iteratorPic = piktograms.iterator();
 
@@ -188,22 +175,23 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                                             }
                                             if(!iteratorPic.hasNext())
                                                 isMissing = true;
-                                            //    Notification.show("Neni tu take");
                                         }
                                     }
                                 }
                             }
-                            /*else
-                                Notification.show(getString("createSentence-notification-not-enough-words"));*/
                             if(isMissing)
                                 Notification.show(getString("createSentence-notification-upload-missing"));
                             else {
                                 addSentence(rows, columns, sentenceNameField.getValue(), collection);
-                                content.addComponent(grid);
+                                HorizontalLayout horizontalLayout = new HorizontalLayout();
+                                content.addComponent(horizontalLayout);
+                                horizontalLayout.addComponents(verticalLayout, grid);
                             }
                         }
                     });
-                    content.addComponent(editButton);
+                    content.addComponent(verticalLayout);
+                    verticalLayout.addComponents(row, column, sentenceNameField, sentenceField, editButton);
+                    content.setComponentAlignment(verticalLayout, Alignment.MIDDLE_LEFT);
                 }
                 else if(findSentenceField.isEmpty())
                     Notification.show(getString("editSentence-notification-find-sentence-empty"));
@@ -217,8 +205,6 @@ public class EditSentenceView extends TreedCustomComponent implements View {
     }
 
     private void addSentence (int row, int column, String name, Collection<Piktogram> collection) {
-        boolean isUsed = false;
-
         Iterable<Sentence> sentences = sentenceService.getSentences();
         Collection<Sentence> sentenceCollection = new ArrayList<>();
         for (Sentence sentence : sentences) {
@@ -239,8 +225,6 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                 sentenceService.saveSentence(sentenceAdd);
                 log.info("updated Sentence");
             }
-            else
-                Notification.show("createSentence-notification-sentence-name-used");
         }
     }
 }
