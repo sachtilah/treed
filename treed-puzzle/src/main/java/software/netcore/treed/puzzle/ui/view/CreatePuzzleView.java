@@ -5,7 +5,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.dnd.DropEffect;
 import com.vaadin.shared.ui.dnd.EffectAllowed;
-import com.vaadin.shared.ui.grid.DropMode;
+//import com.vaadin.shared.ui.grid.DropMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
@@ -15,14 +15,14 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.dnd.event.DropEvent;
+//import com.vaadin.ui.dnd.event.DropEvent;
 import lombok.extern.slf4j.Slf4j;
-import com.vaadin.ui.components.grid.GridDragSource;
-import com.vaadin.ui.components.grid.GridDropTarget;
+//import com.vaadin.ui.components.grid.GridDragSource;
+//import com.vaadin.ui.components.grid.GridDropTarget;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
-import com.vaadin.ui.themes.ValoTheme;
-import org.springframework.web.context.WebApplicationContext;
+//import com.vaadin.ui.themes.ValoTheme;
+//import org.springframework.web.context.WebApplicationContext;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
@@ -32,16 +32,16 @@ import software.netcore.treed.data.schema.puzzle.PictogramPart;
 import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
 import software.netcore.treed.puzzle.business.PictogramPartService;
 import software.netcore.treed.puzzle.business.PictogramPuzzleService;
-import software.netcore.treed.puzzle.ui.PictogramShow;
+//import software.netcore.treed.puzzle.ui.PictogramShow;
 
-import javax.lang.model.element.Element;
-import java.awt.*;
+//import javax.lang.model.element.Element;
+//import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.*;
-import java.util.List;
+//import java.util.List;
 
 @Slf4j
 @SpringView(name =CreatePuzzleView.VIEW_NAME)
@@ -202,7 +202,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 if(!allowed)
                     Notification.show(getString("createPuzzle-name-part-field-name-exist"));
                 else
-                    addNewPictogramPart(receiver.stream.toByteArray(), namePartField.getValue(), Integer.valueOf(selectWidthPart.getValue()), Integer.valueOf(selectWidthPart.getValue()));
+                    addNewPictogramPart(receiver.stream.toByteArray(), namePartField.getValue(),
+                            Integer.valueOf(selectWidthPart.getValue()), Integer.valueOf(selectWidthPart.getValue()));
             }
         });
     //upload
@@ -253,7 +254,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
 
-        searchGrid(searchPictogram,"all", pics);
+        searchGrid(searchPictogram,"all");
 
         //Iterator<PictogramPart> iteratorPictogram = pics.iterator();
 
@@ -271,13 +272,13 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
             Notification.show(sk);*/
 
             if (searchField.getValue().isEmpty())
-            searchGrid(searchPictogram, "all", pics);
+            searchGrid(searchPictogram, "all");
             else
-                searchGrid(searchPictogram, searchField.getValue(), pics);
+                searchGrid(searchPictogram, searchField.getValue());
 
 
 
-            Iterable<PictogramPart> picss = pictogramPartService.getPics();
+            //Iterable<PictogramPart> picss = pictogramPartService.getPics();
            /* searchPictogram.removeAllComponents();
         Iterator<PictogramPart> iteratorPictogram = picss.iterator();
         int k=0;
@@ -450,9 +451,9 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
             if (dragSource.isPresent() && dragSource.get() instanceof Image) {
 
                 if (searchField.getValue().isEmpty())
-                    searchGrid(searchPictogram, "all", pics);
+                    searchGrid(searchPictogram, "all");
                 else
-                    searchGrid(searchPictogram, searchField.getValue(), pics);
+                    searchGrid(searchPictogram, searchField.getValue());
                 //int xm = event.getMouseEventDetails().getClientX();
                 //int ym = event.getMouseEventDetails().getClientY();
                 /*isfirstitme
@@ -611,7 +612,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                             //addNewPictogram(receiver.stream.toByteArray(), nameField.getValue(), pictograms);//----------------------------------------
                     }
 
-                    getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME);//-------------------------------------------------
+                    getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME);//---------------------------------------------------
                 });
     //create
         MHorizontalLayout path = new MHorizontalLayout()
@@ -754,7 +755,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
     }
 
 
-    public void searchGrid(GridLayout searchPictogram, String search, Iterable<PictogramPart> picso){
+    private void searchGrid(GridLayout searchPictogram, String search){
         //pics = pictogramPartService.getPics();
         Iterable<PictogramPart> pics = pictogramPartService.getPics();
 
@@ -781,7 +782,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                 if (iteratorPictogramPart.hasNext()) {
                     PictogramPart iterPic = iteratorPictogramPart.next();
-                    if (iterPic.getPictPart().equals(search) || search == "all") {
+                    if (iterPic.getPictPart().equals(search) || search.equals("all")) {
 
 
                         Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
@@ -792,9 +793,6 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                         DragSourceExtension<Image> dragSourcex = new DragSourceExtension<>(picture);    //umozny drag
                         dragSourcex.setEffectAllowed(EffectAllowed.MOVE);                                            //sposob presunu
 
-                        dragSourcex.addDragStartListener(e -> {
-                                  String name= iterPic.getPictPart();
-                                });
                         dragSourcex.addDragStartListener(e -> {
 
 
@@ -868,12 +866,12 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         return nu;
     }*/
 
-    private void addcount(GridLayout createPictogram){
+    /*private void addcount(GridLayout createPictogram){
         //int xa=createPictogram.getCursorX();
         int ya=createPictogram.getCursorY();ya++;
         //createPictogram.setCursorX(xa);
         createPictogram.setCursorY(ya);
-    }
+    }*/
 
     private class ImageUploader implements Upload.Receiver {
 
