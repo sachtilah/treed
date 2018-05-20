@@ -2,12 +2,15 @@ package software.netcore.treed.ui.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import software.netcore.treed.ui.TreedCustomComponent;
-import software.netcore.treed.ui.view.simViews.CreateSentenceView;
-import software.netcore.treed.ui.view.simViews.EditSentenceView;
+import software.netcore.treed.ui.view.simViews.CreateClauseView;
+import software.netcore.treed.ui.view.simViews.EditClauseView;
 import software.netcore.treed.ui.view.simViews.UploadPicView;
 
 /**
@@ -41,13 +44,13 @@ public class HomeScreenView extends TreedCustomComponent implements View {
         upload.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
 
-        Button createSentence = new Button(getString("navigationBar-create-sentence-button"));
-        createSentence.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(CreateSentenceView.VIEW_NAME));
+        Button createClause = new Button(getString("navigationBar-create-clause-button"));
+        createClause.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
 
-        Button editSentence = new Button(getString("navigationBar-edit-sentence-button"));
-        editSentence.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(EditSentenceView.VIEW_NAME));
+        Button editClause = new Button(getString("navigationBar-edit-clause-button"));
+        editClause.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(EditClauseView.VIEW_NAME));
 
 
         Label usernameField = new Label("username");
@@ -57,7 +60,7 @@ public class HomeScreenView extends TreedCustomComponent implements View {
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
         content.addComponent(bar);
-        bar.addComponents(treed, upload, createSentence, editSentence, usernameField, logout);
+        bar.addComponents(treed, upload, createClause, editClause, usernameField, logout);
 
         setSizeUndefined();
     }

@@ -14,9 +14,9 @@ import java.util.Collection;
 @Getter
 @Setter
 @ToString
-@Table(name = "sentence")
+@Table(name = "clause")
 @Entity
-public class Sentence extends AbstractEntity {
+public class Clause extends AbstractEntity {
 
     @Column(name = "row_count", nullable = false)
     private Integer rowCount;

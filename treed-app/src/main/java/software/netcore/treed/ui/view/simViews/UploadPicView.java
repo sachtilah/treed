@@ -2,7 +2,6 @@ package software.netcore.treed.ui.view.simViews;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
@@ -54,13 +53,13 @@ public class UploadPicView extends TreedCustomComponent implements View {
         homeScreen.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME));
 
-        Button createSentence = new Button(getString("navigationBar-create-sentence-button"));
-        createSentence.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(CreateSentenceView.VIEW_NAME));
+        Button createClause = new Button(getString("navigationBar-create-clause-button"));
+        createClause.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
 
-        Button editSentence = new Button(getString("navigationBar-edit-sentence-button"));
-        editSentence.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(EditSentenceView.VIEW_NAME));
+        Button editClause = new Button(getString("navigationBar-edit-clause-button"));
+        editClause.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(EditClauseView.VIEW_NAME));
 
         Label usernameField = new Label("username");
 
@@ -69,7 +68,7 @@ public class UploadPicView extends TreedCustomComponent implements View {
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
         content.addComponent(bar);
-        bar.addComponents(treed, homeScreen, createSentence, editSentence, usernameField, logout);
+        bar.addComponents(treed, homeScreen, createClause, editClause, usernameField, logout);
 
         Label text = new Label(getString("uploadPic-upload-label"));
         content.addComponent(text);
@@ -113,9 +112,8 @@ public class UploadPicView extends TreedCustomComponent implements View {
                 Notification.show(getString("uploadPic-notification-no-term"));
             else {
                 addNewPiktogram(receiver.stream.toByteArray(), termField.getValue());
-                Page.getCurrent().reload();
                 Notification.show(getString("uploadPic-notification-successfully-saved"));
-
+                build();
             }
         });
         layout.addComponents(termField, createButton);

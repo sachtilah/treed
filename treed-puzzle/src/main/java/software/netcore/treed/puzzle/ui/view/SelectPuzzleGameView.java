@@ -45,6 +45,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
                 .withFullSize();
         setCompositionRoot(this.mainLayout);
         setSizeFull();
+        this.mainLayout.setMargin(false);
         build();
     }
 
@@ -138,7 +139,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
                 .add(searchField);
         //search
         MVerticalLayout searchLayout = new MVerticalLayout()
-                .withMargin(false)
+                .withMargin(true)
                 .add(search)
                 .add(pictogram)
                 .add(selectButton);
@@ -150,8 +151,8 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
 
         Panel panel = new Panel();
-        panel.setHeight("600px");
-
+        //panel.setHeight("600px");
+        panel.setSizeFull();
         panel.setContent(searchLayout);
         mainLayout.removeAllComponents();
         mainLayout.add(panel, Alignment.TOP_CENTER);
