@@ -9,9 +9,9 @@ import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import software.netcore.treed.business.PiktogramService;
-import software.netcore.treed.business.SentenceService;
+import software.netcore.treed.business.ClauseService;
+import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
-import software.netcore.treed.data.schema.sim.Sentence;
 import software.netcore.treed.ui.TreedCustomComponent;
 import software.netcore.treed.ui.view.HomeScreenView;
 import software.netcore.treed.ui.view.LoginAttemptView;
@@ -21,16 +21,16 @@ import java.time.Instant;
 import java.util.*;
 
 @Slf4j
-@SpringView(name = software.netcore.treed.ui.view.simViews.EditSentenceView.VIEW_NAME)
-public class EditSentenceView extends TreedCustomComponent implements View {
+@SpringView(name = software.netcore.treed.ui.view.simViews.EditClauseView.VIEW_NAME)
+public class EditClauseView extends TreedCustomComponent implements View {
 
     public static final String VIEW_NAME = "/edit";
     private VerticalLayout mainLayout;
-    private final SentenceService sentenceService;
+    private final ClauseService clauseService;
     private final PiktogramService piktogramService;
 
-    public EditSentenceView(SentenceService sentenceService, PiktogramService piktogramService) {
-        this.sentenceService = sentenceService;
+    public EditClauseView(ClauseService clauseService, PiktogramService piktogramService) {
+        this.clauseService = clauseService;
         this.piktogramService = piktogramService;
     }
 
@@ -58,9 +58,9 @@ public class EditSentenceView extends TreedCustomComponent implements View {
         uploadButton.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
 
-        Button createSentence = new Button(getString("navigationBar-create-sentence-button"));
-        createSentence.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(CreateSentenceView.VIEW_NAME));
+        Button createClause = new Button(getString("navigationBar-create-clause-button"));
+        createClause.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
 
 
         Button homeScreen = new Button(getString("navigationBar-home-button"));
@@ -75,31 +75,33 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
 
         content.addComponent(bar);
-        bar.addComponents(treed, uploadButton, homeScreen, createSentence, usernameField, logout);
+        bar.addComponents(treed, uploadButton, homeScreen, createClause, usernameField, logout);
 
         HorizontalLayout editLayout = new HorizontalLayout();
 
-        Label sentenceLabel = new Label(getString("editSentence-sentence-label"));
-        TextField findSentenceField = new TextField();
+        Label clauseLabel = new Label(getString("editClause-clause-label"));
+        TextField findClauseField = new TextField();
 
-        Button findButton = new Button(getString("editSentence-find-button"));
+        Button findButton = new Button(getString("editClause-find-button"));
         findButton.addClickListener((Button.ClickListener) event -> {
             boolean isFound = false;
-            Iterable<Sentence> sentences = sentenceService.getSentences();
-            Collection<Sentence> sentenceCollection = new ArrayList<>();
-            for (Sentence sentence : sentences) {
-                sentenceCollection.add(sentence);
+            Iterable<Clause> clauses = clauseService.getClauses();
+            Collection<Clause> clauseCollection = new ArrayList<>();
+            for (Clause clause : clauses) {
+                clauseCollection.add(clause);
             }
-            Iterator<Sentence> iteratorSentence = sentences.iterator();
+            Iterator<Clause> iteratorClause = clauses.iterator();
 
-            while ((iteratorSentence.hasNext()) && !isFound) {
-                Sentence iterSentence = iteratorSentence.next();
-                if ((iterSentence.getName().equals(findSentenceField.getValue())) && !findSentenceField.isEmpty()) {
+            while ((iteratorClause.hasNext()) && !isFound) {
+                Clause iterClause = iteratorClause.next();
+                System.out.println(iterClause);
+
+                if ((iterClause.getName().equals(findClauseField.getValue())) && !findClauseField.isEmpty()) {
                     isFound = true;
 
                     int c = 0;
-                    String[] string = new String[iterSentence.getRowCount()*iterSentence.getColumnCount()];
-                    Iterable<Piktogram> pictograms = iterSentence.getPiktograms();
+                    String[] string = new String[iterClause.getRowCount()* iterClause.getColumnCount()];
+                    Iterable<Piktogram> pictograms = iterClause.getPiktograms();
                     Collection<Piktogram> pictogramCollection = new ArrayList<>();
                     for (Piktogram pictogram : pictograms) {
                         pictogramCollection.add(pictogram);
@@ -110,14 +112,14 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                         c++;
                     }
 
-                    TextField sentenceNameField = new TextField(getString("createSentence-sentence-name-field"));
-                    sentenceNameField.setValue(iterSentence.getName());
-                    TextField row = new TextField(getString("createSentence-row-field"));
-                    row.setValue(iterSentence.getRowCount().toString());
-                    TextField column = new TextField(getString("createSentence-column-field"));
-                    column.setValue(iterSentence.getColumnCount().toString());
-                    TextField sentenceField = new TextField(getString("createSentence-sentence-field"));
-                    sentenceField.setValue(String.join(" ", string));
+                    TextField clauseNameField = new TextField(getString("createClause-clause-name-field"));
+                    clauseNameField.setValue(iterClause.getName());
+                    TextField row = new TextField(getString("createClause-row-field"));
+                    row.setValue(iterClause.getRowCount().toString());
+                    TextField column = new TextField(getString("createClause-column-field"));
+                    column.setValue(iterClause.getColumnCount().toString());
+                    TextField clauseField = new TextField(getString("createClause-clause-field"));
+                    clauseField.setValue(String.join(" ", string));
 
                     VerticalLayout verticalLayout = new VerticalLayout();
                     verticalLayout.removeAllComponents();
@@ -125,15 +127,15 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                     verticalLayout.setSpacing(true);
                     verticalLayout.setSizeFull();
 
-                    Button editButton = new MButton(getString("createSentence-edit-button")).withListener(clickEvent -> {
+                    Button editButton = new MButton(getString("createClause-edit-button")).withListener(clickEvent -> {
 
                         boolean isMissing = false;
-                        if(row.getValue().isEmpty() || column.getValue().isEmpty() || sentenceNameField.getValue().isEmpty()
-                                || sentenceField.getValue().isEmpty()){
-                            Notification.show(getString("createSentence-notification-empty-fields"));
+                        if(row.getValue().isEmpty() || column.getValue().isEmpty() || clauseNameField.getValue().isEmpty()
+                                || clauseField.getValue().isEmpty()){
+                            Notification.show(getString("createClause-notification-empty-fields"));
                         }
                         else if((!row.getValue().matches("[0-9]+")) || (!column.getValue().matches("[0-9]+"))){
-                            Notification.show(getString("createSentence-notification-invalid-fields"));
+                            Notification.show(getString("createClause-notification-invalid-fields"));
                         }
                         else {
                             int rows = Integer.parseInt(row.getValue());
@@ -142,7 +144,7 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                             int counter = 0, counterImage = 0;
                             Collection<Piktogram> collection = new ArrayList<>();
 
-                            String[] words = sentenceField.getValue().split("\\s+");
+                            String[] words = clauseField.getValue().split("\\s+");
                             GridLayout grid = new GridLayout(columns, rows*2);
                             grid.removeAllComponents();
                             if(numberOfWords == words.length){
@@ -180,9 +182,9 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                                 }
                             }
                             if(isMissing)
-                                Notification.show(getString("createSentence-notification-upload-missing"));
+                                Notification.show(getString("createClause-notification-upload-missing"));
                             else {
-                                addSentence(rows, columns, sentenceNameField.getValue(), collection);
+                                addClause(rows, columns, clauseNameField.getValue(), collection);
                                 HorizontalLayout horizontalLayout = new HorizontalLayout();
                                 content.addComponent(horizontalLayout);
                                 horizontalLayout.addComponents(verticalLayout, grid);
@@ -190,40 +192,39 @@ public class EditSentenceView extends TreedCustomComponent implements View {
                         }
                     });
                     content.addComponent(verticalLayout);
-                    verticalLayout.addComponents(row, column, sentenceNameField, sentenceField, editButton);
+                    verticalLayout.addComponents(row, column, clauseNameField, clauseField, editButton);
                     content.setComponentAlignment(verticalLayout, Alignment.MIDDLE_LEFT);
                 }
-                else if(findSentenceField.isEmpty())
-                    Notification.show(getString("editSentence-notification-find-sentence-empty"));
+                else if(findClauseField.isEmpty())
+                    Notification.show(getString("editClause-notification-find-clause-empty"));
                 /*else
-                    Notification.show(getString("editSentence-notification-find-sentence-not-found"));*/
+                    Notification.show(getString("editClause-notification-find-clause-not-found"));*/
             }
             });
-
         content.addComponent(editLayout);
-        editLayout.addComponents(sentenceLabel, findSentenceField, findButton);
+        editLayout.addComponents(clauseLabel, findClauseField, findButton);
     }
 
-    private void addSentence (int row, int column, String name, Collection<Piktogram> collection) {
-        Iterable<Sentence> sentences = sentenceService.getSentences();
-        Collection<Sentence> sentenceCollection = new ArrayList<>();
-        for (Sentence sentence : sentences) {
-            sentenceCollection.add(sentence);
+    private void addClause(int row, int column, String name, Collection<Piktogram> collection) {
+        Iterable<Clause> clauses = clauseService.getClauses();
+        Collection<Clause> clauseCollection = new ArrayList<>();
+        for (Clause clause : clauses) {
+            clauseCollection.add(clause);
         }
-        Iterator<Sentence> iteratorSentence = sentences.iterator();
+        Iterator<Clause> iteratorClause = clauses.iterator();
 
-        while ((iteratorSentence.hasNext())) {
-            Sentence iterSentence = iteratorSentence.next();
-            if (iterSentence.getName().equals(name)) {
-                sentenceService.deleteSentence(iterSentence);
-                Sentence sentenceAdd = new Sentence();
-                sentenceAdd.setRowCount(row);
-                sentenceAdd.setColumnCount(column);
-                sentenceAdd.setName(name);
-                sentenceAdd.setPiktograms(collection);
-                sentenceAdd.setCreateTime(Date.from(Instant.now()));
-                sentenceService.saveSentence(sentenceAdd);
-                log.info("updated Sentence");
+        while ((iteratorClause.hasNext())) {
+            Clause iterClause = iteratorClause.next();
+            if (iterClause.getName().equals(name)) {
+                clauseService.deleteClause(iterClause);
+                Clause clauseAdd = new Clause();
+                clauseAdd.setRowCount(row);
+                clauseAdd.setColumnCount(column);
+                clauseAdd.setName(name);
+                clauseAdd.setPiktograms(collection);
+                clauseAdd.setCreateTime(Date.from(Instant.now()));
+                clauseService.saveClause(clauseAdd);
+                log.info("updated Clause");
             }
         }
     }

@@ -9,12 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import software.netcore.treed.data.converter.StringToHashConverter;
 import software.netcore.treed.data.repository.AccountRepository;
 import software.netcore.treed.data.repository.OtpRepository;
-import software.netcore.treed.data.repository.puzzle.PictogramPartRepository;
-import software.netcore.treed.data.repository.puzzle.PictogramPuzzleRepository;
-import software.netcore.treed.data.repository.sim.SentenceRepository;
+import software.netcore.treed.data.repository.sim.ClauseRepository;
 import software.netcore.treed.data.repository.sim.PiktogramRepository;
-import software.netcore.treed.puzzle.business.PictogramPartService;
-import software.netcore.treed.puzzle.business.PictogramPuzzleService;
 
 
 /**
@@ -28,7 +24,7 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
     private final AccountRepository accountRepo;
     private final OtpRepository otpRepo;
     private final PiktogramRepository piktogramRepo;
-    private final SentenceRepository storyRepo;
+    private final ClauseRepository clauseRepo;
 
 @Bean
 public AccountService accountService() {
@@ -46,8 +42,8 @@ public PiktogramService piktogramService() {
 }
 
 @Bean
-public SentenceService storyService() {
-    return new SentenceService(storyRepo);
+public ClauseService clauseService() {
+    return new ClauseService(clauseRepo);
 }
 
 /**
