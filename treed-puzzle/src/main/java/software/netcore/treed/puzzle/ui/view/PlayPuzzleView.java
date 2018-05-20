@@ -52,6 +52,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                 .withFullSize();
         setCompositionRoot(this.mainLayout);
         setSizeFull();
+        this.mainLayout.setMargin(false);
         build();
     }
 
@@ -211,11 +212,11 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                 Component picture = dragSource.get();
                 picture.setWidth((80*widthOfPiktogram)+"px");
                 picture.setHeight((80*heightOfPiktogram)+"px");
-                int w = UI.getCurrent().getPage().getBrowserWindowWidth();
-                int h = UI.getCurrent().getPage().getBrowserWindowHeight();
+                //int w = UI.getCurrent().getPage().getBrowserWindowWidth();
+                //int h = UI.getCurrent().getPage().getBrowserWindowHeight();
                 //int h = UI.getCurrent().getPage().getWebBrowser().
                 //UI.getCurrent().getPage().getWebBrowser().getScreenWidth();
-                log.info("width " + w + "heigh" + h);
+                //log.info("width " + w + "heigh" + h);
                 log.info(" nazov piktogramu " + nameOfPiktogram);
                               /*PointerInfo a = MouseInfo.getPointerInfo();
                               Point b = a.getLocation();
@@ -365,10 +366,12 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                         )
                         .add(createPictogramLayout)
                 );
+        content.setMargin(true);
 
         content.setWidth("100%");
         Panel panel = new Panel();
-        panel.setHeight("600px");
+        //panel.setHeight("600px");
+        panel.setSizeFull();
         panel.setContent(content);
         mainLayout.removeAllComponents();
         mainLayout.add(panel, Alignment.TOP_LEFT);

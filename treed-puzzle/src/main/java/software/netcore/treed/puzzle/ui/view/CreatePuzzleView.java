@@ -46,7 +46,7 @@ import java.util.*;
 @Slf4j
 @SpringView(name =CreatePuzzleView.VIEW_NAME)
 public class CreatePuzzleView extends TreedCustomComponent implements View{
-    private int nu=0;
+    //private int nu=0;
     private int zpx=0;
     private String nameOfPiktogram="";
     private int widthOfPiktogram=1;
@@ -64,11 +64,11 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        //log.info("run enter");
         this.mainLayout = new MVerticalLayout()
                 .withFullSize();
         setCompositionRoot(this.mainLayout);
         setSizeFull();
+        this.mainLayout.setMargin(false);
         build();
     }
 
@@ -94,7 +94,6 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         });*/
        // ((WebApplicationContext)getContext()).getBrowser().getScreenWidth()
 
-        log.info("run build");
 
         //MVerticalLayout skuska = new MVerticalLayout();
 
@@ -104,6 +103,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 .withFullSize()
                 .withWidth("150px")
                 .withHeight("35px");
+        pathField.setValue("150px");
 
         TextField namePartField = new MTextField()
                 .withFullSize()
@@ -175,8 +175,13 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
             //uploadx.setButtonCaption("280px");
             //obraz.setData(image);
         });
-
+        //uploadx.StartedEvent();
         //skuska.add(obraz);
+        uploadx.setButtonCaption(getString("createPuzzle-caption-upload-button"));
+        //String infoi = uploadx.getData().toString();
+        //uploadx.getDescription().
+        //log.info(infoi);
+
 
         Button uploadButton = new MButton(getString("createPuzzle-upload-button-button")).withListener(clickEvent -> { //nahrat
             if (selectWidthPart.getValue()==null)
@@ -599,6 +604,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                     if(nameField.getValue().isEmpty())
                         Notification.show(getString("createPuzzle-name-field-empty-text-field"));
+                    else if(createPictograms.getComponentCount()==0)
+                        Notification.show(getString("createPuzzle-empty-create-field"));
                     else {
                         while (iteratorPictogramPuzzle.hasNext()) {
                             PictogramPuzzle iterPic = iteratorPictogramPuzzle.next();
@@ -608,8 +615,9 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                         if(!allowed)
                             Notification.show(getString("createPuzzle-name-field-name-exist"));
                         else
-                            log.info(" ");
+                            Notification.show(getString("createPuzzle-create-successful"));//-----------------------------------------------------------------
                             //addNewPictogram(receiver.stream.toByteArray(), nameField.getValue(), pictograms);//----------------------------------------
+                            //getUI().getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME);---------------------------------------------------
                     }
 
                     getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME);//---------------------------------------------------
@@ -747,11 +755,24 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         //content.add(dropTargetLayout);
 
         Panel panel = new Panel();
-        panel.setHeight("600px");
-        panel.setWidth("100%");
+        panel.setSizeFull();
+        int w = UI.getCurrent().getPage().getBrowserWindowWidth();
+        int h = UI.getCurrent().getPage().getBrowserWindowHeight();
+        MVerticalLayout sk = new MVerticalLayout();
+        sk.setSizeFull();
+        sk.setMargin(false);
+        sk.setSpacing(false);
+        //panel.setWidth(100,Unit.PERCENTAGE);
+        //panel.setHeight(100,Unit.PERCENTAGE);
+        //panel.setHeight("600px");
+        //panel.setWidth("100%");
         panel.setContent(content);
+        //content.setComponentAlignment();
+        //panel.
+        sk.addComponent(panel);
+        sk.setComponentAlignment(panel, Alignment.TOP_CENTER);
         mainLayout.removeAllComponents();
-        mainLayout.add(panel, Alignment.TOP_CENTER);
+        mainLayout.add(sk, Alignment.TOP_CENTER);
     }
 
 
@@ -804,8 +825,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                                     nameOfPiktogram=iterPic.getPictPart();
                                     widthOfPiktogram=iterPic.getWidth();
                                     heightOfPiktogram=iterPic.getHeight();
-                                    nu++;
-                                    log.info("nu " + nu);
+                                    //nu++;
+                                    //log.info("nu " + nu);
 
 
 
