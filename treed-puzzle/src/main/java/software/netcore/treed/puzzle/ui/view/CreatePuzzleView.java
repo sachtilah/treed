@@ -47,6 +47,7 @@ import java.util.List;
 @SpringView(name =CreatePuzzleView.VIEW_NAME)
 public class CreatePuzzleView extends TreedCustomComponent implements View{
     private int nu=0;
+    private int zpx=0;
     private String nameOfPiktogram="";
     private int widthOfPiktogram=1;
     private int heightOfPiktogram=1;
@@ -466,11 +467,11 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 //picture.setHeight(80*Integer.valueOf(sizeYPartField.getValue())+"px");
                 picture.setWidth((80*widthOfPiktogram)+"px");
                 picture.setHeight((80*heightOfPiktogram)+"px");
-                int w = UI.getCurrent().getPage().getBrowserWindowWidth();
-                int h = UI.getCurrent().getPage().getBrowserWindowHeight();
+                //int w = UI.getCurrent().getPage().getBrowserWindowWidth();
+                //int h = UI.getCurrent().getPage().getBrowserWindowHeight();
                 //int h = UI.getCurrent().getPage().getWebBrowser().
                 //UI.getCurrent().getPage().getWebBrowser().getScreenWidth();
-                log.info("width " + w + "heigh" + h);
+                //log.info("width " + w + "heigh" + h);
                 log.info(" nazov piktogramu " + nameOfPiktogram);
                               /*PointerInfo a = MouseInfo.getPointerInfo();
                               Point b = a.getLocation();
@@ -491,23 +492,27 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 //y= nu+1;
                //addnum();
 
+                /*log.info(Integer.toString(Math.round(createPictograms.getWidth())));
+                log.info(Integer.toString(Math.round(picture.getWidth())));
+                log.info(Integer.toString(Math.round(x)));*/
 
-                int zpx=createPictograms.getComponentCount();
+                if (createPictograms.getWidth()>=xp*80+picture.getWidth() && createPictograms.getHeight()>= yp*80+picture.getHeight()){
+
+
+
+                zpx=createPictograms.getComponentCount();
+                    if (zpx < 10){
+
+
                 createPictograms.addComponent(picture, "left: "+80*xp+"px; top: "+80*yp+"px;");
                 //int zp = createPictograms.getPosition(picture).getZIndex();
 
                 int zp=createPictograms.getComponentCount();
 
 
-                //String[] namePict = new String[4];
-
-
-                /*namePict[0]=(nameOfPiktogram);
-                namePict[1]=(Integer.toString(xp));
-                namePict[2]=(Integer.toString(yp));
-                namePict[3]=(Integer.toString(zp-1));*/
-
                 //int fuk = Integer.valueOf(namePict[1]);
+
+
 
 
 
@@ -525,11 +530,19 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                     }
 
                 }
+                    log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
+                    }else{
+                        Notification.show(getString("createPuzzle-max-layout-pictogram-reached"));
+                    }
+
+
+            }else{
+                    Notification.show(getString("createPuzzle-drop-picture-out-of-bound"));
+                }
 
                 //pictograms.add(namePict);
 
 
-                log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
                 //log.info("drop at x "+ (x) + " y " + y);
                 //log.info("mouse x "+ (xm) + " y " + ym);
                 log.info("mouse relative x "+ (x) + " y " + y);
@@ -541,6 +554,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         });
 
 
+        Panel createPictogramx = new Panel();
+        createPictogramx.setContent(createPictograms);
 
 
       /*  DragSourceExtension<Image> dragSourcex = new DragSourceExtension<>(picture);    //umozny drag
@@ -605,7 +620,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
         MVerticalLayout createPictogramLayout = new MVerticalLayout()
                 .add(path)
-                .add(createPictograms)
+                .add(createPictogramx)
                 //.add(createPictogram)
                 .add(createButton);
            createPictogramLayout.setComponentAlignment(path, Alignment.TOP_CENTER);
@@ -781,6 +796,11 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                                   String name= iterPic.getPictPart();
                                 });
                         dragSourcex.addDragStartListener(e -> {
+
+
+
+
+
                                     dragSourcex.setDragData(picture);
                                     //dragSource.setDragData("bla");
                                     nameOfPiktogram=iterPic.getPictPart();
@@ -788,6 +808,10 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                                     heightOfPiktogram=iterPic.getHeight();
                                     nu++;
                                     log.info("nu " + nu);
+
+
+
+
                                 }
                                 //dragSource.setDataTransferData("",searchPictogram);
                         );
