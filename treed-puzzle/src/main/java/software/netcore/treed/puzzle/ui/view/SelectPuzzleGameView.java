@@ -1,22 +1,22 @@
 package software.netcore.treed.puzzle.ui.view;
 
-import com.vaadin.event.MouseEvents;
+//import com.vaadin.event.MouseEvents;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
-import com.vaadin.shared.ui.dnd.EffectAllowed;
+//import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import com.vaadin.ui.dnd.DragSourceExtension;
+//import com.vaadin.ui.dnd.DragSourceExtension;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.api.TreedCustomComponent;
-import software.netcore.treed.data.schema.puzzle.PictogramPart;
+//import software.netcore.treed.data.schema.puzzle.PictogramPart;
 import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
-import software.netcore.treed.puzzle.business.PictogramPartService;
+//import software.netcore.treed.puzzle.business.PictogramPartService;
 import software.netcore.treed.puzzle.business.PictogramPuzzleService;
 
 import java.io.ByteArrayInputStream;
@@ -30,8 +30,8 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
     public static final String VIEW_NAME = "/puzzle/select";
     private MVerticalLayout mainLayout;
-    public static String caption;
-    private String nameOfPiktogram="";
+    private static String caption;
+    //private String nameOfPiktogram="";
     private final PictogramPuzzleService pictogramPuzzleService;
 
     public SelectPuzzleGameView(PictogramPuzzleService pictogramPuzzleService) {
@@ -66,14 +66,14 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
                 .withFullSize()
                 .withHeight("35px");
 
-        GridLayout searchPictogram = new GridLayout(5,10);
-        //GridLayout searchPictogram = new GridLayout(10,sizeOfSearchPictogram);
+        //GridLayout searchPictogram = new GridLayout(5,10);
+        GridLayout searchPictogram = new GridLayout(5,sizeOfSearchPictogram);
         searchPictogram.setSpacing(true);
         searchPictogram.setMargin(false);
         searchPictogram.setSizeFull();
 
 
-        searchGrid(searchPictogram,"all", pics);
+        searchGrid(searchPictogram,"all");
         //searchGridx(searchPictogram,"all");
 
         //searchPictogram.addComponent(selectPuzzle,0,0);
@@ -106,9 +106,9 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
             Notification.show(sk);*/
 
             if (searchField.getValue().isEmpty())
-                searchGrid(searchPictogram, "all", pics);
+                searchGrid(searchPictogram, "all");
             else
-                searchGrid(searchPictogram, searchField.getValue(), pics);
+                searchGrid(searchPictogram, searchField.getValue());
 
 
         });
@@ -130,9 +130,9 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
         pictogram.setContent(searchPictogram);
         //pictogram.setContent(new Label("puzzle-pictograms"));
-        Button selectButton = new MButton(getString("selectPuzzleGame-select-button-button")).withListener(clickEvent -> { //nahrat
-            getUI().getNavigator().navigateTo(PlayPuzzleView.VIEW_NAME);
-        });
+        Button selectButton = new MButton(getString("selectPuzzleGame-select-button-button")).withListener(clickEvent ->
+            getUI().getNavigator().navigateTo(PlayPuzzleView.VIEW_NAME)
+        );
         MHorizontalLayout search= new MHorizontalLayout()
                 .add(selectPuzzle)
                 .add(searchField);
@@ -157,7 +157,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         mainLayout.add(panel, Alignment.TOP_CENTER);
     }
 
-    private void searchGrid(GridLayout searchPictogram, String search, Iterable<PictogramPuzzle> picso){
+    private void searchGrid(GridLayout searchPictogram, String search){
         //pics = pictogramPartService.getPics();
         Iterable<PictogramPuzzle> pics = pictogramPuzzleService.getPics();
 
@@ -172,7 +172,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
                 if (iteratorPictogramPuzzle.hasNext()) {
                     PictogramPuzzle iterPic = iteratorPictogramPuzzle.next();
-                    if (iterPic.getPictPuzzle().equals(search) || search == "all") {
+                    if (iterPic.getPictPuzzle().equals(search) || search.equals("all")) {
 
 
                         Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
@@ -198,7 +198,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
             j=j+2;
         }
     }
-    public String getCaptionx(){
+    public static String getCaptionx(){
         return caption;
     }
 
