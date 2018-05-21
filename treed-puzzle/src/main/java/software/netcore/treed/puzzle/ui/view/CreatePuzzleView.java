@@ -36,9 +36,11 @@ import software.netcore.treed.puzzle.business.PictogramPuzzleService;
 
 //import javax.lang.model.element.Element;
 //import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.util.*;
 //import java.util.List;
@@ -103,7 +105,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 .withFullSize()
                 .withWidth("150px")
                 .withHeight("35px");
-        pathField.setValue("150px");
+
 
         TextField namePartField = new MTextField()
                 .withFullSize()
@@ -163,11 +165,15 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         uploadx.setReceiver(receiver);
 
         //Image obraz = new Image();
+        uploadx.addStartedListener(event -> {
+            pathField.setValue(event.getFilename());
+        });
 
         uploadx.addSucceededListener((Upload.SucceededListener) succeededEvent -> {
             Image image = new Image("", new StreamResource((StreamResource.StreamSource) () ->
                     new ByteArrayInputStream(receiver.stream.toByteArray()), ""));
-
+            succeededEvent.getFilename();
+            //receiver.stream.getFilename();
             //skuska.addComponent(image);
             //skuska.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
             //image.setWidth("280px");
@@ -175,8 +181,12 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
             //uploadx.setButtonCaption("280px");
             //obraz.setData(image);
         });
+
+
         //uploadx.StartedEvent();
         //skuska.add(obraz);
+
+        //pathField.setValue("150px");
         uploadx.setButtonCaption(getString("createPuzzle-caption-upload-button"));
         //String infoi = uploadx.getData().toString();
         //uploadx.getDescription().
@@ -445,6 +455,10 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         createPictograms.setWidth("800px");
 
         //List<String[]> pictograms = new ArrayList<>();
+
+       // String[] position = new String[4];
+        //Collection<String[]> pictogramsPartPosition = new ArrayList<>();
+
         String[][] pictograms = new String[10][4];
 
         DropTargetExtension<AbsoluteLayout> dropTargets = new DropTargetExtension<>(createPictograms);    //umozni prijat
@@ -478,7 +492,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 //int h = UI.getCurrent().getPage().getWebBrowser().
                 //UI.getCurrent().getPage().getWebBrowser().getScreenWidth();
                 //log.info("width " + w + "heigh" + h);
-                log.info(" nazov piktogramu " + nameOfPiktogram);
+                log.info(" nazov piktogramu " + picture.getCaption());
                               /*PointerInfo a = MouseInfo.getPointerInfo();
                               Point b = a.getLocation();
                               int xm = (int) b.getX();
@@ -504,6 +518,48 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                 if (createPictograms.getWidth()>=xp*80+picture.getWidth() && createPictograms.getHeight()>= yp*80+picture.getHeight()){
 
+                //odstranenie
+
+                    /*if (removePictogramPart) {
+                        Iterator<String[]> itr = pictogramsPartPosition.iterator();
+                        while (itr.hasNext()){
+                            if (picture.getCaption()==((ArrayList<String[]>) pictogramsPartPosition).get())
+                        }
+
+
+                        for (String[] elem : pictogramsPartPosition) {
+                            log.info(elem[0]);
+                            if (elem[0].equals(picture.getCaption())){
+                                //pictogramsPartPosition.
+                                pictogramsPartPosition.remove();
+                            }
+                        }*/
+
+
+                       /* String removeElem = "Perl";
+                        List<String> myList = new ArrayList<String>();
+                        myList.add("Java");
+                        myList.add("Unix");
+                        myList.add("Oracle");
+                        myList.add("C++");
+                        myList.add("Perl");
+                        System.out.println("Before remove:");
+                        System.out.println(myList);
+                        Iterator<String> itr = myList.iterator();
+                        while(itr.hasNext()){
+                            if(removeElem.equals(itr.next())){
+                                itr.remove();
+                            }
+                        }
+                        System.out.println("After remove:");
+                        System.out.println(myList);
+
+
+                        createPictograms.removeComponent(picture);
+                    //}*/
+
+
+
 
 
                 zpx=createPictograms.getComponentCount();
@@ -520,31 +576,67 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
 
+                       /* if (delete){
 
 
-                if (zpx!=zp){
-                    pictograms[zp-1][0]=(nameOfPiktogram);
-                    pictograms[zp-1][1]=(Integer.toString(xp));
-                    pictograms[zp-1][2]=(Integer.toString(yp));
-                    pictograms[zp-1][3]=(Integer.toString(zp-1));
-                }else{
-                    for (int i=0; zp-1<i;i++){
-                        if (pictograms[i][0].equals(nameOfPiktogram)){
-                            pictograms[i][1]=(Integer.toString(xp));
-                            pictograms[i][2]=(Integer.toString(yp));
+                        }else {*/
+
+
+
+
+
+
+
+                  /*      if (zpx != zp) {
+                            position[0]=(nameOfPiktogram);
+                            position[1]=(Integer.toString(xp));
+                            position[2]=(Integer.toString(yp));
+                            position[3]=(Integer.toString(zp - 1));
+                            pictogramsPartPosition.add(position);
+                    } else {
+
+
+                        for (int i = 0; zp - 1 < i; i++) {
+                            if (pictograms[i][0].equals(nameOfPiktogram)) {
+                                pictograms[i][1] = (Integer.toString(xp));
+                                pictograms[i][2] = (Integer.toString(yp));
+                            }
                         }
-                    }
 
-                }
+
+
+                    }*/
+
+                            if (zpx != zp) {
+                                pictograms[zp - 1][0] = (picture.getCaption());
+                                pictograms[zp - 1][1] = (Integer.toString(xp));
+                                pictograms[zp - 1][2] = (Integer.toString(yp));
+                                pictograms[zp - 1][3] = (Integer.toString(zp - 1));
+                            } else {
+                                for (int i = 0; zp - 1 < i; i++) {
+                                    if (pictograms[i][0].equals(picture.getCaption())) {
+                                        pictograms[i][1] = (Integer.toString(xp));
+                                        pictograms[i][2] = (Integer.toString(yp));
+                                    }
+                                }
+
+                            }
+
+
+                        //}
+
+
                     log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
                     }else{
                         Notification.show(getString("createPuzzle-max-layout-pictogram-reached"));
-                    }
+                    }//pocet casti
 
 
             }else{
                     Notification.show(getString("createPuzzle-drop-picture-out-of-bound"));
-                }
+                }//hranice
+
+
 
                 //pictograms.add(namePict);
 
@@ -555,7 +647,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 //log.info();
                 //addcount(createPictogram);
 
-            }
+            }//drag
 
         });
 
@@ -615,8 +707,10 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                         if(!allowed)
                             Notification.show(getString("createPuzzle-name-field-name-exist"));
                         else
-                            Notification.show(getString("createPuzzle-create-successful"));//-----------------------------------------------------------------
-                            //addNewPictogram(receiver.stream.toByteArray(), nameField.getValue(), pictograms);//----------------------------------------
+                            Notification.show(getString("createPuzzle-create-successful"));
+                        //Collection<AbsoluteLayout> sentenceCollection = new ArrayList<>();
+                        //sentenceCollection.add(createPictograms);
+                            addNewPictogram(nameField.getValue(), pictograms);
                             //getUI().getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME);---------------------------------------------------
                     }
 
@@ -734,7 +828,17 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
 
 
+                        /*new StreamResource((StreamResource.StreamSource) () ->
+                                new ByteArrayOutputStream(Image),);*/
 
+        //BufferedImage sav = new BufferedImage();
+        //ByteArrayOutputStream imagebuffer = null;
+
+        /*createPictograms.getData() = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", imagebuffer);
+        return new ByteArrayInputStream(
+                imagebuffer.toByteArray());*/
+        //createPictograms.writeDesign();
 
 
 
@@ -756,8 +860,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
         Panel panel = new Panel();
         panel.setSizeFull();
-        int w = UI.getCurrent().getPage().getBrowserWindowWidth();
-        int h = UI.getCurrent().getPage().getBrowserWindowHeight();
+        //int w = UI.getCurrent().getPage().getBrowserWindowWidth();
+        //int h = UI.getCurrent().getPage().getBrowserWindowHeight();
         MVerticalLayout sk = new MVerticalLayout();
         sk.setSizeFull();
         sk.setMargin(false);
@@ -772,7 +876,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         sk.addComponent(panel);
         sk.setComponentAlignment(panel, Alignment.TOP_CENTER);
         mainLayout.removeAllComponents();
-        mainLayout.add(sk, Alignment.TOP_CENTER);
+        mainLayout.add(panel, Alignment.TOP_CENTER);
     }
 
 
@@ -808,6 +912,9 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                         Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
                                 new ByteArrayInputStream(iterPic.getBytes()), ""));
+
+
+
                         picture.setWidth("80px");
                         picture.setHeight("80px");
 
@@ -822,6 +929,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                                     dragSourcex.setDragData(picture);
                                     //dragSource.setDragData("bla");
+                                    picture.setCaption(iterPic.getPictPart());
                                     nameOfPiktogram=iterPic.getPictPart();
                                     widthOfPiktogram=iterPic.getWidth();
                                     heightOfPiktogram=iterPic.getHeight();
@@ -868,12 +976,12 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         pictogramPartService.savePic(pictogramPartAdd);
     }
 
-    private void addNewPictogram(byte[] bytes, String pictPuzzleName, String[][] pictograms){
+    private void addNewPictogram(String pictPuzzleName, String[][] position){
 
         PictogramPuzzle pictogramPuzzleAdd = new PictogramPuzzle();
-        pictogramPuzzleAdd.setBytes(bytes);
+        //pictogramPuzzleAdd.setBytes(bytes);
         pictogramPuzzleAdd.setPictPuzzle(pictPuzzleName);
-        pictogramPuzzleAdd.setComponents(pictograms);
+        pictogramPuzzleAdd.setComponents(position);
         pictogramPuzzleAdd.setCreateTime(Date.from(Instant.now()));
         pictogramPuzzleService.savePic(pictogramPuzzleAdd);
     }
