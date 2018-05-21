@@ -13,7 +13,7 @@ public class PictogramPartService {
     private final PictogramPartRepository pictogramPartRepository;
 
     public Iterable<PictogramPart> getPics() {
-        log.info("Getting all pictogram");
+        log.info("Getting all part of pictogram");
         return pictogramPartRepository.findAll();
     }
 

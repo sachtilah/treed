@@ -34,7 +34,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
     public static final String VIEW_NAME = "/puzzle/play";
     private MVerticalLayout mainLayout;
     private int widthOfPiktogram=1;
-    private String str = SelectPuzzleGameView.getCaptionx();
+    private String pokec="skuska2";//----------------------------------------------------------------------------------------------------
     private int heightOfPiktogram=1;
     private boolean isCorrect = true;
     private String[][] componentOfPictogram = new String[10][4];
@@ -61,7 +61,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
      */
     private void build() {
         log.info("run build");
-
+        //pokec = SelectPuzzleGameView.getCaptionx();
         Iterable<PictogramPuzzle> picsPuzzle = pictogramPuzzleService.getPics();
         /*Collection<PictogramPuzzle> pictogramPuzzleCollection = new ArrayList<>();
         for (PictogramPuzzle pictogramPuzzle : picsPuzzle) {
@@ -72,7 +72,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
         Iterator<PictogramPuzzle> iteratorPictogramPuzzle = picsPuzzle.iterator();
         while (iteratorPictogramPuzzle.hasNext()) {
             PictogramPuzzle iterPicPuzzle = iteratorPictogramPuzzle.next();
-            if (iterPicPuzzle.getPictPuzzle().equals(str)){
+            if (iterPicPuzzle.getPictPuzzle().equals(pokec)){
                 componentOfPictogram = iterPicPuzzle.getComponents();
             }
         }
@@ -155,8 +155,8 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                 .add(pictogram);
 
 
-
-        Label namePictogram = new Label(str);
+log.info(pokec);
+        Label namePictogram = new Label(pokec);
 
 
 
@@ -260,25 +260,27 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
 
 
                         if (zpx!=zp){
-                            pictogramsPuzzle[zp-1][0]=(nameOfPiktogram);
+                            pictogramsPuzzle[zp-1][0]=(picture.getCaption());
                             pictogramsPuzzle[zp-1][1]=(Integer.toString(xp));
                             pictogramsPuzzle[zp-1][2]=(Integer.toString(yp));
                             pictogramsPuzzle[zp-1][3]=(Integer.toString(zp-1));
                         }else{
                             for (int i=0; zp-1<i;i++){
-                                if (pictogramsPuzzle[i][0].equals(nameOfPiktogram)){
+                                if (pictogramsPuzzle[i][0].equals(picture.getCaption())){
                                     pictogramsPuzzle[i][1]=(Integer.toString(xp));
                                     pictogramsPuzzle[i][2]=(Integer.toString(yp));
                                 }
                             }
 
                         }
-                        for (int j=0;componentOfPictogram[j][0]!=null;j++){
+                        int j=0;
+                        while (componentOfPictogram[j][0]!=null){
                             for (int k=0;k<4;k++){
                                 if (!componentOfPictogram[j][k].equals(pictogramsPuzzle[j][k])){
                                     isCorrect=false;
                                 }
                             }
+                            j++;
                         }
 
 
@@ -304,7 +306,9 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                 //addcount(createPictogram);
 
             }
-
+            if (isCorrect && createPictograms.getComponentCount()!=0){
+                Notification.show("Well done");//----------------------------------------------------------------------------------
+            }
         });
 
         Panel createPictogramx = new Panel();
@@ -341,9 +345,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
         //createPictogram.addComponent(new Label("1x2 cell"), 1, 2, 1, 3);
         //KONIEC GRID
 
-        if (isCorrect && createPictograms.getComponentCount()!=0){
-            Notification.show("Well done");//----------------------------------------------------------------------------------
-        }
+
 
         MHorizontalLayout path = new MHorizontalLayout()
                 .add(namePictogram);
@@ -420,6 +422,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                                     heightOfPiktogram=iterPic.getHeight();
                                     //dragSource.setDragData("bla");
                                     nameOfPiktogram=iterPic.getPictPart();
+                                    picture.setCaption(iterPic.getPictPart());
                                 }
                                 //dragSource.setDataTransferData("",searchPictogram);
                         );
