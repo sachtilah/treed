@@ -1,11 +1,17 @@
 package software.netcore.treed.ui.view.simViews;
 
+import com.vaadin.data.HasValue;
+import com.vaadin.data.Result;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
+import org.vaadin.viritin.button.MButton;
+import org.vaadin.viritin.fields.MTextField;
+import org.vaadin.viritin.label.MLabel;
 import software.netcore.treed.business.ClauseService;
 import software.netcore.treed.business.PiktogramService;
 import software.netcore.treed.data.schema.Account;
@@ -13,13 +19,18 @@ import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import software.netcore.treed.ui.TreedCustomComponent;
 import com.vaadin.navigator.View;
+import software.netcore.treed.ui.view.HomeScreenView;
 import software.netcore.treed.ui.view.LoginAttemptView;
 
 import javax.xml.bind.Binder;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.validation.Validator;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+import static com.vaadin.data.ValidationResult.ok;
 
 @Slf4j
 @SpringView(name = software.netcore.treed.ui.view.simViews.GameView.VIEW_NAME)
@@ -29,7 +40,6 @@ public class GameView extends TreedCustomComponent implements View {
     private VerticalLayout mainLayout;
     public String parameter;
     private final ClauseService clauseService;
-    private com.vaadin.data.Binder<Piktogram> binder;
 
     public GameView(ClauseService clauseService) {
         this.clauseService = clauseService;
@@ -71,6 +81,14 @@ public class GameView extends TreedCustomComponent implements View {
         content.addComponent(clauseNameLabel);
         content.setComponentAlignment(clauseNameLabel, Alignment.MIDDLE_CENTER);
 
+        Button backButton = new MButton(getString("gameView-back-button"));
+        backButton.addClickListener((Button.ClickListener) event ->
+                getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME));
+
+        content.addComponent(backButton);
+        content.setComponentAlignment(backButton, Alignment.MIDDLE_CENTER);
+
+        final int[] c = {0};
 
         Iterable<Clause> clauses = clauseService.getClauses();
         for (Clause clause : clauses) {
@@ -86,7 +104,6 @@ public class GameView extends TreedCustomComponent implements View {
                 }
                 Iterator<Piktogram> iteratorPic = piktograms.iterator();
                 int i = 0, j = 0, k = 1, l = 0;
-                binder = new com.vaadin.data.Binder<>();
                 while (iteratorPic.hasNext()) {
                             Piktogram iterPic = iteratorPic.next();
                             if (j % 2 == 0 && i<columns) {
@@ -98,16 +115,25 @@ public class GameView extends TreedCustomComponent implements View {
                                 j+=2;
                                 i=0;
                             }
-
                             if (k % 2 == 1 && l<columns) {
-                                grid.addComponent(new TextField(""), l, k);
+                                grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
+                                    if(iterPic.getTerm().equals(valueChangeEvent.getValue())) {
+                                        grid.removeComponent(valueChangeEvent.getComponent());
+                                        grid.addComponent(new Label("<strong><center>" + iterPic.getTerm()
+                                        + "</center></strong>", ContentMode.HTML));
+                                        c[0]++;
+                                        if(c[0] ==clause.getPiktograms().size())
+                                            Notification.show(getString("gameView-notification-win"));
+                                    }
+                                    else Notification.show(getString("gameView-notification-wrong"), Notification.Type.ERROR_MESSAGE);
+                                }), l, k);
                                 l++;
                             }
                             if(l==columns){
                                 k+=2;
                                 l=0;
                             }
-                        }
+                }
                 content.addComponent(grid);
                 content.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
                 log.info("Clause " + parameter + " loaded");
