@@ -436,6 +436,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         //pictograms.add();
 
         AbsoluteLayout createPictograms = new AbsoluteLayout();
+        createPictograms.removeAllComponents();
 
         /*createPictograms.getPosition();
 
@@ -559,7 +560,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                     //}*/
 
 
-                    //log.info("nemo dropnuteho piktogramu "+nameOfPiktogram);
+
 
 
                 zpx=createPictograms.getComponentCount();
@@ -622,12 +623,18 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                                 }
 
                             }
+                        log.info("nemo dropnuteho piktogramu "+nameOfPiktogram);
+                            log.info(pictograms[zp - 1][0]);
+                        log.info(pictograms[zp - 1][1]);
+                        log.info(pictograms[zp - 1][2]);
+                        log.info(pictograms[zp - 1][3]);
+
 
 
                         //}
 
 
-                    log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
+                    //log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
                     }else{
                         Notification.show(getString("createPuzzle-max-layout-pictogram-reached"));
                     }//pocet casti
@@ -644,7 +651,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                 //log.info("drop at x "+ (x) + " y " + y);
                 //log.info("mouse x "+ (xm) + " y " + ym);
-                log.info("mouse relative x "+ (x) + " y " + y);
+                //log.info("mouse relative x "+ (x) + " y " + y);
                 //log.info();
                 //addcount(createPictogram);
 
@@ -962,6 +969,10 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
     }
 
     private void addNewPictogram(String pictPuzzleName, String[][] position){
+        log.info(position[0][0]);
+        log.info(position[0][1]);
+        log.info(position[0][2]);
+        log.info(position[0][3]);
 
         PictogramPuzzle pictogramPuzzleAdd = new PictogramPuzzle();
         //pictogramPuzzleAdd.setBytes(bytes);
