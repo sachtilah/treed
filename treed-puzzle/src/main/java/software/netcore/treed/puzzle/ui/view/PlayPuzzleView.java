@@ -37,6 +37,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
     private String pokec="skuska2";//----------------------------------------------------------------------------------------------------
     private int heightOfPiktogram=1;
     private boolean isCorrect = true;
+    private static String selectedPictogram="skuska2";
     private String[][] componentOfPictogram = new String[10][4];
     private final PictogramPartService pictogramPartService;
     private final PictogramPuzzleService pictogramPuzzleService;
@@ -107,7 +108,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                     //dragSource.setDataTransferData("",searchPictogram);
         );*/
         //----------------------------------------------------
-        //SelectPuzzleGameView.getCaptionx();
+       // String face = SelectPuzzleGameView.getCaptionx();
 
         searchGridPart(searchPictogram,"all");
 
@@ -217,7 +218,8 @@ log.info(pokec);
                 //int h = UI.getCurrent().getPage().getWebBrowser().
                 //UI.getCurrent().getPage().getWebBrowser().getScreenWidth();
                 //log.info("width " + w + "heigh" + h);
-                log.info(" nazov piktogramu " + nameOfPiktogram);
+                log.info(" nazov piktogramu " + selectedPictogram);
+                log.info("nemo dropnuteho piktogramu "+nameOfPiktogram);
                               /*PointerInfo a = MouseInfo.getPointerInfo();
                               Point b = a.getLocation();
                               int xm = (int) b.getX();
@@ -260,13 +262,13 @@ log.info(pokec);
 
 
                         if (zpx!=zp){
-                            pictogramsPuzzle[zp-1][0]=(picture.getCaption());
+                            pictogramsPuzzle[zp-1][0]=(nameOfPiktogram);
                             pictogramsPuzzle[zp-1][1]=(Integer.toString(xp));
                             pictogramsPuzzle[zp-1][2]=(Integer.toString(yp));
                             pictogramsPuzzle[zp-1][3]=(Integer.toString(zp-1));
                         }else{
                             for (int i=0; zp-1<i;i++){
-                                if (pictogramsPuzzle[i][0].equals(picture.getCaption())){
+                                if (pictogramsPuzzle[i][0].equals(nameOfPiktogram)){
                                     pictogramsPuzzle[i][1]=(Integer.toString(xp));
                                     pictogramsPuzzle[i][2]=(Integer.toString(yp));
                                 }
@@ -307,7 +309,7 @@ log.info(pokec);
 
             }
             if (isCorrect && createPictograms.getComponentCount()!=0){
-                Notification.show("Well done");//----------------------------------------------------------------------------------
+                Notification.show("Well done--------------------------------------");//----------------------------------------------------------------------------------
             }
         });
 
@@ -422,7 +424,7 @@ log.info(pokec);
                                     heightOfPiktogram=iterPic.getHeight();
                                     //dragSource.setDragData("bla");
                                     nameOfPiktogram=iterPic.getPictPart();
-                                    picture.setCaption(iterPic.getPictPart());
+                                    //picture.setCaption(iterPic.getPictPart());
                                 }
                                 //dragSource.setDataTransferData("",searchPictogram);
                         );
@@ -449,6 +451,10 @@ log.info(pokec);
             }
             j=j+2;
         }
+    }
+
+    public static void setSelectedPictogram(String selPictogram){
+        selectedPictogram=selPictogram;
     }
 
 }

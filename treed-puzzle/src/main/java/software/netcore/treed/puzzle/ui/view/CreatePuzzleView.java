@@ -492,7 +492,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                 //int h = UI.getCurrent().getPage().getWebBrowser().
                 //UI.getCurrent().getPage().getWebBrowser().getScreenWidth();
                 //log.info("width " + w + "heigh" + h);
-                log.info(" nazov piktogramu " + picture.getCaption());
+                //log.info(" nazov piktogramu " + picture.getCaption());
                               /*PointerInfo a = MouseInfo.getPointerInfo();
                               Point b = a.getLocation();
                               int xm = (int) b.getX();
@@ -559,7 +559,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
                     //}*/
 
 
-
+                    //log.info("nemo dropnuteho piktogramu "+nameOfPiktogram);
 
 
                 zpx=createPictograms.getComponentCount();
@@ -607,14 +607,15 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                     }*/
 
+
                             if (zpx != zp) {
-                                pictograms[zp - 1][0] = (picture.getCaption());
+                                pictograms[zp - 1][0] = (nameOfPiktogram);
                                 pictograms[zp - 1][1] = (Integer.toString(xp));
                                 pictograms[zp - 1][2] = (Integer.toString(yp));
                                 pictograms[zp - 1][3] = (Integer.toString(zp - 1));
                             } else {
                                 for (int i = 0; zp - 1 < i; i++) {
-                                    if (pictograms[i][0].equals(picture.getCaption())) {
+                                    if (pictograms[i][0].equals(nameOfPiktogram)) {
                                         pictograms[i][1] = (Integer.toString(xp));
                                         pictograms[i][2] = (Integer.toString(yp));
                                     }
@@ -667,22 +668,6 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         );*/
 
 
-
-
-        /*createPictogram.addComponent(new Button("R/C 1"));
-        for (int i = 0; i < 9; i++) {
-            createPictogram.addComponent(new Button("Col " +
-                    (createPictogram.getCursorX() + 1)));
-        }
-        createPictogram.addComponent(new Button("Row "), 9, 9);
-
-        for (int i = 0; i < 9; i++) {
-            createPictogram.addComponent(new Button("Row " + i), 0, i+1);
-        }*/
-
-        //createPictogram.addComponent(new Button("3x1 button"), 1, 1, 3, 1);
-        //createPictogram.addComponent(new Label("1x2 cell"), 1, 2, 1, 3);
-        //KONIEC GRID
 
 
 
@@ -929,7 +914,7 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
 
                                     dragSourcex.setDragData(picture);
                                     //dragSource.setDragData("bla");
-                                    picture.setCaption(iterPic.getPictPart());
+                                    //picture.setCaption(null);
                                     nameOfPiktogram=iterPic.getPictPart();
                                     widthOfPiktogram=iterPic.getWidth();
                                     heightOfPiktogram=iterPic.getHeight();
