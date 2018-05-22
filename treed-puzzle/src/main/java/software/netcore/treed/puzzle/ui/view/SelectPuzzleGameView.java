@@ -62,8 +62,8 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
      * Build page.
      */
     private void build() {
-        captionx="skuska";
-        log.info("run build");
+        //captionx="skuska";
+        //log.info("run build");
         Iterable<PictogramPuzzle> pics = pictogramPuzzleService.getPics();
         Collection<PictogramPuzzle> pictogramPuzzleCollection = new ArrayList<>();
         for (PictogramPuzzle pictogramPuzzle : pics) {
@@ -73,6 +73,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         int sizeOfSearchPictogram = (Math.round(pictogramPuzzleCollection.size()/5)+1)*2;
 
         Label selectPuzzle = new Label(getString("selectPuzzleGame-select-puzzle-label"));
+        Button selectButton = new MButton(getString("selectPuzzleGame-select-button-button"));
 
         TextField searchField = new MTextField()
                 .withFullSize()
@@ -83,7 +84,9 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         AbsoluteLayout searchPictogram = new AbsoluteLayout();
         //searchPictogram.setSpacing(false);
         //searchPictogram.setMargin(false);
-        searchPictogram.setSizeFull();
+        searchPictogram.setWidth(100,Unit.PERCENTAGE);
+        searchPictogram.setHeight((((Math.round(pictogramPuzzleCollection.size()/5)+1)*200)+25),Unit.PIXELS);
+        //searchPictogram.setSizeFull();//-----------------------------------------------------------------------------------------
 
 
         searchGrid(searchPictogram,"all");
@@ -95,17 +98,24 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         searchPictogram.addLayoutClickListener(ClickEvent ->{
                     int x = ClickEvent.getMouseEventDetails().getRelativeX();
                     int y = ClickEvent.getMouseEventDetails().getRelativeY();
-                    log.info("drop at x "+ (x) + " y " + y);
+                    //log.info("drop at x "+ (x) + " y " + y);
                     int xp =Math.round((x-10)/170);
                     int yp =Math.round((y-25)/200);//nechapem preco mi davamedyeru hore
                     //captionx=piktogt;
                     int selected =yp*5+xp;
+                    //searchPictogram.getComponentCount()/2;
                     log.info("selected " + selected);
+                    //log.info(Integer.toString(searchPictogram.getComponentCount()));
+                    if (searchPictogram.getComponentCount()/2>=(selected+1)){
                     if (piktogramNames.toArray()[selected]!=null) {
-                        String asimeno = String.valueOf(piktogramNames.toArray()[selected]);
-                        PlayPuzzleView.setSelectedPictogram(asimeno);
-                        log.info("vzbrany piktogram " + asimeno);
+                        captionx = String.valueOf(piktogramNames.toArray()[selected]);
+                        PlayPuzzleView.setSelectedPictogram(captionx);
+                        //log.info("asimeno " + captionx);
                     }
+                    }
+
+
+
                     //int a= Math.round(searchPictogram.getComponent(0,0).getHeight());
                     //int b = Math.round(searchPictogram.getComponent(0,1).getHeight());
                     /*if (searchPictogram.getComponent(0,0)!=null && searchPictogram.getComponent(0,1)!=null) {
@@ -134,7 +144,12 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         }
         );
 
-
+        selectButton.addClickListener(clickEvent ->{
+            if(captionx!=null)
+                getUI().getNavigator().navigateTo(PlayPuzzleView.VIEW_NAME);
+            else
+                Notification.show(getString("selectPuzzleGame-no-pictogram-select-button"));
+        });
 
 
 
@@ -167,12 +182,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
         pictogram.setContent(searchPictogram);
         //pictogram.setContent(new Label("puzzle-pictograms"));
-        Button selectButton = new MButton(getString("selectPuzzleGame-select-button-button")).withListener(clickEvent ->{
-                if(captionx!=null)
-            getUI().getNavigator().navigateTo(PlayPuzzleView.VIEW_NAME);
-                else
-                    Notification.show(getString("selectPuzzleGame-no-pictogram-select-button"));
-    });
+
         MHorizontalLayout search= new MHorizontalLayout()
                 .add(selectPuzzle)
                 .add(searchField);
@@ -211,6 +221,10 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         int j=0;
         int i=0;
 
+        /*for (int k = 0; k < piktogramNames.size(); k++)
+            piktogramNames.clear();[k] = null;*/
+
+        piktogramNames.clear();
         searchPictogram.removeAllComponents();
 
         while (iteratorPictogramPuzzle.hasNext()) {
@@ -242,7 +256,13 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
                                 while (iteratorPictogramPart.hasNext()) {
                                     PictogramPart iterPart = iteratorPictogramPart.next();
 
+
                                 if (componentOfPictogram[l][0].equals(iterPart.getPictPart())) {
+                                    /*log.info(iterPart.getPictPart()+componentOfPictogram[l][0]);
+                                    log.info(componentOfPictogram[l][1]);
+                                    log.info(componentOfPictogram[l][2]);
+                                    log.info(componentOfPictogram[l][3]);*/
+
                                     //isCorrect=false;
                                     Image pikt = new Image("", new StreamResource((StreamResource.StreamSource) () ->
                                             new ByteArrayInputStream(iterPart.getBytes()), ""));
@@ -251,54 +271,35 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
                                     pikt.setHeight(16*iterPart.getHeight()+"px");
                                     //log.info("added Image w,h" + iterPart.getWidth()+iterPart.getHeight());
                                     picture.addComponent(pikt,Integer.valueOf(componentOfPictogram[l][1]),Integer.valueOf(componentOfPictogram[l][2]));
-                                    log.info("added part " + iterPart.getPictPart());
+                                    //log.info("added part " + iterPart.getPictPart());
                                 }
                                 }
                             l++;
                         }
 
-                        /*GridLayout skuska = new GridLayout(1,1);
-                        skuska.setSpacing(false);
-                        skuska.setMargin(false);
-                        skuska.setHeight("100px");
-                        skuska.setWidth("100px");
-                        skuska.addComponent(picture,0,0);*/
-
-//picture.setColumnExpandRatio(i,0.2f);
-//picture.setRowExpandRatio(j,0.2f);
-
                        //picture.setWidth("160px");
                        //picture.setHeight("160px");
 
-
-
                         //searchPictogram.addComponent(picture, i, j);
-                        //picture.setCaption(null);
+
                         searchPictogram.addComponent(picture, "left: "+((170*i)+10)+"px; top: "+(200*j)+"px;");
 
                         //searchPictogram.getComponent(i, j);
-                        //searchPictogram.getComponent(i,j).setCaption(iterPic.getPictPuzzle());
-                        //picture.setCaption(iterPic.getPictPuzzle());
 
-                        log.info("added Image " + iterPic.getPictPuzzle());
-                       // piktogramNames[m]=iterPic.getPictPuzzle();
+                        //log.info("added Image " + iterPic.getPictPuzzle());
+
                         piktogramNames.add(iterPic.getPictPuzzle());
-                        //m++;
+
                         //searchPictogram.addComponent(new Label(iterPic.getPictPuzzle()), i, (j + 1));
                         Label name = new Label(iterPic.getPictPuzzle());
                         name.setWidth("150px");
                         name.setHeight("20px");
                         searchPictogram.addComponent(name, "left: "+((170*i)+15)+"px; top: "+((200*j)+170)+"px;");
 
-                        log.info("added Text " + iterPic.getPictPuzzle());
+                        //log.info("added Text " + iterPic.getPictPuzzle());
                         i++;
-                    }else {
-                        log.info("break");
-                        break;//else {i--;}
                     }
 
-                //}
-                //i++;
             }
             i=0;
             j=j+1;

@@ -37,7 +37,7 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
     private String pokec="skuska2";//----------------------------------------------------------------------------------------------------
     private int heightOfPiktogram=1;
     private boolean isCorrect = true;
-    private static String selectedPictogram="skuska2";
+    private static String selectedPictogram="skuska3";
     private String[][] componentOfPictogram = new String[10][4];
     private final PictogramPartService pictogramPartService;
     private final PictogramPuzzleService pictogramPuzzleService;
@@ -61,7 +61,8 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
      * Build page.
      */
     private void build() {
-        log.info("run build");
+        //log.info("run build");
+        log.info(selectedPictogram);
         //pokec = SelectPuzzleGameView.getCaptionx();
         Iterable<PictogramPuzzle> picsPuzzle = pictogramPuzzleService.getPics();
         /*Collection<PictogramPuzzle> pictogramPuzzleCollection = new ArrayList<>();
@@ -69,12 +70,23 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
             pictogramPuzzleCollection.add(pictogramPuzzle);
         }*/
         //int countOfPuzzle = (Math.round(pictogramPuzzleCollection.size()));
-
+int bob=0;
         Iterator<PictogramPuzzle> iteratorPictogramPuzzle = picsPuzzle.iterator();
         while (iteratorPictogramPuzzle.hasNext()) {
             PictogramPuzzle iterPicPuzzle = iteratorPictogramPuzzle.next();
-            if (iterPicPuzzle.getPictPuzzle().equals(pokec)){
+           /* componentOfPictogram = iterPicPuzzle.getComponents();
+            log.info(componentOfPictogram[0][0]);
+            log.info(componentOfPictogram[0][1]);*/
+           // log.info(iterPicPuzzle.getPictPuzzle());
+            //log.info(selectedPictogram);
+            if (iterPicPuzzle.getPictPuzzle().equals(selectedPictogram)){
                 componentOfPictogram = iterPicPuzzle.getComponents();
+                /*log.info(componentOfPictogram[bob+1][0]);
+                log.info(componentOfPictogram[bob+1][1]);
+                log.info(componentOfPictogram[bob+1][2]);
+                log.info(componentOfPictogram[bob+1][3]);
+                bob++;*/
+
             }
         }
 
@@ -156,8 +168,8 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
                 .add(pictogram);
 
 
-log.info(pokec);
-        Label namePictogram = new Label(pokec);
+            //log.info(pokec);
+        Label namePictogram = new Label(selectedPictogram);
 
 
 
@@ -171,6 +183,8 @@ log.info(pokec);
 
         AbsoluteLayout createPictograms = new AbsoluteLayout();
 
+
+        //createPictograms.removeAllComponents();
         /*createPictograms.getPosition();
 
         DragSourceExtension<Image> dragSourcex = new DragSourceExtension<>(picture);    //umozny drag
@@ -218,8 +232,8 @@ log.info(pokec);
                 //int h = UI.getCurrent().getPage().getWebBrowser().
                 //UI.getCurrent().getPage().getWebBrowser().getScreenWidth();
                 //log.info("width " + w + "heigh" + h);
-                log.info(" nazov piktogramu " + selectedPictogram);
-                log.info("nemo dropnuteho piktogramu "+nameOfPiktogram);
+                //log.info(" nazov piktogramu " + selectedPictogram);
+                //log.info("nemo dropnuteho piktogramu "+nameOfPiktogram);
                               /*PointerInfo a = MouseInfo.getPointerInfo();
                               Point b = a.getLocation();
                               int xm = (int) b.getX();
@@ -288,7 +302,7 @@ log.info(pokec);
 
 
 
-                        log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
+                        //log.info("drop position at x "+ (xp) + " y " + yp + " z " + (zp-1)+ " zpx " + zpx);
                     }else{
                         Notification.show(getString("createPuzzle-max-layout-pictogram-reached"));
                     }
@@ -301,15 +315,15 @@ log.info(pokec);
                 //log.info("drop nasobenie at x "+ (xp) + " y " + yp);
                 //createPictograms.addComponent(picture, "left: "+80*xp+"px; top: "+80*yp+"px;");
 
-                log.info("drop at x "+ (x) + " y " + y);
-                log.info("mouse x "+ (xm) + " y " + ym);
-                log.info("mouse relative x "+ (x) + " y " + y);
+                //log.info("drop at x "+ (x) + " y " + y);
+                //log.info("mouse x "+ (xm) + " y " + ym);
+                //log.info("mouse relative x "+ (x) + " y " + y);
                 //log.info();
                 //addcount(createPictogram);
 
             }
             if (isCorrect && createPictograms.getComponentCount()!=0){
-                Notification.show("Well done--------------------------------------");//----------------------------------------------------------------------------------
+                Notification.show("Well done");//----------------------------------------------------------------------------------
             }
         });
 
@@ -391,10 +405,11 @@ log.info(pokec);
 
         Iterator<PictogramPart> iteratorPictogramPart = pics.iterator();
         int j=0;
+        int i=0;
         searchPictogram.removeAllComponents();
 
         while (iteratorPictogramPart.hasNext()) {
-            for (int i = 0; i < 5; i++) {
+            while (iteratorPictogramPart.hasNext() && 5>i) {
 
                 if (iteratorPictogramPart.hasNext()) {
                     PictogramPart iterPic = iteratorPictogramPart.next();
@@ -403,11 +418,11 @@ log.info(pokec);
 
                         for (int k=0; componentOfPictogram[k][0]!=null;k++){
                             if (componentOfPictogram[k][0].equals(iterPic.getPictPart())){
-                                String strin = "Urob magiu :)";//----------------------------------------------------------------------------
-                                Notification.show(strin);
-
-                            }
-                        }
+                                //String strin = "Urob magiu :)";
+                                //Notification.show(strin);
+                                log.info(componentOfPictogram[0][1]);
+                                log.info(componentOfPictogram[0][2]);
+                                log.info(componentOfPictogram[0][3]);
 
 
                         Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
@@ -440,8 +455,10 @@ log.info(pokec);
                         searchPictogram.addComponent(new Label(iterPic.getPictPart()), i, (j + 1));
 
                         log.info("added Text " + iterPic.getPictPart());
+                            i++;
 
-
+                            }
+                        }
 
 
 
