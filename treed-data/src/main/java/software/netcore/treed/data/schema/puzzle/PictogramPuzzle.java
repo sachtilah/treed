@@ -3,7 +3,7 @@ package software.netcore.treed.data.schema.puzzle;
 import lombok.Getter;
 import lombok.Setter;
 import software.netcore.treed.data.schema.AbstractEntity;
-//import software.netcore.treed.data.schema.sim.Piktogram;
+
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -26,7 +26,7 @@ public class PictogramPuzzle extends AbstractEntity {
     private String pictPuzzle;
 
     @Column(name = "components", nullable = false)
-    private String[][] components;
+    private String[][] components = new String[10][4];
 
     /*@OneToMany(fetch = FetchType.EAGER)
     private Collection<String[]> position;*/
