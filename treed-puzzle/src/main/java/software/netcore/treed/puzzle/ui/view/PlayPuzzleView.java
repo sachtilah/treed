@@ -413,7 +413,7 @@ int bob=0;
 
                 if (iteratorPictogramPart.hasNext()) {
                     PictogramPart iterPic = iteratorPictogramPart.next();
-                    if (iterPic.getPictPart().equals(search) || search.equals("all")) {
+                    if (iterPic.getPictPart().contains(search) || search.equals("all")) {
 
 
                         for (int k=0; componentOfPictogram[k][0]!=null;k++){
@@ -466,6 +466,7 @@ int bob=0;
 
                 }
             }
+            i=0;
             j=j+2;
         }
     }
