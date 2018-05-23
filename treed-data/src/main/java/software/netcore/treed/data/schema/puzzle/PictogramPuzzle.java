@@ -26,7 +26,7 @@ public class PictogramPuzzle extends AbstractEntity {
     private String pictPuzzle;
 
     @Column(name = "components", nullable = false)
-    private String[][] components = new String[10][4];
+    private String[][] components;// = new String[10][4];
 
     /*@OneToMany(fetch = FetchType.EAGER)
     private Collection<String[]> position;*/

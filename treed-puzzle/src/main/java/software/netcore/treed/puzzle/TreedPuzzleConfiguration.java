@@ -15,7 +15,7 @@ import software.netcore.treed.puzzle.business.PictogramPuzzleService;
 @RequiredArgsConstructor
 @Configuration
 public class TreedPuzzleConfiguration extends WebMvcConfigurerAdapter {
-    private final PictogramPartRepository pictogramPartRepo;
+   /* private final PictogramPartRepository pictogramPartRepo;
     private final PictogramPuzzleRepository pictogramPuzzleRepo;
 
     @Bean
@@ -26,6 +26,6 @@ public class TreedPuzzleConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public PictogramPuzzleService pictogramPuzzleService() {
         return new PictogramPuzzleService(pictogramPuzzleRepo);
-    }
+    }*/
 
 }

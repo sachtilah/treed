@@ -239,7 +239,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
                     //}
 
 
-                    if (iterPic.getPictPuzzle().equals(search) || search.equals("all")) {
+                    if (iterPic.getPictPuzzle().contains(search) || search.equals("all")) {
 
 
                         Iterable<PictogramPart> picsPart = pictogramPartService.getPics();
