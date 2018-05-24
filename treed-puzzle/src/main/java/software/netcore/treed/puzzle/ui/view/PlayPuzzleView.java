@@ -54,15 +54,16 @@ public class PlayPuzzleView extends AbstractMenuView implements View {
     @Override
     protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         //log.info("run build");
-        log.info(selectedPictogram);
+        //log.info(selectedPictogram);
         //pokec = SelectPuzzleGameView.getCaptionx();
-        Iterable<PictogramPuzzle> picsPuzzle = pictogramPuzzleService.getPics();
+
         /*Collection<PictogramPuzzle> pictogramPuzzleCollection = new ArrayList<>();
         for (PictogramPuzzle pictogramPuzzle : picsPuzzle) {
             pictogramPuzzleCollection.add(pictogramPuzzle);
         }*/
         //int countOfPuzzle = (Math.round(pictogramPuzzleCollection.size()));
 int bob=0;
+        Iterable<PictogramPuzzle> picsPuzzle = pictogramPuzzleService.getPics();
         Iterator<PictogramPuzzle> iteratorPictogramPuzzle = picsPuzzle.iterator();
         while (iteratorPictogramPuzzle.hasNext()) {
             PictogramPuzzle iterPicPuzzle = iteratorPictogramPuzzle.next();
@@ -199,6 +200,7 @@ int bob=0;
         DropTargetExtension<AbsoluteLayout> dropTargets = new DropTargetExtension<>(createPictograms);    //umozni prijat
         dropTargets.setDropEffect(DropEffect.MOVE);
         dropTargets.addDropListener(event -> {
+            isCorrect=true;
             Optional<AbstractComponent> dragSource = event.getDragSourceComponent();
 
             if (dragSource.isPresent() && dragSource.get() instanceof Image) {
@@ -272,19 +274,42 @@ int bob=0;
                             pictogramsPuzzle[zp-1][1]=(Integer.toString(xp));
                             pictogramsPuzzle[zp-1][2]=(Integer.toString(yp));
                             pictogramsPuzzle[zp-1][3]=(Integer.toString(zp-1));
+                            //log.info(pictogramsPuzzle[0][1]);
                         }else{
-                            for (int i=0; zp-1<i;i++){
+                            for (int i=0; zp-1>=i;i++){
                                 if (pictogramsPuzzle[i][0].equals(nameOfPiktogram)){
                                     pictogramsPuzzle[i][1]=(Integer.toString(xp));
                                     pictogramsPuzzle[i][2]=(Integer.toString(yp));
+                                    //log.info(pictogramsPuzzle[0][1]);
                                 }
                             }
 
                         }
+
                         int j=0;
+                        Iterator<PictogramPuzzle> iterPictogramPuzzle = picsPuzzle.iterator();
+                        while (iterPictogramPuzzle.hasNext()) {
+                            PictogramPuzzle iterPicPuzzle = iterPictogramPuzzle.next();
+                                  if (iterPicPuzzle.getPictPuzzle().equals(selectedPictogram)){
+                                componentOfPictogram = iterPicPuzzle.getComponents();
+                            }
+                        }
+
+
                         while (componentOfPictogram[j][0]!=null){
                             for (int k=0;k<4;k++){
+                                log.info("yaacaitok  do riti");
+                                log.info(componentOfPictogram[j][k]);
+                                /*log.info(componentOfPictogram[j][k]);
+                                log.info(componentOfPictogram[j][k]);
+                                log.info(componentOfPictogram[j][k]);
+                                log.info(pictogramsPuzzle[j][k]);
+                                log.info(pictogramsPuzzle[j][k]);
+                                log.info(pictogramsPuzzle[j][k]);*/
+                                log.info(pictogramsPuzzle[j][k]);
+
                                 if (!componentOfPictogram[j][k].equals(pictogramsPuzzle[j][k])){
+                                    log.info("chodte vsetci do riti");
                                     isCorrect=false;
                                 }
                             }
@@ -390,11 +415,18 @@ int bob=0;
 
     private void searchGridPart(GridLayout searchPictogram, String search){
         //pics = pictogramPartService.getPics();
+
+        Iterable<PictogramPuzzle> picsPuzzle = pictogramPuzzleService.getPics();
+        Iterator<PictogramPuzzle> iterPictogramPuzzle = picsPuzzle.iterator();
+        while (iterPictogramPuzzle.hasNext()) {
+            PictogramPuzzle iterPicPuzzle = iterPictogramPuzzle.next();
+            if (iterPicPuzzle.getPictPuzzle().equals(selectedPictogram)){
+                componentOfPictogram = iterPicPuzzle.getComponents();
+            }
+        }
+
+
         Iterable<PictogramPart> pics = pictogramPartService.getPics();
-
-
-
-
         Iterator<PictogramPart> iteratorPictogramPart = pics.iterator();
         int j=0;
         int i=0;
@@ -412,9 +444,9 @@ int bob=0;
                             if (componentOfPictogram[k][0].equals(iterPic.getPictPart())){
                                 //String strin = "Urob magiu :)";
                                 //Notification.show(strin);
-                                log.info(componentOfPictogram[0][1]);
-                                log.info(componentOfPictogram[0][2]);
-                                log.info(componentOfPictogram[0][3]);
+                                log.info(componentOfPictogram[k][1]);
+                                log.info(componentOfPictogram[k][2]);
+                                log.info(componentOfPictogram[k][3]);
 
 
                         Image picture = new Image("", new StreamResource((StreamResource.StreamSource) () ->
@@ -441,12 +473,12 @@ int bob=0;
 
 
 
-                        log.info("added Image " + iterPic.getPictPart());
+                        //log.info("added Image " + iterPic.getPictPart());
 
 
                         searchPictogram.addComponent(new Label(iterPic.getPictPart()), i, (j + 1));
 
-                        log.info("added Text " + iterPic.getPictPart());
+                        //log.info("added Text " + iterPic.getPictPart());
                             i++;
 
                             }

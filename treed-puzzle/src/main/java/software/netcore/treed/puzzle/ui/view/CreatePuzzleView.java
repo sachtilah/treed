@@ -331,7 +331,7 @@ public class CreatePuzzleView extends AbstractMenuView implements View{
 
 
         Panel pictogram = new Panel();
-            pictogram.setWidth("450px");
+            pictogram.setWidth("465px");
             pictogram.setHeight("300px");
 
         pictogram.setContent(searchPictogram);
