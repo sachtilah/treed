@@ -9,8 +9,11 @@ import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import software.netcore.treed.api.AbstractRestrictedEnterView;
 import software.netcore.treed.data.schema.Account;
+import software.netcore.treed.data.schema.AccountRole;
 import software.netcore.treed.ui.AuthenticationProvider;
 import software.netcore.treed.ui.view.TreedDashboard;
+
+import java.util.Objects;
 
 /**
  * @since v.1.0.0
@@ -23,8 +26,10 @@ public abstract class AbstractPuzzleView extends AbstractRestrictedEnterView {
 
         MenuBar menuBar = new MenuBar();
         menuBar.addItem("Home", command -> getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME));
-        menuBar.addItem("Create puzzle", command -> getUI().getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME));
 
+//        if (Objects.nonNull(account) && AccountRole.TEACHER.equals(account.getRole())) {
+            menuBar.addItem("Create puzzle", command -> getUI().getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME));
+//        }
 
         return new MHorizontalLayout()
                 .withStyleName("header")
