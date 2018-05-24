@@ -1,18 +1,16 @@
-package software.netcore.treed.ui.view.simViews;
+package software.netcore.treed.ui.view.sim;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MVerticalLayout;
-import software.netcore.treed.business.PiktogramService;
+import software.netcore.treed.business.sim.PiktogramService;
 import software.netcore.treed.data.schema.sim.Piktogram;
-import software.netcore.treed.ui.view.LoginAttemptView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-@SpringView(name = software.netcore.treed.ui.view.simViews.UploadPicView.VIEW_NAME)
+@SpringView(name = software.netcore.treed.ui.view.sim.UploadPicView.VIEW_NAME)
 public class UploadPicView extends AbstractSimView implements View {
 
     public static final String VIEW_NAME = "/upload";

@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import software.netcore.treed.business.puzzle.PictogramPartService;
+import software.netcore.treed.business.puzzle.PictogramPuzzleService;
+import software.netcore.treed.business.sim.ClauseService;
+import software.netcore.treed.business.sim.PiktogramService;
 import software.netcore.treed.data.converter.StringToHashConverter;
 import software.netcore.treed.data.repository.AccountRepository;
 import software.netcore.treed.data.repository.OtpRepository;
@@ -30,15 +34,15 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
     private final PictogramPartRepository pictogramPartRepo;
     private final PictogramPuzzleRepository pictogramPuzzleRepo;
 
-//    @Bean
-//    public PictogramPartService pictogramPartService() {
-//        return new PictogramPartService(pictogramPartRepo);
-//    }
-//
-//    @Bean
-//    public PictogramPuzzleService pictogramPuzzleService() {
-//        return new PictogramPuzzleService(pictogramPuzzleRepo);
-//    }
+    @Bean
+    public PictogramPartService pictogramPartService() {
+        return new PictogramPartService(pictogramPartRepo);
+    }
+
+    @Bean
+    public PictogramPuzzleService pictogramPuzzleService() {
+        return new PictogramPuzzleService(pictogramPuzzleRepo);
+    }
 
     @Bean
     public AccountService accountService() {

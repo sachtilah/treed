@@ -1,19 +1,17 @@
-package software.netcore.treed.ui.view.simViews;
+package software.netcore.treed.ui.view.sim;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.layouts.MVerticalLayout;
-import software.netcore.treed.business.PiktogramService;
-import software.netcore.treed.business.ClauseService;
+import software.netcore.treed.business.sim.PiktogramService;
+import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
-import software.netcore.treed.ui.view.LoginAttemptView;
 
 import java.io.ByteArrayInputStream;
 import java.time.Instant;
@@ -23,7 +21,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 @Slf4j
-@SpringView(name = software.netcore.treed.ui.view.simViews.CreateClauseView.VIEW_NAME)
+@SpringView(name = software.netcore.treed.ui.view.sim.CreateClauseView.VIEW_NAME)
 public class CreateClauseView extends AbstractSimView implements View {
 
     public static final String VIEW_NAME = "/clause";

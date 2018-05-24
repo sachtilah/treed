@@ -15,7 +15,8 @@ import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.api.AbstractRestrictedEnterView;
 import software.netcore.treed.ui.AuthenticationProvider;
-import software.netcore.treed.ui.view.simViews.SimHomeScreenView;
+import software.netcore.treed.ui.view.puzzle.SelectPuzzleGameView;
+import software.netcore.treed.ui.view.sim.SimHomeScreenView;
 
 /**
  * @since v.1.8.0
@@ -43,7 +44,7 @@ public class TreedDashboard extends AbstractRestrictedEnterView implements View 
                                         .add(new MButton()
                                                 .withCaption("Puzzle")
                                                 .withStyleName(ValoTheme.BUTTON_LARGE, ValoTheme.BUTTON_BORDERLESS_COLORED)
-                                                .withListener(event1 -> getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME))),
+                                                .withListener(event1 -> getUI().getNavigator().navigateTo(SelectPuzzleGameView.VIEW_NAME))),
                                 Alignment.MIDDLE_CENTER),
                 Alignment.TOP_CENTER);
     }

@@ -1,4 +1,4 @@
-package software.netcore.treed.puzzle.ui.view;
+package software.netcore.treed.ui.view.puzzle;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -7,27 +7,18 @@ import com.vaadin.shared.ui.dnd.DropEffect;
 import com.vaadin.shared.ui.dnd.EffectAllowed;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextField;
-import lombok.extern.slf4j.Slf4j;
 import com.vaadin.ui.dnd.DragSourceExtension;
 import com.vaadin.ui.dnd.DropTargetExtension;
+import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
-import software.netcore.treed.api.AbstractRestrictedEnterView;
-import software.netcore.treed.api.TreedCustomComponent;
+import software.netcore.treed.business.puzzle.PictogramPartService;
+import software.netcore.treed.business.puzzle.PictogramPuzzleService;
 import software.netcore.treed.data.schema.puzzle.PictogramPart;
 import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
-import software.netcore.treed.puzzle.business.PictogramPartService;
-import software.netcore.treed.puzzle.business.PictogramPuzzleService;
-import software.netcore.treed.ui.view.AbstractMenuView;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -36,7 +27,7 @@ import java.util.*;
 
 @Slf4j
 @SpringView(name =CreatePuzzleView.VIEW_NAME)
-public class CreatePuzzleView extends AbstractMenuView implements View{
+public class CreatePuzzleView extends AbstractPuzzleView implements View{
     private int zpx=0;
     private String nameOfPiktogram="";
     private int widthOfPiktogram=1;

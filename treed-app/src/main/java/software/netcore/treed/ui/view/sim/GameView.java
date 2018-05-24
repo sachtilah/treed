@@ -1,4 +1,4 @@
-package software.netcore.treed.ui.view.simViews;
+package software.netcore.treed.ui.view.sim;
 
 import com.vaadin.data.HasValue;
 import com.vaadin.navigator.ViewChangeListener;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MVerticalLayout;
-import software.netcore.treed.business.ClauseService;
+import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import com.vaadin.navigator.View;
@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 @Slf4j
-@SpringView(name = software.netcore.treed.ui.view.simViews.GameView.VIEW_NAME)
+@SpringView(name = software.netcore.treed.ui.view.sim.GameView.VIEW_NAME)
 public class GameView extends AbstractSimView implements View {
 
     public static final String VIEW_NAME = "/game";

@@ -1,4 +1,4 @@
-package software.netcore.treed.puzzle.business;
+package software.netcore.treed.business.puzzle;
 
 
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package software.netcore.treed.puzzle.ui.view;
+package software.netcore.treed.ui.view.puzzle;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -13,13 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
-import software.netcore.treed.api.AbstractRestrictedEnterView;
-import software.netcore.treed.api.TreedCustomComponent;
+import software.netcore.treed.business.puzzle.PictogramPartService;
+import software.netcore.treed.business.puzzle.PictogramPuzzleService;
 import software.netcore.treed.data.schema.puzzle.PictogramPart;
 import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
-import software.netcore.treed.puzzle.business.PictogramPartService;
-import software.netcore.treed.puzzle.business.PictogramPuzzleService;
-import software.netcore.treed.ui.view.AbstractMenuView;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -29,9 +26,11 @@ import java.util.Optional;
 
 @Slf4j
 @SpringView(name =PlayPuzzleView.VIEW_NAME)
-public class PlayPuzzleView extends AbstractMenuView implements View {
-    private String nameOfPiktogram="";
+public class PlayPuzzleView extends AbstractPuzzleView implements View {
+
     public static final String VIEW_NAME = "/puzzle/play";
+
+    private String nameOfPiktogram="";
     private int widthOfPiktogram=1;
     private String pokec="skuska2";//----------------------------------------------------------------------------------------------------
     private int heightOfPiktogram=1;

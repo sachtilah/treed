@@ -1,4 +1,4 @@
-package software.netcore.treed.ui.view.simViews;
+package software.netcore.treed.ui.view.sim;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -6,7 +6,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MVerticalLayout;
-import software.netcore.treed.business.ClauseService;
+import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.data.schema.sim.Clause;
 
 import java.util.ArrayList;
