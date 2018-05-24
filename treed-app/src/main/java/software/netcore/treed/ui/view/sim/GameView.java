@@ -6,6 +6,7 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
@@ -88,12 +89,16 @@ public class GameView extends AbstractSimView implements View {
                         i = 0;
                     }
                     if (k % 2 == 1 && l < columns) {
+                        int finalK = k;
+                        int finalL = l;
                         grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
                             if (iterPic.getTerm().equals(valueChangeEvent.getValue())) {
                                 grid.removeComponent(valueChangeEvent.getComponent());
-                                grid.addComponent(new Label("<strong>" + iterPic.getTerm()
-                                        + "</strong>", ContentMode.HTML));
+                                grid.addComponent(new Label(iterPic.getTerm()));
                                 c[0]++;
+                                //grid.getComponent(finalL, finalK).setStyleName(ValoTheme.LABEL_HUGE);
+                                grid.getComponent(finalL, finalK).setStyleName(ValoTheme.LABEL_SUCCESS);
+                                grid.setComponentAlignment(grid.getComponent(finalL, finalK), Alignment.MIDDLE_CENTER);
                                 if (c[0] == clause.getPiktograms().size())
                                     Notification.show(getString("gameView-notification-win"));
                             } else valueChangeEvent.getComponent().addStyleName("wrongTerm");
