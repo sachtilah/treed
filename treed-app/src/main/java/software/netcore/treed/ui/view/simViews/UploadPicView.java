@@ -81,7 +81,7 @@ public class UploadPicView extends AbstractSimView implements View {
                 Notification.show(getString("uploadPic-notification-no-term"));
             else {
                 addNewPiktogram(receiver.stream.toByteArray(), termField.getValue());
-                Notification.show(getString("uploadPic-notification-successfully-saved"));
+                Notification.show(getString("uploadPic-notification-successfully-saved"), Notification.Type.ASSISTIVE_NOTIFICATION);
                 build(contentLayout, viewChangeEvent);
             }
         });

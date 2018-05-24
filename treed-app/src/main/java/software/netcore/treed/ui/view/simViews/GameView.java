@@ -117,13 +117,13 @@ public class GameView extends AbstractSimView implements View {
                                 grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
                                     if(iterPic.getTerm().equals(valueChangeEvent.getValue())) {
                                         grid.removeComponent(valueChangeEvent.getComponent());
-                                        grid.addComponent(new Label("<strong><center>" + iterPic.getTerm()
-                                        + "</center></strong>", ContentMode.HTML));
+                                        grid.addComponent(new Label("<strong>" + iterPic.getTerm()
+                                        + "</strong>", ContentMode.HTML));
                                         c[0]++;
                                         if(c[0] ==clause.getPiktograms().size())
                                             Notification.show(getString("gameView-notification-win"));
                                     }
-                                    else Notification.show(getString("gameView-notification-wrong"), Notification.Type.ERROR_MESSAGE);
+                                    else valueChangeEvent.getComponent().addStyleName("wrongTerm");
                                 }), l, k);
                                 l++;
                             }

@@ -46,7 +46,7 @@ public class CreateClauseView extends AbstractSimView implements View {
         TextField clauseNameField = new TextField(getString("createClause-clause-name-field"));
         TextField row = new TextField(getString("createClause-row-field"));
         TextField column = new TextField(getString("createClause-column-field"));
-        TextField clauseField = new TextField(getString("createClause-clause-field"));
+        TextArea clauseField = new TextArea(getString("createClause-clause-field"));
 
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.removeAllComponents();
@@ -59,6 +59,8 @@ public class CreateClauseView extends AbstractSimView implements View {
         horizontalLayout.setMargin(true);
         horizontalLayout.setSpacing(true);
         horizontalLayout.setSizeFull();
+
+        boolean wasGenerated = false;
 
         Button generateButton = new MButton(getString("createClause-generate-button")).withListener(clickEvent -> {
             boolean isMissing = false;
@@ -127,23 +129,20 @@ public class CreateClauseView extends AbstractSimView implements View {
                     Button reloadButton = new MButton(getString("createClause-reload-button")).withListener(click -> {
                         build(contentLayout, viewChangeEvent);
                     });
-
                     horizontalLayout.addComponents(createButton, reloadButton);
-
-                    HorizontalLayout horizontalLayout1 = new HorizontalLayout();
-                    content.addComponent(horizontalLayout1);
-                    horizontalLayout1.addComponents(verticalLayout);
-                    horizontalLayout1.addComponent(grid);
-                    //horizontalLayout1.setComponentAlignment(grid, Alignment.BOTTOM_CENTER);
+                    //HorizontalLayout horizontalLayout1 = new HorizontalLayout();
+                    //content.addComponent(horizontalLayout1);
+                    //horizontalLayout1.addComponents(verticalLayout);
+                    //horizontalLayout1.addComponent(grid);
+                    content.addComponents(verticalLayout, grid);
                     //build();
                 }
             }
         });
         horizontalLayout.addComponent(generateButton);
+        horizontalLayout.setComponentAlignment(generateButton, Alignment.TOP_LEFT);
         content.addComponent(verticalLayout);
         verticalLayout.addComponents(row, column, clauseNameField, clauseField, horizontalLayout);
-        content.setComponentAlignment(verticalLayout, Alignment.TOP_LEFT);
-        //verticalLayout.setComponentAlignment(horizontalLayout, Alignment.TOP_LEFT);
     }
 
     private void addClause(int row, int column, String name, Collection<Piktogram> collection) {
