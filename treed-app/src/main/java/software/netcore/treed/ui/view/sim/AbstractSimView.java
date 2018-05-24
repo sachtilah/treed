@@ -28,10 +28,10 @@ public abstract class AbstractSimView extends AbstractRestrictedEnterView {
         menuBar.addItem("Home", command -> getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME));
         menuBar.addItem("Upload", command -> getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
 
-        if (Objects.nonNull(account) && AccountRole.TEACHER.equals(account.getRole())) {
+//        if (Objects.nonNull(account) && AccountRole.TEACHER.equals(account.getRole())) {
             menuBar.addItem("Create clause", command -> getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
             menuBar.addItem("Edit clause", command -> getUI().getNavigator().navigateTo(EditClauseView.VIEW_NAME));
-        }
+//        }
 
         return new MHorizontalLayout()
                 .withStyleName("header")

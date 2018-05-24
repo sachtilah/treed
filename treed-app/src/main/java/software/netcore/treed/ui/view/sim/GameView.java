@@ -34,46 +34,20 @@ public class GameView extends AbstractSimView implements View {
     }
 
     @Override
-    protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent event){
-        setCompositionRoot(contentLayout);
-        if(event.getParameters() != null){
+    protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent event) {
+        if (event.getParameters() != null) {
             String[] params = event.getParameters().split("/");
-            for(String param : params){
+            for (String param : params) {
                 parameter = param;
             }
         }
         build(parameter, contentLayout);
     }
 
-    public void build(String parameter, MVerticalLayout contentLayout){
-        VerticalLayout content = contentLayout;
-        content.removeAllComponents();
-
-        HorizontalLayout bar = new HorizontalLayout();
-        bar.setWidth("100%");
-        Label treed = new Label("<strong>treed</strong>", ContentMode.HTML);
-
-        Button upload = new Button(getString("navigationBar-upload-button"));
-        upload.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
-
-        Button createClause = new Button(getString("navigationBar-create-clause-button"));
-        createClause.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
-
-        Button editClause = new Button(getString("navigationBar-edit-clause-button"));
-        editClause.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(EditClauseView.VIEW_NAME));
-
-        Label usernameField = new Label("username");
-
-        Button logout = new Button(getString("navigationBar-logout-button"));
-        logout.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
-
-        content.addComponent(bar);
-        bar.addComponents(treed, upload, createClause, editClause, usernameField, logout);
-
+    public void build(String parameter, MVerticalLayout contentLayout) {
+        VerticalLayout content = new MVerticalLayout();
+        contentLayout.removeAllComponents();
+        contentLayout.addComponent(content);
 
         Label clauseNameLabel = new Label("<h1>" + parameter + "</h1>", ContentMode.HTML);
         content.addComponent(clauseNameLabel);
@@ -90,10 +64,10 @@ public class GameView extends AbstractSimView implements View {
 
         Iterable<Clause> clauses = clauseService.getClauses();
         for (Clause clause : clauses) {
-            if(clause.getName().equals(parameter)){
+            if (clause.getName().equals(parameter)) {
                 int columns = clause.getColumnCount();
                 int rows = clause.getRowCount();
-                GridLayout grid = new GridLayout(columns, rows*2);
+                GridLayout grid = new GridLayout(columns, rows * 2);
                 grid.removeAllComponents();
                 Iterable<Piktogram> piktograms = clause.getPiktograms();
                 Collection<Piktogram> piktogramCollection = new ArrayList<>();
@@ -103,34 +77,33 @@ public class GameView extends AbstractSimView implements View {
                 Iterator<Piktogram> iteratorPic = piktograms.iterator();
                 int i = 0, j = 0, k = 1, l = 0;
                 while (iteratorPic.hasNext()) {
-                            Piktogram iterPic = iteratorPic.next();
-                            if (j % 2 == 0 && i<columns) {
-                                    grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                                            new ByteArrayInputStream(iterPic.getBytes()), "")), i, j);
-                                    i++;
-                            }
-                            if(i==columns){
-                                j+=2;
-                                i=0;
-                            }
-                            if (k % 2 == 1 && l<columns) {
-                                grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
-                                    if(iterPic.getTerm().equals(valueChangeEvent.getValue())) {
-                                        grid.removeComponent(valueChangeEvent.getComponent());
-                                        grid.addComponent(new Label("<strong>" + iterPic.getTerm()
+                    Piktogram iterPic = iteratorPic.next();
+                    if (j % 2 == 0 && i < columns) {
+                        grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                                new ByteArrayInputStream(iterPic.getBytes()), "")), i, j);
+                        i++;
+                    }
+                    if (i == columns) {
+                        j += 2;
+                        i = 0;
+                    }
+                    if (k % 2 == 1 && l < columns) {
+                        grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
+                            if (iterPic.getTerm().equals(valueChangeEvent.getValue())) {
+                                grid.removeComponent(valueChangeEvent.getComponent());
+                                grid.addComponent(new Label("<strong>" + iterPic.getTerm()
                                         + "</strong>", ContentMode.HTML));
-                                        c[0]++;
-                                        if(c[0] ==clause.getPiktograms().size())
-                                            Notification.show(getString("gameView-notification-win"));
-                                    }
-                                    else valueChangeEvent.getComponent().addStyleName("wrongTerm");
-                                }), l, k);
-                                l++;
-                            }
-                            if(l==columns){
-                                k+=2;
-                                l=0;
-                            }
+                                c[0]++;
+                                if (c[0] == clause.getPiktograms().size())
+                                    Notification.show(getString("gameView-notification-win"));
+                            } else valueChangeEvent.getComponent().addStyleName("wrongTerm");
+                        }), l, k);
+                        l++;
+                    }
+                    if (l == columns) {
+                        k += 2;
+                        l = 0;
+                    }
                 }
                 content.addComponent(grid);
                 content.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
