@@ -58,15 +58,17 @@ public class CreateClauseView extends AbstractSimView implements View {
         horizontalLayout.setSpacing(true);
         horizontalLayout.setSizeFull();
 
-        boolean wasGenerated = false;
+        HorizontalLayout horizontalLayout1 = new HorizontalLayout();
 
         Button generateButton = new MButton(getString("createClause-generate-button")).withListener(clickEvent -> {
             boolean isMissing = false;
             if (row.getValue().isEmpty() || column.getValue().isEmpty() || clauseNameField.getValue().isEmpty()
                     || clauseField.getValue().isEmpty()) {
                 Notification.show(getString("createClause-notification-empty-fields"));
+                build(contentLayout, viewChangeEvent);
             } else if ((!row.getValue().matches("[0-9]+")) || (!column.getValue().matches("[0-9]+"))) {
                 Notification.show(getString("createClause-notification-invalid-fields"));
+                build(contentLayout, viewChangeEvent);
             } else {
                 int rows = Integer.parseInt(row.getValue());
                 int columns = Integer.parseInt(column.getValue());
@@ -128,18 +130,17 @@ public class CreateClauseView extends AbstractSimView implements View {
                         build(contentLayout, viewChangeEvent);
                     });
                     horizontalLayout.addComponents(createButton, reloadButton);
-                    //HorizontalLayout horizontalLayout1 = new HorizontalLayout();
-                    //content.addComponent(horizontalLayout1);
-                    //horizontalLayout1.addComponents(verticalLayout);
-                    //horizontalLayout1.addComponent(grid);
-                    content.addComponents(verticalLayout, grid);
-                    //build();
+                    horizontalLayout1.addComponent(grid);
                 }
             }
         });
         horizontalLayout.addComponent(generateButton);
+        Listener listener = (Listener) event -> event.getComponent().setVisible(false);
+        generateButton.addListener(listener);
         horizontalLayout.setComponentAlignment(generateButton, Alignment.TOP_LEFT);
-        content.addComponent(verticalLayout);
+        content.addComponent(horizontalLayout1);
+        horizontalLayout1.addComponent(verticalLayout);
+
         verticalLayout.addComponents(row, column, clauseNameField, clauseField, horizontalLayout);
     }
 
