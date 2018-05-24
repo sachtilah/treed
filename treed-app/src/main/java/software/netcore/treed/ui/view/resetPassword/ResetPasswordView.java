@@ -6,7 +6,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.vaadin.viritin.button.MButton;
-import software.netcore.treed.api.TreedCustomComponent;
+import software.netcore.treed.api.AbstractFreeEnterView;
 import software.netcore.treed.business.MailService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.data.schema.Otp;
@@ -18,7 +18,7 @@ import java.util.*;
  * @since v. 1.0.0
  */
 @SpringView(name = ResetPasswordView.VIEW_NAME)
-public class ResetPasswordView extends TreedCustomComponent implements View {
+public class ResetPasswordView extends AbstractFreeEnterView implements View {
 
     public static final String VIEW_NAME = "/reset/mailview";
     private final OtpService otpService;

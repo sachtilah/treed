@@ -13,8 +13,6 @@ import software.netcore.treed.data.repository.puzzle.PictogramPartRepository;
 import software.netcore.treed.data.repository.puzzle.PictogramPuzzleRepository;
 import software.netcore.treed.data.repository.sim.ClauseRepository;
 import software.netcore.treed.data.repository.sim.PiktogramRepository;
-import software.netcore.treed.puzzle.business.PictogramPartService;
-import software.netcore.treed.puzzle.business.PictogramPuzzleService;
 
 
 /**
@@ -32,42 +30,42 @@ public class ServiceConfiguration extends WebMvcConfigurerAdapter {
     private final PictogramPartRepository pictogramPartRepo;
     private final PictogramPuzzleRepository pictogramPuzzleRepo;
 
+//    @Bean
+//    public PictogramPartService pictogramPartService() {
+//        return new PictogramPartService(pictogramPartRepo);
+//    }
+//
+//    @Bean
+//    public PictogramPuzzleService pictogramPuzzleService() {
+//        return new PictogramPuzzleService(pictogramPuzzleRepo);
+//    }
+
     @Bean
-    public PictogramPartService pictogramPartService() {
-        return new PictogramPartService(pictogramPartRepo);
+    public AccountService accountService() {
+        return new AccountService(passwordEncoder(), accountRepo);
     }
 
     @Bean
-    public PictogramPuzzleService pictogramPuzzleService() {
-        return new PictogramPuzzleService(pictogramPuzzleRepo);
+    public OtpService otpService() {
+        return new OtpService(otpRepo);
     }
 
-@Bean
-public AccountService accountService() {
-    return new AccountService(passwordEncoder(), accountRepo);
-}
+    @Bean
+    public PiktogramService piktogramService() {
+        return new PiktogramService(piktogramRepo);
+    }
 
-@Bean
-public OtpService otpService() {
-    return new OtpService(otpRepo);
-}
+    @Bean
+    public ClauseService clauseService() {
+        return new ClauseService(clauseRepo);
+    }
 
-@Bean
-public PiktogramService piktogramService() {
-    return new PiktogramService(piktogramRepo);
-}
-
-@Bean
-public ClauseService clauseService() {
-    return new ClauseService(clauseRepo);
-}
-
-/**
- * Bean used to compare human readable password with hashed one from database during login attempt.
- *
- * @return password encoder
- * @see StringToHashConverter
- */
+    /**
+     * Bean used to compare human readable password with hashed one from database during login attempt.
+     *
+     * @return password encoder
+     * @see StringToHashConverter
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -6,6 +6,7 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.vaadin.viritin.button.MButton;
+import software.netcore.treed.api.AbstractFreeEnterView;
 import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
@@ -18,7 +19,7 @@ import java.util.*;
  * @since v. 1.0.0
  */
 @SpringView(name = NewPasswordView.VIEW_NAME)
-public class NewPasswordView extends TreedCustomComponent implements View {
+public class NewPasswordView extends AbstractFreeEnterView implements View {
 
     public static final String VIEW_NAME = "/reset/verifyview";
     private final OtpService otpService;

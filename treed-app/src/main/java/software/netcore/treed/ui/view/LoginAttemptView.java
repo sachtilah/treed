@@ -11,7 +11,7 @@ import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
-import software.netcore.treed.api.TreedCustomComponent;
+import software.netcore.treed.api.AbstractFreeEnterView;
 import software.netcore.treed.ui.AuthenticationProvider;
 import software.netcore.treed.ui.view.resetPassword.ResetPasswordView;
 
@@ -20,7 +20,7 @@ import software.netcore.treed.ui.view.resetPassword.ResetPasswordView;
  */
 @RequiredArgsConstructor
 @SpringView(name = LoginAttemptView.VIEW_NAME)
-public class LoginAttemptView extends TreedCustomComponent implements View {
+public class LoginAttemptView extends AbstractFreeEnterView implements View {
 
     public static final String VIEW_NAME = "/login";
 
@@ -42,6 +42,7 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
     private void build() {
         TextField usernameField = new MTextField(getString("loginAttempt-username-field"))
                 .withFullSize();
+        usernameField.focus();
         PasswordField passwordField = new PasswordField(getString("loginAttempt-password-field"));
         passwordField.setSizeFull();
 
@@ -85,7 +86,7 @@ public class LoginAttemptView extends TreedCustomComponent implements View {
         boolean isLoggedIn = authenticationProvider.login(username, password);
 
         if (isLoggedIn) {
-            getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME);
+            getUI().getNavigator().navigateTo(TreedDashboard.VIEW_NAME);
         } else {
             Notification.show(getString("loginAttempt-notification-wrong-inputs"));
         }

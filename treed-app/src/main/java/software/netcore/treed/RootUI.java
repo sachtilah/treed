@@ -1,14 +1,12 @@
 package software.netcore.treed;
 
-import com.vaadin.annotations.PreserveOnRefresh;
-import com.vaadin.annotations.Push;
-import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Viewport;
+import com.vaadin.annotations.*;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,8 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.business.OtpService;
 import software.netcore.treed.business.PiktogramService;
-import software.netcore.treed.puzzle.ui.view.CreatePuzzleView;
+import software.netcore.treed.ui.SecurityViewChangeListener;
+import software.netcore.treed.ui.view.ErrorViewProviderImpl;
 import software.netcore.treed.ui.view.LoginAttemptView;
 
 
@@ -32,6 +31,7 @@ import java.util.Locale;
 @Slf4j
 @SpringUI
 @Title("Treed")
+@Theme("treed")
 @Push(transport = Transport.LONG_POLLING)
 @PreserveOnRefresh
 @Viewport("user-scalable=no,initial-scale=1.0")
@@ -40,10 +40,6 @@ public class RootUI extends UI {
 
     private final MessageSource messageSource;
 
-    /* used to manipulate with accounts */
-    private final AccountService accountService;
-    private final OtpService otpService;
-    private final PiktogramService piktogramService;
     private final SpringViewProvider springViewProvider;
 
     @Override
@@ -57,6 +53,8 @@ public class RootUI extends UI {
 
         Navigator navigator = new Navigator(this, getContent());
         navigator.addProvider(springViewProvider);
+        navigator.setErrorProvider(new ErrorViewProviderImpl(springViewProvider));
+        navigator.addViewChangeListener(new SecurityViewChangeListener());
 
         //getNavigator().navigateTo(CreatePuzzleView.VIEW_NAME);
         getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);

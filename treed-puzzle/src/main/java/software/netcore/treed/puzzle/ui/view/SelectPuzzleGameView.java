@@ -13,6 +13,7 @@ import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+import software.netcore.treed.api.AbstractRestrictedEnterView;
 import software.netcore.treed.api.TreedCustomComponent;
 //import software.netcore.treed.data.schema.puzzle.PictogramPart;
 import software.netcore.treed.data.schema.puzzle.PictogramPart;
@@ -20,6 +21,7 @@ import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
 //import software.netcore.treed.puzzle.business.PictogramPartService;
 import software.netcore.treed.puzzle.business.PictogramPartService;
 import software.netcore.treed.puzzle.business.PictogramPuzzleService;
+import software.netcore.treed.ui.view.AbstractMenuView;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -28,10 +30,9 @@ import java.util.Iterator;
 
 @Slf4j
 @SpringView(name =SelectPuzzleGameView.VIEW_NAME)
-public class SelectPuzzleGameView extends TreedCustomComponent implements View {
+public class SelectPuzzleGameView extends AbstractMenuView implements View {
 
     public static final String VIEW_NAME = "/puzzle/select";
-    private MVerticalLayout mainLayout;
    private String captionx;
     //private String nameOfPiktogram="";
     private String[][] componentOfPictogram = new String[10][4];
@@ -47,21 +48,11 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         this.pictogramPartService = pictogramPartService;
     }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        //log.info("run enter");
-        this.mainLayout = new MVerticalLayout()
-                .withFullSize();
-        setCompositionRoot(this.mainLayout);
-        setSizeFull();
-        this.mainLayout.setMargin(false);
-        build();
-    }
-
     /**
      * Build page.
      */
-    private void build() {
+    @Override
+    protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent event) {
         //captionx="skuska";
         //log.info("run build");
         Iterable<PictogramPuzzle> pics = pictogramPuzzleService.getPics();
@@ -153,7 +144,7 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
 
 
 
-        ((MTextField) searchField).withValueChangeListener(event -> {
+        ((MTextField) searchField).withValueChangeListener(valueChangeEvent -> {
             /*String sk = "35px";
             Notification.show(sk);*/
 
@@ -203,8 +194,8 @@ public class SelectPuzzleGameView extends TreedCustomComponent implements View {
         //panel.setHeight("600px");
         panel.setSizeFull();
         panel.setContent(searchLayout);
-        mainLayout.removeAllComponents();
-        mainLayout.add(panel, Alignment.TOP_CENTER);
+        contentLayout.removeAllComponents();
+        contentLayout.add(panel, Alignment.TOP_CENTER);
     }
 
     private void searchGrid(AbsoluteLayout searchPictogram, String search){

@@ -28,11 +28,13 @@ import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+import software.netcore.treed.api.AbstractRestrictedEnterView;
 import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.data.schema.puzzle.PictogramPart;
 import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
 import software.netcore.treed.puzzle.business.PictogramPartService;
 import software.netcore.treed.puzzle.business.PictogramPuzzleService;
+import software.netcore.treed.ui.view.AbstractMenuView;
 //import software.netcore.treed.puzzle.ui.PictogramShow;
 
 //import javax.lang.model.element.Element;
@@ -48,7 +50,7 @@ import java.util.*;
 
 @Slf4j
 @SpringView(name =CreatePuzzleView.VIEW_NAME)
-public class CreatePuzzleView extends TreedCustomComponent implements View{
+public class CreatePuzzleView extends AbstractMenuView implements View{
     //private int nu=0;
     private int zpx=0;
     private String nameOfPiktogram="";
@@ -57,7 +59,6 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
     private int identificator = 0;
     private boolean removePictogram=false;
     public static final String VIEW_NAME = "/puzzle/create";
-    private MVerticalLayout mainLayout;
     private final PictogramPuzzleService pictogramPuzzleService;
     private final PictogramPartService pictogramPartService;
     private ArrayList<String[]> pictogramComponents=new ArrayList<String[]>();
@@ -68,25 +69,15 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         this.pictogramPuzzleService = pictogramPuzzleService;
     }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        this.mainLayout = new MVerticalLayout()
-                .withFullSize();
-        setCompositionRoot(this.mainLayout);
-        setSizeFull();
-        this.mainLayout.setMargin(false);
-        build();
-    }
-
-
     /**
      * Build page.
      */
-    private void build() {
+    @Override
+    protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         /*
          * Objects
          */
-        mainLayout.removeAllComponents();
+        contentLayout.removeAllComponents();
         /*WebApplicationContext ctx = (WebApplicationContext)treed.getContext();
         //int width Browser.getClientWidth();
         int width = ctx.getBrowser().getScreenWidth();
@@ -1039,8 +1030,8 @@ public class CreatePuzzleView extends TreedCustomComponent implements View{
         //panel.
         sk.addComponent(panel);
         sk.setComponentAlignment(panel, Alignment.TOP_CENTER);
-        mainLayout.removeAllComponents();
-        mainLayout.add(panel, Alignment.TOP_CENTER);
+        contentLayout.removeAllComponents();
+        contentLayout.add(panel, Alignment.TOP_CENTER);
     }
 
 

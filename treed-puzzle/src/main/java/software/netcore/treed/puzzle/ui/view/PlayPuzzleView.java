@@ -15,11 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+import software.netcore.treed.api.AbstractRestrictedEnterView;
 import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.data.schema.puzzle.PictogramPart;
 import software.netcore.treed.data.schema.puzzle.PictogramPuzzle;
 import software.netcore.treed.puzzle.business.PictogramPartService;
 import software.netcore.treed.puzzle.business.PictogramPuzzleService;
+import software.netcore.treed.ui.view.AbstractMenuView;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -29,10 +31,9 @@ import java.util.Optional;
 
 @Slf4j
 @SpringView(name =PlayPuzzleView.VIEW_NAME)
-public class PlayPuzzleView extends TreedCustomComponent implements View {
+public class PlayPuzzleView extends AbstractMenuView implements View {
     private String nameOfPiktogram="";
     public static final String VIEW_NAME = "/puzzle/play";
-    private MVerticalLayout mainLayout;
     private int widthOfPiktogram=1;
     private String pokec="skuska2";//----------------------------------------------------------------------------------------------------
     private int heightOfPiktogram=1;
@@ -41,26 +42,17 @@ public class PlayPuzzleView extends TreedCustomComponent implements View {
     private String[][] componentOfPictogram = new String[10][4];
     private final PictogramPartService pictogramPartService;
     private final PictogramPuzzleService pictogramPuzzleService;
+
     public PlayPuzzleView(PictogramPartService pictogramPartService, PictogramPuzzleService pictogramPuzzleService) {
         this.pictogramPartService = pictogramPartService;
         this.pictogramPuzzleService = pictogramPuzzleService;
     }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        //log.info("run enter");
-        this.mainLayout = new MVerticalLayout()
-                .withFullSize();
-        setCompositionRoot(this.mainLayout);
-        setSizeFull();
-        this.mainLayout.setMargin(false);
-        build();
-    }
-
     /**
      * Build page.
      */
-    private void build() {
+    @Override
+    protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         //log.info("run build");
         log.info(selectedPictogram);
         //pokec = SelectPuzzleGameView.getCaptionx();
@@ -391,8 +383,8 @@ int bob=0;
         //panel.setHeight("600px");
         panel.setSizeFull();
         panel.setContent(content);
-        mainLayout.removeAllComponents();
-        mainLayout.add(panel, Alignment.TOP_LEFT);
+        contentLayout.removeAllComponents();
+        contentLayout.add(panel, Alignment.TOP_LEFT);
 
     }
 

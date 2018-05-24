@@ -26,7 +26,7 @@
 
         <packaged.file.name>Treed</packaged.file.name>
 
-        <treed.version>0.1.1</treed.version>
+        <treed.version>1.0.0</treed.version>
         <vaadin.version>8.1.0</vaadin.version>
     </properties>
 
@@ -34,8 +34,8 @@
         <module>treed-app</module>
         <module>treed-data</module>
         <module>treed-api</module>
-        <module>treed-puzzle</module>
-        <module>treed-sim</module>
+        <!--<module>treed-puzzle</module>-->
+        <!--<module>treed-sim</module>-->
     </modules>
 
     <dependencyManagement>

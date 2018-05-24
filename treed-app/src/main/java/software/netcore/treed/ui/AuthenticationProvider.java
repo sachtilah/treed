@@ -42,7 +42,7 @@ public class AuthenticationProvider {
     /**
      * Logout user.
      */
-    public void logout() {
+    public static void logout() {
         VaadinSession.getCurrent().getSession().invalidate();
         Page.getCurrent().reload();
     }

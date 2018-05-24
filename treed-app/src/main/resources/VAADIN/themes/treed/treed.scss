@@ -1,0 +1,11 @@
+@import "../valo/valo";
+
+@mixin treed {
+
+  @include valo;
+
+  .header {
+    background-color: #77b5f8;
+  }
+
+}

@@ -22,16 +22,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <java.version>1.8</java.version>
-
-
     </properties>
 
-    <repositories>
-
-    </repositories>
-
     <dependencies>
-
         <!-- self dependencies -->
         <dependency>
             <groupId>software.netcore</groupId>
@@ -43,11 +36,11 @@
             <artifactId>treed-api</artifactId>
             <version>${treed.version}</version>
         </dependency>
-        <dependency>
-            <groupId>software.netcore</groupId>
-            <artifactId>treed-puzzle</artifactId>
-            <version>${treed.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>software.netcore</groupId>-->
+            <!--<artifactId>treed-puzzle</artifactId>-->
+            <!--<version>${treed.version}</version>-->
+        <!--</dependency>-->
         <!-- spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

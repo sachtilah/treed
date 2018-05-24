@@ -17,6 +17,7 @@ import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+import software.netcore.treed.api.AbstractFreeEnterView;
 import software.netcore.treed.api.TreedCustomComponent;
 import software.netcore.treed.business.AccountService;
 import software.netcore.treed.data.schema.Account;
@@ -29,7 +30,7 @@ import java.util.Objects;
  */
 @RequiredArgsConstructor
 @SpringView(name = RegistrationView.VIEW_NAME)
-public class RegistrationView extends TreedCustomComponent implements View {
+public class RegistrationView extends AbstractFreeEnterView implements View {
 
     public static final String VIEW_NAME = "/registration";
 

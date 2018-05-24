@@ -6,11 +6,12 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.viritin.button.MButton;
-import software.netcore.treed.api.TreedCustomComponent;
+import org.vaadin.viritin.label.MLabel;
+import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.PiktogramService;
 import software.netcore.treed.data.schema.sim.Piktogram;
-import software.netcore.treed.ui.view.HomeScreenView;
 import software.netcore.treed.ui.view.LoginAttemptView;
 
 import java.io.ByteArrayInputStream;
@@ -22,10 +23,9 @@ import java.util.Collection;
 import java.util.Date;
 
 @SpringView(name = software.netcore.treed.ui.view.simViews.UploadPicView.VIEW_NAME)
-public class UploadPicView extends TreedCustomComponent implements View {
+public class UploadPicView extends AbstractSimView implements View {
 
     public static final String VIEW_NAME = "/upload";
-    private VerticalLayout mainLayout;
     private final PiktogramService piktogramService;
 
     public UploadPicView(PiktogramService piktogramService) {
@@ -33,44 +33,13 @@ public class UploadPicView extends TreedCustomComponent implements View {
     }
 
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        this.mainLayout = new VerticalLayout();
-        setCompositionRoot(this.mainLayout);
-        build();
-    }
+    protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        MVerticalLayout content = new MVerticalLayout();
+        contentLayout.removeAllComponents();
+        contentLayout.add(content);
 
-    public void build() {
-        VerticalLayout content = this.mainLayout;
-        content.removeAllComponents();
-        content.setMargin(true);
-        content.setSpacing(true);
-
-        HorizontalLayout bar = new HorizontalLayout();
-        bar.setWidth("100%");
-        Label treed = new Label("<strong>treed</strong>", ContentMode.HTML);
-
-        Button homeScreen = new Button(getString("navigationBar-home-button"));
-        homeScreen.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME));
-
-        Button createClause = new Button(getString("navigationBar-create-clause-button"));
-        createClause.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
-
-        Button editClause = new Button(getString("navigationBar-edit-clause-button"));
-        editClause.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(EditClauseView.VIEW_NAME));
-
-        Label usernameField = new Label("username");
-
-        Button logout = new Button(getString("navigationBar-logout-button"));
-        logout.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
-
-        content.addComponent(bar);
-        bar.addComponents(treed, homeScreen, createClause, editClause, usernameField, logout);
-
-        Label text = new Label(getString("uploadPic-upload-label"));
+        MLabel text = new MLabel(getString("uploadPic-upload-label"))
+                .withStyleName(ValoTheme.LABEL_H2);
         content.addComponent(text);
         content.setComponentAlignment(text, Alignment.MIDDLE_CENTER);
 
@@ -108,12 +77,12 @@ public class UploadPicView extends TreedCustomComponent implements View {
         layout.addComponents(preview, upload);
 
         Button createButton = new MButton(getString("uploadPic-create-button")).withListener(clickEvent -> {
-            if(termField.getValue().isEmpty())
+            if (termField.getValue().isEmpty())
                 Notification.show(getString("uploadPic-notification-no-term"));
             else {
                 addNewPiktogram(receiver.stream.toByteArray(), termField.getValue());
                 Notification.show(getString("uploadPic-notification-successfully-saved"));
-                build();
+                build(contentLayout, viewChangeEvent);
             }
         });
         layout.addComponents(termField, createButton);
@@ -121,7 +90,7 @@ public class UploadPicView extends TreedCustomComponent implements View {
         layout.setComponentAlignment(createButton, Alignment.BOTTOM_CENTER);
     }
 
-    private void addNewPiktogram (byte[] bytes, String term){
+    private void addNewPiktogram(byte[] bytes, String term) {
 
         Piktogram piktogramAdd = new Piktogram();
         piktogramAdd.setBytes(bytes);

@@ -1,8 +1,6 @@
 package software.netcore.treed.ui.view.simViews;
 
 import com.vaadin.data.HasValue;
-import com.vaadin.data.Result;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
@@ -11,45 +9,45 @@ import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
-import org.vaadin.viritin.label.MLabel;
+import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.ClauseService;
-import software.netcore.treed.business.PiktogramService;
-import software.netcore.treed.data.schema.Account;
 import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
-import software.netcore.treed.ui.TreedCustomComponent;
 import com.vaadin.navigator.View;
-import software.netcore.treed.ui.view.HomeScreenView;
 import software.netcore.treed.ui.view.LoginAttemptView;
 
-import javax.xml.bind.Binder;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.validation.Validator;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static com.vaadin.data.ValidationResult.ok;
-
 @Slf4j
 @SpringView(name = software.netcore.treed.ui.view.simViews.GameView.VIEW_NAME)
-public class GameView extends TreedCustomComponent implements View {
+public class GameView extends AbstractSimView implements View {
 
     public static final String VIEW_NAME = "/game";
-    private VerticalLayout mainLayout;
-    public String parameter;
+    private String parameter;
     private final ClauseService clauseService;
 
     public GameView(ClauseService clauseService) {
         this.clauseService = clauseService;
     }
 
-    public void build(String parameter){
-        VerticalLayout content = this.mainLayout;
+    @Override
+    protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent event){
+        setCompositionRoot(contentLayout);
+        if(event.getParameters() != null){
+            String[] params = event.getParameters().split("/");
+            for(String param : params){
+                parameter = param;
+            }
+        }
+        build(parameter, contentLayout);
+    }
+
+    public void build(String parameter, MVerticalLayout contentLayout){
+        VerticalLayout content = contentLayout;
         content.removeAllComponents();
-        content.setMargin(true);
-        content.setSpacing(true);
 
         HorizontalLayout bar = new HorizontalLayout();
         bar.setWidth("100%");
@@ -83,7 +81,7 @@ public class GameView extends TreedCustomComponent implements View {
 
         Button backButton = new MButton(getString("gameView-back-button"));
         backButton.addClickListener((Button.ClickListener) event ->
-                getUI().getNavigator().navigateTo(HomeScreenView.VIEW_NAME));
+                getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME));
 
         content.addComponent(backButton);
         content.setComponentAlignment(backButton, Alignment.MIDDLE_CENTER);
@@ -141,16 +139,4 @@ public class GameView extends TreedCustomComponent implements View {
         }
     }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event){
-        this.mainLayout = new VerticalLayout();
-        setCompositionRoot(this.mainLayout);
-        if(event.getParameters() != null){
-            String[] params = event.getParameters().split("/");
-            for(String param : params){
-                parameter = param;
-            }
-        }
-        build(parameter);
-    }
 }
