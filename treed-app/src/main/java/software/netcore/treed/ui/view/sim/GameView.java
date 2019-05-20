@@ -68,48 +68,32 @@ public class GameView extends AbstractSimView implements View {
             if (clause.getName().equals(parameter)) {
                 int columns = clause.getColumnCount();
                 int rows = clause.getRowCount();
-                GridLayout grid = new GridLayout(columns, rows * 2);
+                GridLayout grid = new GridLayout(columns, rows * 3);
                 grid.removeAllComponents();
-                Iterable<Piktogram> piktograms = clause.getPiktograms();
-                Collection<Piktogram> piktogramCollection = new ArrayList<>();
-                for (Piktogram piktogram : piktograms) {
-                    piktogramCollection.add(piktogram);
-                }
-                Iterator<Piktogram> iteratorPic = piktograms.iterator();
-                int i = 0, j = 0, k = 1, l = 0;
-                while (iteratorPic.hasNext()) {
-                    Piktogram iterPic = iteratorPic.next();
-                    if (j % 2 == 0 && i < columns) {
-                        grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                                new ByteArrayInputStream(iterPic.getBytes()), "")), i, j);
-                        i++;
-                    }
-                    if (i == columns) {
-                        j += 2;
-                        i = 0;
-                    }
-                    if (k % 2 == 1 && l < columns) {
-                        int finalK = k;
-                        int finalL = l;
-                        grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
-                            if (iterPic.getTerm().equals(valueChangeEvent.getValue())) {
-                                grid.removeComponent(valueChangeEvent.getComponent());
-                                grid.addComponent(new Label(iterPic.getTerm()));
-                                c[0]++;
-                                //grid.getComponent(finalL, finalK).setStyleName(ValoTheme.LABEL_HUGE);
-                                grid.getComponent(finalL, finalK).setStyleName(ValoTheme.LABEL_SUCCESS);
-                                grid.setComponentAlignment(grid.getComponent(finalL, finalK), Alignment.MIDDLE_CENTER);
-                                if (c[0] == clause.getPiktograms().size())
-                                    Notification.show(getString("gameView-notification-win"));
-                            } else valueChangeEvent.getComponent().addStyleName("wrongTerm");
-                        }), l, k);
-                        l++;
-                    }
-                    if (l == columns) {
-                        k += 2;
-                        l = 0;
-                    }
-                }
+
+               Iterable<Piktogram> piktograms = clause.getPiktograms();
+               Collection<Piktogram> piktogramCollection = new ArrayList<>();
+               for (Piktogram piktogram : piktograms)
+                  piktogramCollection.add(piktogram);
+               Iterator<Piktogram> iteratorPic = piktograms.iterator();
+
+               int counter;
+               int i, j;
+
+               for(counter = 0; counter < rows * 3; counter+=3) {
+                  for (i = 0; i < columns; i++) {
+                     Piktogram iterPic = iteratorPic.next();
+                     j = counter;
+                     grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                           new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j);
+                     j++;
+                     grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
+                           new ByteArrayInputStream(iterPic.getBytesAudio()), "")), i, j);
+                     j++;
+                     grid.addComponent(new Label(iterPic.getTerm()), i, j);
+                     System.out.println("Term: " + iterPic.getTerm() + ", i: " + i + ", j: " + j);
+                  }
+               }
                 content.addComponent(grid);
                 content.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
                 log.info("Clause " + parameter + " loaded");

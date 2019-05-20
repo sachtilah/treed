@@ -119,7 +119,7 @@ public class EditClauseView extends AbstractSimView implements View {
                                             if (j % 2 == 0) {
                                                 if ((iterPic.getTerm().equals(words[counterImage])) && (counterImage < numberOfWords)) {
                                                     grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                                                            new ByteArrayInputStream(iterPic.getBytes()), "")), i, j);
+                                                            new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j);
                                                     piktogramCollection.add(iterPic);
                                                     counterImage++;
                                                     break;

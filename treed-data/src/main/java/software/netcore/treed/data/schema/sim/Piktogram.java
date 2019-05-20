@@ -19,10 +19,23 @@ import javax.persistence.Table;
 public class Piktogram extends AbstractEntity {
 
     @Lob
-    @Column(name = "bytes", nullable = false)
-    private byte[] bytes;
+    @Column(name = "bytesImage", nullable = false)
+    private byte[] bytesImage;
+
+    @Lob
+    @Column(name = "bytesAudio", length = 5 * 1024 * 1024)
+    private byte[] bytesAudio;
 
     @Column(name = "term", nullable = false)
     private String term;
+
+    @Column(name = "term_en")
+    private String term_en;
+
+    @Column(name = "term_ro")
+    private String term_ro;
+
+    @Column(name = "term_ru")
+    private String term_ru;
 
 }

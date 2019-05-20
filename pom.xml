@@ -27,7 +27,7 @@
         <packaged.file.name>Treed</packaged.file.name>
 
         <treed.version>1.0.0</treed.version>
-        <vaadin.version>8.1.0</vaadin.version>
+        <vaadin.version>8.5.0</vaadin.version>
     </properties>
 
     <modules>
@@ -65,7 +65,15 @@
             <dependency>
                 <groupId>org.vaadin.addon</groupId>
                 <artifactId>easyuploads</artifactId>
-                <version>8.0.0</version>
+                <version>9.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-core</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-upload-flow</artifactId>
             </dependency>
             <dependency>
                 <groupId>com.vaadin</groupId>

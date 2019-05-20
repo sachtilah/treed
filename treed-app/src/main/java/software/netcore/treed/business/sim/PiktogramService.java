@@ -2,7 +2,8 @@ package software.netcore.treed.business.sim;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import software.netcore.treed.data.repository.sim.PiktogramRepository;
 import software.netcore.treed.data.schema.sim.Piktogram;
 
@@ -11,7 +12,7 @@ import software.netcore.treed.data.schema.sim.Piktogram;
  */
 @RequiredArgsConstructor
 @Slf4j
-public class PiktogramService extends WebMvcConfigurerAdapter {
+public class PiktogramService implements WebMvcConfigurer {
 
     private final PiktogramRepository piktogramRepository;
 

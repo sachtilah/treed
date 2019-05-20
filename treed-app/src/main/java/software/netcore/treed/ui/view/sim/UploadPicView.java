@@ -42,6 +42,14 @@ public class UploadPicView extends AbstractSimView implements View {
         content.setComponentAlignment(text, Alignment.MIDDLE_CENTER);
 
         TextField termField = new TextField(getString("uploadPic-term-field"));
+        TextField termField_en = new TextField(getString("uploadPic-term-field-en"));
+        TextField termField_ro = new TextField(getString("uploadPic-term-field-ro"));
+        TextField termField_ru = new TextField(getString("uploadPic-term-field-ru"));
+
+        termField.setWidth("300");
+        termField_en.setWidth("300");
+        termField_ro.setWidth("300");
+        termField_ru.setWidth("300");
 
         Iterable<Piktogram> pics = piktogramService.getPics();
         Collection<Piktogram> piktogramCollection = new ArrayList<>();
@@ -52,52 +60,75 @@ public class UploadPicView extends AbstractSimView implements View {
         final Embedded preview = new Embedded();
         preview.setVisible(false);
 
-        final Upload upload = new Upload();
-        upload.setCaption(getString("uploadPic-select-image-caption"));
+        final Upload uploadImage = new Upload();
+        uploadImage.setCaption(getString("uploadPic-select-image-caption"));
 
-        ImageUploader receiver = new ImageUploader();
+        ComponentUploader receiverImage = new ComponentUploader();
 
-        upload.setReceiver(receiver);
-        upload.addSucceededListener((Upload.SucceededListener) succeededEvent -> {
+        uploadImage.setReceiver(receiverImage);
+        uploadImage.addSucceededListener((Upload.SucceededListener) succeededEvent -> {
             Image image = new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                    new ByteArrayInputStream(receiver.stream.toByteArray()), ""));
+                    new ByteArrayInputStream(receiverImage.stream.toByteArray()), succeededEvent.getFilename()));
             content.addComponent(image);
             content.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
             image.setWidth("250px");
             image.setHeight("191px");
+            uploadImage.setCaption(succeededEvent.getFilename());
         });
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.removeAllComponents();
-        layout.setMargin(true);
-        layout.setSpacing(true);
-        content.addComponent(layout);
-        content.setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
-        layout.addComponents(preview, upload);
+        content.addComponents(preview, uploadImage);
+        content.setComponentAlignment(uploadImage, Alignment.MIDDLE_CENTER);
+
+        final Upload uploadAudio = new Upload();
+        uploadAudio.setCaption(getString("uploadPic-select-image-caption"));
+        ComponentUploader receiverAudio = new ComponentUploader();
+        uploadAudio.setReceiver(receiverAudio);
+        uploadAudio.addSucceededListener((Upload.SucceededListener) succeededEvent ->{
+           Audio audio = new Audio("", new StreamResource((StreamResource.StreamSource) () ->
+                 new ByteArrayInputStream(receiverAudio.stream.toByteArray()), succeededEvent.getFilename()));
+           content.addComponent(audio);
+           content.setComponentAlignment(audio, Alignment.MIDDLE_CENTER);
+           uploadAudio.setCaption(succeededEvent.getFilename());
+           audio.setShowControls(true);
+           audio.play();
+        });
+        content.addComponent(uploadAudio);
+        content.setComponentAlignment(uploadAudio, Alignment.MIDDLE_CENTER);
 
         Button createButton = new MButton(getString("uploadPic-create-button")).withListener(clickEvent -> {
             if (termField.getValue().isEmpty())
                 Notification.show(getString("uploadPic-notification-no-term"));
             else {
-                addNewPiktogram(receiver.stream.toByteArray(), termField.getValue());
+                addNewPiktogram(receiverImage.stream.toByteArray(), receiverAudio.stream.toByteArray(), termField.getValue(), termField_en.getValue(),
+                      termField_ro.getValue(), termField_ru.getValue());
                 Notification.show(getString("uploadPic-notification-successfully-saved"), Notification.Type.ASSISTIVE_NOTIFICATION);
                 build(contentLayout, viewChangeEvent);
             }
         });
-        layout.addComponents(termField, createButton);
-        layout.setComponentAlignment(termField, Alignment.MIDDLE_CENTER);
-        layout.setComponentAlignment(createButton, Alignment.BOTTOM_CENTER);
+
+        content.addComponents(termField, termField_en, termField_ro, termField_ru);
+        content.addComponent(createButton);
+
+        content.setComponentAlignment(termField_en, Alignment.MIDDLE_CENTER);
+        content.setComponentAlignment(termField_ro, Alignment.MIDDLE_CENTER);
+        content.setComponentAlignment(termField_ru, Alignment.MIDDLE_CENTER);
+        content.setComponentAlignment(termField, Alignment.MIDDLE_CENTER);
+        content.setComponentAlignment(createButton, Alignment.BOTTOM_CENTER);
     }
 
-    private void addNewPiktogram(byte[] bytes, String term) {
+    private void addNewPiktogram(byte[] bytesImage, byte[] bytesAudio, String term, String term_en, String term_ro, String term_ru) {
 
         Piktogram piktogramAdd = new Piktogram();
-        piktogramAdd.setBytes(bytes);
+        piktogramAdd.setBytesImage(bytesImage);
+        piktogramAdd.setBytesAudio(bytesAudio);
         piktogramAdd.setTerm(term);
+        piktogramAdd.setTerm_en(term_en);
+        piktogramAdd.setTerm_ro(term_ro);
+        piktogramAdd.setTerm_ru(term_ru);
         piktogramAdd.setCreateTime(Date.from(Instant.now()));
         piktogramService.savePic(piktogramAdd);
     }
 
-    private class ImageUploader implements Upload.Receiver {
+    private class ComponentUploader implements Upload.Receiver {
 
         private ByteArrayOutputStream stream;
 

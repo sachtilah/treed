@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import software.netcore.treed.business.puzzle.PictogramPartService;
 import software.netcore.treed.business.puzzle.PictogramPuzzleService;
 import software.netcore.treed.business.sim.ClauseService;
@@ -25,7 +25,7 @@ import software.netcore.treed.data.repository.sim.PiktogramRepository;
  */
 @RequiredArgsConstructor
 @Configuration
-public class ServiceConfiguration extends WebMvcConfigurerAdapter {
+public class ServiceConfiguration implements WebMvcConfigurer {
 
     private final AccountRepository accountRepo;
     private final OtpRepository otpRepo;

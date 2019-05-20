@@ -36,7 +36,7 @@ public class CreateClauseView extends AbstractSimView implements View {
     @Override
     protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         VerticalLayout content = new MVerticalLayout()
-                .withSpacing(true);
+              .withSpacing(true);
 
         contentLayout.removeAllComponents();
         contentLayout.add(content);
@@ -63,7 +63,7 @@ public class CreateClauseView extends AbstractSimView implements View {
         Button generateButton = new MButton(getString("createClause-generate-button")).withListener(clickEvent -> {
             boolean isMissing = false;
             if (row.getValue().isEmpty() || column.getValue().isEmpty() || clauseNameField.getValue().isEmpty()
-                    || clauseField.getValue().isEmpty()) {
+                  || clauseField.getValue().isEmpty()) {
                 Notification.show(getString("createClause-notification-empty-fields"));
                 build(contentLayout, viewChangeEvent);
             } else if ((!row.getValue().matches("[0-9]+")) || (!column.getValue().matches("[0-9]+"))) {
@@ -73,36 +73,46 @@ public class CreateClauseView extends AbstractSimView implements View {
                 int rows = Integer.parseInt(row.getValue());
                 int columns = Integer.parseInt(column.getValue());
                 int numberOfWords = rows * columns;
-                int counter = 0, counterImage = 0;
+                int counter = 0;
+                int counterImage = 0;
+                int counterAudio = 0;
                 Collection<Piktogram> collection = new ArrayList<>();
 
                 String[] words = clauseField.getValue().split("\\s+");
-                GridLayout grid = new GridLayout(columns, rows * 2);
+                GridLayout grid = new GridLayout(columns, rows * 3);
                 grid.removeAllComponents();
                 if (numberOfWords == words.length) {
-                    for (int j = 0; j < rows * 2; j++) {
+                    for (int j = 1; j <= rows * 3; j++) {
                         for (int i = 0; i < columns; i++) {
                             Iterable<Piktogram> piktograms = piktogramService.getPics();
                             Collection<Piktogram> piktogramCollection = new ArrayList<>();
-                            for (Piktogram piktogram : piktograms) {
+                            for (Piktogram piktogram : piktograms)
                                 piktogramCollection.add(piktogram);
-                            }
                             Iterator<Piktogram> iteratorPic = piktograms.iterator();
 
-                            while ((iteratorPic.hasNext())) {
+                            while (iteratorPic.hasNext() && (counterImage < numberOfWords || counterAudio < numberOfWords || counter < numberOfWords)) {
                                 Piktogram iterPic = iteratorPic.next();
-                                if (j % 2 == 0) {
-                                    if ((iterPic.getTerm().equals(words[counterImage])) && (counterImage < numberOfWords)) {
+                                if (j % 3 == 1 ||j == 1) {
+                                    if (iterPic.getTerm().equals(words[counterImage])) {
                                         grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                                                new ByteArrayInputStream(iterPic.getBytes()), "")), i, j);
+                                              new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j-1);
                                         collection.add(iterPic);
                                         counterImage++;
                                         break;
                                     }
                                 }
-                                if (j % 2 == 1) {
-                                    if ((iterPic.getTerm().equals(words[counter])) && (counter < numberOfWords)) {
-                                        grid.addComponent(new Label(words[counter]), i, j);
+                                if (j % 3 == 2 || j == 2) {
+                                    if (iterPic.getTerm().equals(words[counterAudio])) {
+                                        grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
+                                              new ByteArrayInputStream(iterPic.getBytesAudio()), "")), i, j-1);
+                                        collection.add(iterPic);
+                                        counterAudio++;
+                                        break;
+                                    }
+                                }
+                                if (j % 3 == 0) {
+                                    if (iterPic.getTerm().equals(words[counter])) {
+                                        grid.addComponent(new Label(words[counter]), i, j-1);
                                         counter++;
                                         break;
                                     }
@@ -171,6 +181,4 @@ public class CreateClauseView extends AbstractSimView implements View {
             clauseService.saveClause(clauseAdd);
         }
     }
-
 }
-
