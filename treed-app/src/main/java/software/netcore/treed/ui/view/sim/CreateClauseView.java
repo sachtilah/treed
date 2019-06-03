@@ -105,7 +105,6 @@ public class CreateClauseView extends AbstractSimView implements View {
                                     if (iterPic.getTerm().equals(words[counterAudio])) {
                                         grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
                                               new ByteArrayInputStream(iterPic.getBytesAudio()), "")), i, j-1);
-                                        collection.add(iterPic);
                                         counterAudio++;
                                         break;
                                     }
@@ -129,6 +128,7 @@ public class CreateClauseView extends AbstractSimView implements View {
                 if (isMissing) {
                     Notification.show(getString("createClause-notification-upload-missing"));
                 } else {
+
 
                     Button createButton = new MButton(getString("createClause-create-button")).withListener(click -> {
                         addClause(rows, columns, clauseNameField.getValue(), collection);
@@ -159,9 +159,8 @@ public class CreateClauseView extends AbstractSimView implements View {
 
         Iterable<Clause> clauses = clauseService.getClauses();
         Collection<Clause> clauseCollection = new ArrayList<>();
-        for (Clause clause : clauses) {
+        for (Clause clause : clauses)
             clauseCollection.add(clause);
-        }
         Iterator<Clause> iteratorClause = clauses.iterator();
 
         while ((iteratorClause.hasNext())) {

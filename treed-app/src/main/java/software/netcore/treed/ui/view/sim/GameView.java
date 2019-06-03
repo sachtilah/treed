@@ -1,21 +1,17 @@
 package software.netcore.treed.ui.view.sim;
 
-import com.vaadin.data.HasValue;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
-import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import com.vaadin.navigator.View;
-import software.netcore.treed.ui.view.LoginAttemptView;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -57,11 +53,8 @@ public class GameView extends AbstractSimView implements View {
         Button backButton = new MButton(getString("gameView-back-button"));
         backButton.addClickListener((Button.ClickListener) event ->
                 getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME));
-
         content.addComponent(backButton);
         content.setComponentAlignment(backButton, Alignment.MIDDLE_CENTER);
-
-        final int[] c = {0};
 
         Iterable<Clause> clauses = clauseService.getClauses();
         for (Clause clause : clauses) {
@@ -72,26 +65,31 @@ public class GameView extends AbstractSimView implements View {
                 grid.removeAllComponents();
 
                Iterable<Piktogram> piktograms = clause.getPiktograms();
-               Collection<Piktogram> piktogramCollection = new ArrayList<>();
-               for (Piktogram piktogram : piktograms)
+               final Collection<Piktogram> piktogramCollection = new ArrayList<>();
+               for (Piktogram piktogram : piktograms) {
+                  System.out.println(piktogram.getTerm());
                   piktogramCollection.add(piktogram);
+               }
                Iterator<Piktogram> iteratorPic = piktograms.iterator();
 
-               int counter;
-               int i, j;
+               int i = 0, j = 0;
 
-               for(counter = 0; counter < rows * 3; counter+=3) {
-                  for (i = 0; i < columns; i++) {
-                     Piktogram iterPic = iteratorPic.next();
-                     j = counter;
-                     grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                           new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j);
+               while(iteratorPic.hasNext() && j < rows * 3){
+                  Piktogram iterPic = iteratorPic.next();
+                  grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                        new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j);
+                  j++;
+                  grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
+                        new ByteArrayInputStream(iterPic.getBytesAudio()), "")), i, j);
+                  j++;
+                  grid.addComponent(new Label(iterPic.getTerm()), i, j);
+                  if(i+1 < columns) {
+                     j -= 2;
+                     i++;
+                  }
+                  else if(i < columns) {
+                     i = 0;
                      j++;
-                     grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
-                           new ByteArrayInputStream(iterPic.getBytesAudio()), "")), i, j);
-                     j++;
-                     grid.addComponent(new Label(iterPic.getTerm()), i, j);
-                     System.out.println("Term: " + iterPic.getTerm() + ", i: " + i + ", j: " + j);
                   }
                }
                 content.addComponent(grid);
