@@ -1,5 +1,6 @@
 package software.netcore.treed.ui.view.sim;
 
+import com.vaadin.data.HasValue;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
@@ -7,11 +8,13 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
+import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import com.vaadin.navigator.View;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -56,6 +59,8 @@ public class GameView extends AbstractSimView implements View {
         content.addComponent(backButton);
         content.setComponentAlignment(backButton, Alignment.MIDDLE_CENTER);
 
+        final int[] c = {0};
+
         Iterable<Clause> clauses = clauseService.getClauses();
         for (Clause clause : clauses) {
             if (clause.getName().equals(parameter)) {
@@ -79,10 +84,25 @@ public class GameView extends AbstractSimView implements View {
                   grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
                         new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j);
                   j++;
-                  grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
-                        new ByteArrayInputStream(iterPic.getBytesAudio()), "")), i, j);
+                  Audio audio = new Audio("", new StreamResource((StreamResource.StreamSource) () ->
+                        new ByteArrayInputStream(iterPic.getBytesAudio()), ""));
+                  grid.addComponent(audio, i, j);
                   j++;
-                  grid.addComponent(new Label(iterPic.getTerm()), i, j);
+
+                  int finalJ = j;
+                  int finalI = i;
+                  grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
+                     if (iterPic.getTerm().equals(valueChangeEvent.getValue())) {
+                        grid.removeComponent(valueChangeEvent.getComponent());
+                        grid.addComponent(new Label(iterPic.getTerm()));
+                        c[0]++;
+                        grid.getComponent(finalI, finalJ).setStyleName(ValoTheme.LABEL_SUCCESS);
+                        grid.setComponentAlignment(grid.getComponent(finalI, finalJ), Alignment.MIDDLE_CENTER);
+                        if (c[0] == clause.getPiktograms().size())
+                           Notification.show(getString("gameView-notification-win"));
+                     } else valueChangeEvent.getComponent().addStyleName("wrongTerm");
+                  }), i, j);
+
                   if(i+1 < columns) {
                      j -= 2;
                      i++;
@@ -92,9 +112,9 @@ public class GameView extends AbstractSimView implements View {
                      j++;
                   }
                }
-                content.addComponent(grid);
-                content.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
-                log.info("Clause " + parameter + " loaded");
+               content.addComponent(grid);
+               content.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
+               log.info("Clause " + parameter + " loaded");
             }
         }
     }

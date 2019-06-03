@@ -136,9 +136,7 @@ public class CreateClauseView extends AbstractSimView implements View {
                         build(contentLayout, viewChangeEvent);
                     });
 
-                    Button reloadButton = new MButton(getString("createClause-reload-button")).withListener(click -> {
-                        build(contentLayout, viewChangeEvent);
-                    });
+                    Button reloadButton = new MButton(getString("createClause-reload-button")).withListener(click -> build(contentLayout, viewChangeEvent));
                     horizontalLayout.addComponents(createButton, reloadButton);
                     horizontalLayout1.addComponent(grid);
                 }

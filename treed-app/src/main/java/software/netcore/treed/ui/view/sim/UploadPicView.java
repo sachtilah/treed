@@ -88,7 +88,6 @@ public class UploadPicView extends AbstractSimView implements View {
            content.addComponent(audio);
            content.setComponentAlignment(audio, Alignment.MIDDLE_CENTER);
            uploadAudio.setCaption(succeededEvent.getFilename());
-           audio.setShowControls(true);
            audio.play();
         });
         content.addComponent(uploadAudio);

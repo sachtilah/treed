@@ -27,10 +27,9 @@ public class SimHomeScreenView extends AbstractSimView implements View {
 
     @Override
     protected void build(MVerticalLayout contentLayout, ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        MVerticalLayout content = contentLayout;
-        content.removeAllComponents();
-        content.setMargin(true);
-        content.setSpacing(true);
+        contentLayout.removeAllComponents();
+        contentLayout.setMargin(true);
+        contentLayout.setSpacing(true);
 
 //        HorizontalLayout bar = new HorizontalLayout();
 //        bar.setWidth("100%");
@@ -76,12 +75,12 @@ public class SimHomeScreenView extends AbstractSimView implements View {
             verticalLayout.setComponentAlignment(clauseButton, Alignment.MIDDLE_CENTER);
         }
         if (verticalLayout.getComponentCount() == 0) {
-            content.add(new MVerticalLayout()
+            contentLayout.add(new MVerticalLayout()
                             .withSizeUndefined()
                             .add(new MLabel("No clause created yet."))
                     , Alignment.TOP_CENTER);
         } else {
-            content.addComponent(verticalLayout);
+            contentLayout.addComponent(verticalLayout);
         }
     }
 }
