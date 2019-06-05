@@ -1,5 +1,6 @@
 package software.netcore.treed.ui.view.sim;
 
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.data.HasValue;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
@@ -11,26 +12,33 @@ import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.sim.ClauseService;
+import software.netcore.treed.business.sim.PiktogramService;
 import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.Property;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
+@StyleSheet("VAADIN/themes/treed/styles.scss")
 @SpringView(name = software.netcore.treed.ui.view.sim.GameView.VIEW_NAME)
 public class GameView extends AbstractSimView implements View {
 
     public static final String VIEW_NAME = "/game";
     private String parameter;
     private final ClauseService clauseService;
+    private final PiktogramService piktogramService;
 
-    public GameView(ClauseService clauseService) {
+    public GameView(ClauseService clauseService, final PiktogramService piktogramService) {
         this.clauseService = clauseService;
+       this.piktogramService = piktogramService;
     }
 
     @Override
@@ -71,10 +79,8 @@ public class GameView extends AbstractSimView implements View {
 
                Iterable<Piktogram> piktograms = clause.getPiktograms();
                final Collection<Piktogram> piktogramCollection = new ArrayList<>();
-               for (Piktogram piktogram : piktograms) {
-                  System.out.println(piktogram.getTerm());
+               for (Piktogram piktogram : piktograms)
                   piktogramCollection.add(piktogram);
-               }
                Iterator<Piktogram> iteratorPic = piktograms.iterator();
 
                int i = 0, j = 0;
@@ -91,7 +97,14 @@ public class GameView extends AbstractSimView implements View {
 
                   int finalJ = j;
                   int finalI = i;
-                  grid.addComponent(new MTextField("").withValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
+
+                  Iterable<Piktogram> pictograms = piktogramService.getPics();
+                  final List<String> piktogramList = new ArrayList<>();
+                  for (Piktogram piktogram : pictograms)
+                     piktogramList.add(piktogram.getTerm());
+
+                  ComboBox<String> field = new ComboBox<>("");
+                  field.addValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
                      if (iterPic.getTerm().equals(valueChangeEvent.getValue())) {
                         grid.removeComponent(valueChangeEvent.getComponent());
                         grid.addComponent(new Label(iterPic.getTerm()));
@@ -101,7 +114,18 @@ public class GameView extends AbstractSimView implements View {
                         if (c[0] == clause.getPiktograms().size())
                            Notification.show(getString("gameView-notification-win"));
                      } else valueChangeEvent.getComponent().addStyleName("wrongTerm");
-                  }), i, j);
+                  });
+                  field.setItems(piktogramList);
+                  field.addStyleName("comboBox");
+                  field.setEmptySelectionAllowed(false);
+                  field.setItemCaptionGenerator(String::toString);
+                  field.setNewItemProvider(inputString -> {
+                     String newPic;
+                     newPic = inputString;
+                     field.setItems(piktogramList);
+                     return Optional.of(newPic);
+                  }) ;
+                  grid.addComponent(field, i, j);
 
                   if(i+1 < columns) {
                      j -= 2;
@@ -118,5 +142,4 @@ public class GameView extends AbstractSimView implements View {
             }
         }
     }
-
 }
