@@ -9,7 +9,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
-import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.business.sim.PiktogramService;
@@ -17,7 +16,6 @@ import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.themes.ValoTheme;
-import com.vaadin.v7.data.Property;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -53,9 +51,9 @@ public class GameView extends AbstractSimView implements View {
     }
 
     public void build(String parameter, MVerticalLayout contentLayout) {
-        VerticalLayout content = new MVerticalLayout();
-        contentLayout.removeAllComponents();
-        contentLayout.addComponent(content);
+         VerticalLayout content = new MVerticalLayout();
+         contentLayout.removeAllComponents();
+         contentLayout.addComponent(content);
 
         Label clauseNameLabel = new Label("<h1>" + parameter + "</h1>", ContentMode.HTML);
         content.addComponent(clauseNameLabel);
@@ -92,6 +90,8 @@ public class GameView extends AbstractSimView implements View {
                   j++;
                   Audio audio = new Audio("", new StreamResource((StreamResource.StreamSource) () ->
                         new ByteArrayInputStream(iterPic.getBytesAudio()), ""));
+                  audio.play();
+                  System.out.println(iterPic.getBytesAudio().toString());
                   grid.addComponent(audio, i, j);
                   j++;
 
@@ -130,6 +130,7 @@ public class GameView extends AbstractSimView implements View {
                   if(i+1 < columns) {
                      j -= 2;
                      i++;
+                     //coment
                   }
                   else if(i < columns) {
                      i = 0;
