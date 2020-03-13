@@ -8,9 +8,9 @@ import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.data.schema.sim.Clause;
-
 import java.util.ArrayList;
 import java.util.Collection;
+
 
 /**
  * @since v. 1.0.0
@@ -20,7 +20,6 @@ public class SimHomeScreenView extends AbstractSimView implements View {
 
     public static final String VIEW_NAME = "/loged/home";
     private final ClauseService clauseService;
-
     public SimHomeScreenView(ClauseService clauseService) {
         this.clauseService = clauseService;
     }
@@ -74,6 +73,12 @@ public class SimHomeScreenView extends AbstractSimView implements View {
             verticalLayout.addComponent(clauseButton);
             verticalLayout.setComponentAlignment(clauseButton, Alignment.MIDDLE_CENTER);
         }
+        Button clauseButton = new Button("kinect");
+        clauseButton.addClickListener((Button.ClickListener) event ->
+              getUI().getNavigator().navigateTo(KinectView.VIEW_NAME));
+        verticalLayout.addComponent(clauseButton);
+        verticalLayout.setComponentAlignment(clauseButton, Alignment.MIDDLE_CENTER);
+
         if (verticalLayout.getComponentCount() == 0) {
             contentLayout.add(new MVerticalLayout()
                             .withSizeUndefined()

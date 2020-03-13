@@ -6,18 +6,16 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.viritin.button.MButton;
-import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.business.sim.PiktogramService;
 import software.netcore.treed.data.schema.sim.Clause;
 import software.netcore.treed.data.schema.sim.Piktogram;
 import com.vaadin.navigator.View;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import com.vaadin.v7.data.Property;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -111,21 +109,23 @@ public class GameView extends AbstractSimView implements View {
                         c[0]++;
                         grid.getComponent(finalI, finalJ).setStyleName(ValoTheme.LABEL_SUCCESS);
                         grid.setComponentAlignment(grid.getComponent(finalI, finalJ), Alignment.MIDDLE_CENTER);
-                        if (c[0] == clause.getPiktograms().size())
-                           Notification.show(getString("gameView-notification-win"));
+                        if (c[0] == clause.getPiktograms().size()) {
+                           Notification notification = new Notification(getString("gameView-notification-win"));
+                           notification.setDelayMsec(2000);
+                        }
                      } else valueChangeEvent.getComponent().addStyleName("wrongTerm");
                   });
                   field.setItems(piktogramList);
                   field.addStyleName("comboBox");
                   field.setEmptySelectionAllowed(false);
                   field.setItemCaptionGenerator(String::toString);
-                  field.setNewItemProvider(inputString -> {
+/*                  field.setNewItemProvider(inputString -> {
                      String newPic;
                      newPic = inputString;
                      field.setItems(piktogramList);
                      return Optional.of(newPic);
                   }) ;
-                  grid.addComponent(field, i, j);
+*/                  grid.addComponent(field, i, j);
 
                   if(i+1 < columns) {
                      j -= 2;

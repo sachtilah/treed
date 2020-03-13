@@ -7,9 +7,9 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
+
 import software.netcore.treed.api.AbstractRestrictedEnterView;
 import software.netcore.treed.data.schema.Account;
-import software.netcore.treed.data.schema.AccountRole;
 import software.netcore.treed.ui.AuthenticationProvider;
 import software.netcore.treed.ui.view.TreedDashboard;
 
