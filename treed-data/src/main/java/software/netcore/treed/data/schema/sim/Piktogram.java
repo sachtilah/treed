@@ -26,6 +26,11 @@ public class Piktogram extends AbstractEntity {
     @Column(name = "bytesAudio", length = 5 * 1024 * 1024)
     private byte[] bytesAudio;
 
+    @Lob
+    @Column(name = "bytesVideo", length = 5 * 1024 * 1024)
+    private byte[] bytesVideo;
+
+
     @Column(name = "term", nullable = false)
     private String term;
 

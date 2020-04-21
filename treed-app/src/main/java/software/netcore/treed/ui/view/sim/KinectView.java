@@ -1,29 +1,10 @@
-/*
- * -----------------------------------------------------------------------\
- * Lumeer
- *
- * Copyright (C) 2016 - 2017 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * -----------------------------------------------------------------------/
- */
 package software.netcore.treed.ui.view.sim;
+/*
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MVerticalLayout;
@@ -31,14 +12,12 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 import java.util.Date;
 
 import edu.ufl.digitalworlds.j4k.J4KSDK;
-import edu.ufl.digitalworlds.gui.DWApp;
 
+import edu.ufl.digitalworlds.j4k.Skeleton;
+import lombok.SneakyThrows;
 import software.netcore.treed.business.sim.ClauseService;
-
-/**
- * @author Martin Večeřa <marvenec@gmail.com>
- */
-
+*/
+/*
 @SpringView(name = software.netcore.treed.ui.view.sim.KinectView.VIEW_NAME)
 public class KinectView extends AbstractSimView implements View {
 
@@ -47,19 +26,26 @@ public class KinectView extends AbstractSimView implements View {
       int counter = 0;
       long time = 0;
 
+
+      @SneakyThrows
       @Override
       public void onSkeletonFrameEvent(boolean[] skeleton_tracked, float[] positions, float[] orientations, byte[] joint_status) {
-         System.out.println("A new skeleton frame was received.");
+
+         for(int i = 0; i<this.getMaxNumberOfSkeletons(); i++)
+               Skeleton.getSkeleton(i, skeleton_tracked, positions,orientations,joint_status,this);
+
+         //System.out.println("A new skeleton frame was received: " + skeleton_tracked + ", " + positions + ", " + orientations + ", " + joint_status);
       }
 
       @Override
       public void onColorFrameEvent(byte[] color_frame) {
-         System.out.println("A new color frame was received.");
+         int counter = 0;
+         //System.out.print("A new color frame was received: ");
       }
 
       @Override
       public void onDepthFrameEvent(short[] depth_frame, byte[] body_index, float[] xyz, float[] uv) {
-         System.out.println("A new depth frame was received.");
+         //System.out.println("A new depth frame was received: " + depth_frame + ", " + body_index + ", " + xyz + ", " + uv);
 
          if (counter == 0) {
             time = new Date().getTime();
@@ -69,7 +55,7 @@ public class KinectView extends AbstractSimView implements View {
 
       public static void doIt() {
 
-         if (System.getProperty("os.arch").toLowerCase().indexOf("64") < 0) {
+         if (!System.getProperty("os.arch").toLowerCase().contains("64")) {
             System.out.println("WARNING: You are running a 32bit version of Java.");
             System.out.println("This may reduce significantly the performance of this application.");
             System.out.println("It is strongly adviced to exit this program and install a 64bit version of Java.\n");
@@ -81,7 +67,7 @@ public class KinectView extends AbstractSimView implements View {
 
          //Sleep for 10 seconds.
          try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
          } catch (InterruptedException e) {
          }
 
@@ -115,4 +101,4 @@ public class KinectView extends AbstractSimView implements View {
       KinectView2.doIt();
 
    }
-}
+}*/

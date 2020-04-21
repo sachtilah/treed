@@ -76,13 +76,15 @@ public class CreateClauseView extends AbstractSimView implements View {
                 int counter = 0;
                 int counterImage = 0;
                 int counterAudio = 0;
+                int counterVideo = 0;
                 Collection<Piktogram> collection = new ArrayList<>();
 
                 String[] words = clauseField.getValue().split("\\s+");
-                GridLayout grid = new GridLayout(columns, rows * 3);
-                grid.removeAllComponents();
+
+                GridLayout mainGrid = new GridLayout(columns, rows);
+                mainGrid.removeAllComponents();
                 if (numberOfWords == words.length) {
-                    for (int j = 1; j <= rows * 3; j++) {
+                    for (int j = 0; j < rows; j++) {
                         for (int i = 0; i < columns; i++) {
                             Iterable<Piktogram> piktograms = piktogramService.getPics();
                             Collection<Piktogram> piktogramCollection = new ArrayList<>();
@@ -90,34 +92,46 @@ public class CreateClauseView extends AbstractSimView implements View {
                                 piktogramCollection.add(piktogram);
                             Iterator<Piktogram> iteratorPic = piktograms.iterator();
 
-                            while (iteratorPic.hasNext() && (counterImage < numberOfWords || counterAudio < numberOfWords || counter < numberOfWords)) {
+                            GridLayout grid = new GridLayout(1, 5);
+                            grid.removeAllComponents();
+                            int gridRow = 0;
+
+                            while (iteratorPic.hasNext() && (counterImage < numberOfWords || counterAudio < numberOfWords || counterVideo < numberOfWords || counter < numberOfWords)) {
                                 Piktogram iterPic = iteratorPic.next();
-                                if (j % 3 == 1 ||j == 1) {
-                                    if (iterPic.getTerm().equals(words[counterImage])) {
-                                        grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                                              new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j-1);
-                                        collection.add(iterPic);
-                                        counterImage++;
-                                        break;
-                                    }
-                                }
-                                if (j % 3 == 2 || j == 2) {
-                                    if (iterPic.getTerm().equals(words[counterAudio])) {
+                                if (iterPic.getTerm().equals(words[counterImage])) {
+                                    grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                                          new ByteArrayInputStream(iterPic.getBytesImage()), "")), 0, gridRow);
+                                    collection.add(iterPic);
+                                    counterImage++;
+                                    gridRow++;
+
+                                    if (iterPic.getBytesAudio() != null) {
                                         grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
-                                              new ByteArrayInputStream(iterPic.getBytesAudio()), "")), i, j-1);
+                                              new ByteArrayInputStream(iterPic.getBytesAudio()), "")), 0, gridRow);
                                         counterAudio++;
-                                        break;
+                                        gridRow++;
+                                    }
+                                    if (iterPic.getBytesVideo() != null) {
+                                        grid.addComponent(new Video("", new StreamResource((StreamResource.StreamSource) () ->
+                                              new ByteArrayInputStream(iterPic.getBytesVideo()), "")), 0, gridRow);
+                                        counterVideo++;
+                                        gridRow++;
                                     }
                                 }
-                                if (j % 3 == 0) {
-                                    if (iterPic.getTerm().equals(words[counter])) {
-                                        grid.addComponent(new Label(words[counter]), i, j-1);
-                                        counter++;
-                                        break;
-                                    }
+                                if (iterPic.getTerm().equals(words[counter])) {
+                                    grid.addComponent(new Label(words[counter]), 0, gridRow);
+                                    counter++;
+                                    gridRow++;
                                 }
-                                if (!iteratorPic.hasNext())
+                                if (!iteratorPic.hasNext()) {
                                     isMissing = true;
+                                }
+
+                                if (gridRow >= 2) {
+                                    mainGrid.addComponent(grid, i, j);
+                                    System.out.println(i + ", " + j + ": " + iterPic.getTerm());
+                                    break;
+                                }
                             }
                         }
                     }
@@ -125,6 +139,8 @@ public class CreateClauseView extends AbstractSimView implements View {
                     Notification.show(getString("createClause-notification-not-enough-words"));
                     isMissing = true;
                 }
+
+
                 if (isMissing) {
                     Notification.show(getString("createClause-notification-upload-missing"));
                 } else {
@@ -138,7 +154,7 @@ public class CreateClauseView extends AbstractSimView implements View {
 
                     Button reloadButton = new MButton(getString("createClause-reload-button")).withListener(click -> build(contentLayout, viewChangeEvent));
                     horizontalLayout.addComponents(createButton, reloadButton);
-                    horizontalLayout1.addComponent(grid);
+                    horizontalLayout1.addComponent(mainGrid);
                 }
             }
         });

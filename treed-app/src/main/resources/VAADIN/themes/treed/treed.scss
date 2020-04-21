@@ -8,8 +8,20 @@
     background-color: #77b5f8;
   }
 
+  .comboBox .v-filterselect-button {
+    display: none;
+  }
+
+  .comboBox .v-filterselect-input {
+    padding-right: 0px;
+  }
+
+  .wrongTerm v-filterselect-input .v-disabled{
+    background: #ffcac8!important;
+  }
+
   .wrongTerm{
     border-color: red;
-    background-color: #ffcac8;
+//    background-color: #ffcac8;
   }
 }

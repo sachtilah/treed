@@ -102,10 +102,10 @@ public class EditClauseView extends AbstractSimView implements View {
                             Collection<Piktogram> collection = new ArrayList<>();
 
                             String[] words = clauseField.getValue().split("\\s+");
-                            GridLayout grid = new GridLayout(columns, rows * 2);
-                            grid.removeAllComponents();
+                            GridLayout mainGrid = new GridLayout(columns, rows);
+                            mainGrid.removeAllComponents();
                             if (numberOfWords == words.length) {
-                                for (int j = 0; j < rows * 2; j++) {
+                                for (int j = 0; j < rows; j++) {
                                     for (int i = 0; i < columns; i++) {
                                         Iterable<Piktogram> piktograms = piktogramService.getPics();
                                         Collection<Piktogram> piktogramCollection = new ArrayList<>();
@@ -114,26 +114,45 @@ public class EditClauseView extends AbstractSimView implements View {
                                         }
                                         Iterator<Piktogram> iteratorPic = piktograms.iterator();
 
+                                        GridLayout grid = new GridLayout(1, 5);
+                                        grid.removeAllComponents();
+                                        int gridRow = 0;
+
                                         while ((iteratorPic.hasNext())) {
                                             Piktogram iterPic = iteratorPic.next();
-                                            if (j % 2 == 0) {
-                                                if ((iterPic.getTerm().equals(words[counterImage])) && (counterImage < numberOfWords)) {
-                                                    grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                                                            new ByteArrayInputStream(iterPic.getBytesImage()), "")), i, j);
-                                                    piktogramCollection.add(iterPic);
-                                                    counterImage++;
-                                                    break;
+                                            if ((iterPic.getTerm().equals(words[counterImage])) && (counterImage < numberOfWords)) {
+                                                grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                                                      new ByteArrayInputStream(iterPic.getBytesImage()), "")), 0, gridRow);
+                                                piktogramCollection.add(iterPic);
+                                                counterImage++;
+                                                gridRow++;
+
+                                                if (iterPic.getBytesAudio() != null) {
+                                                    grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
+                                                          new ByteArrayInputStream(iterPic.getBytesAudio()), "")), 0, gridRow);
+                                                    gridRow++;
+                                                }
+                                                if (iterPic.getBytesVideo() != null) {
+                                                    grid.addComponent(new Video("", new StreamResource((StreamResource.StreamSource) () ->
+                                                          new ByteArrayInputStream(iterPic.getBytesVideo()), "")), 0, gridRow);
+                                                    gridRow++;
                                                 }
                                             }
-                                            if (j % 2 == 1) {
-                                                if ((iterPic.getTerm().equals(words[counter])) && (counter < numberOfWords)) {
-                                                    grid.addComponent(new Label(words[counter]), i, j);
-                                                    counter++;
-                                                    break;
-                                                }
+                                            if ((iterPic.getTerm().equals(words[counter])) && (counter < numberOfWords)) {
+
+                                                grid.addComponent(new Label(words[counter]), 0, gridRow);
+                                                counter++;
+                                                gridRow++;
                                             }
-                                            if (!iteratorPic.hasNext())
+                                            if (!iteratorPic.hasNext()) {
                                                 isMissing = true;
+                                            }
+
+                                            if (gridRow >= 2) {
+                                                mainGrid.addComponent(grid, i, j);
+                                                System.out.println(i + ", " + j + ": " + iterPic.getTerm());
+                                                break;
+                                            }
                                         }
                                     }
                                 }
@@ -144,7 +163,7 @@ public class EditClauseView extends AbstractSimView implements View {
                                 addClause(rows, columns, clauseNameField.getValue(), collection);
                                 HorizontalLayout horizontalLayout = new HorizontalLayout();
                                 content.addComponent(horizontalLayout);
-                                horizontalLayout.addComponents(verticalLayout, grid);
+                                horizontalLayout.addComponents(verticalLayout, mainGrid);
                             }
                         }
                     });

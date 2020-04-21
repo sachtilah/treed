@@ -79,7 +79,7 @@ public class UploadPicView extends AbstractSimView implements View {
         content.setComponentAlignment(uploadImage, Alignment.MIDDLE_CENTER);
 
         final Upload uploadAudio = new Upload();
-        uploadAudio.setCaption(getString("uploadPic-select-image-caption"));
+        uploadAudio.setCaption(getString("uploadPic-select-audio-caption"));
         ComponentUploader receiverAudio = new ComponentUploader();
         uploadAudio.setReceiver(receiverAudio);
         uploadAudio.addSucceededListener((Upload.SucceededListener) succeededEvent ->{
@@ -93,11 +93,27 @@ public class UploadPicView extends AbstractSimView implements View {
         content.addComponent(uploadAudio);
         content.setComponentAlignment(uploadAudio, Alignment.MIDDLE_CENTER);
 
+        final Upload uploadVideo = new Upload();
+        uploadVideo.setCaption(getString("uploadPic-select-video-caption"));
+        ComponentUploader receiverVideo = new ComponentUploader();
+        uploadVideo.setReceiver(receiverVideo);
+        uploadVideo.addSucceededListener((Upload.SucceededListener) succeededEvent ->{
+            Video video = new Video("", new StreamResource((StreamResource.StreamSource) () ->
+                  new ByteArrayInputStream(receiverVideo.stream.toByteArray()), succeededEvent.getFilename()));
+            content.addComponent(video);
+            content.setComponentAlignment(video, Alignment.MIDDLE_CENTER);
+            uploadVideo.setCaption(succeededEvent.getFilename());
+            video.play();
+        });
+        content.addComponent(uploadVideo);
+        content.setComponentAlignment(uploadVideo, Alignment.MIDDLE_CENTER);
+
+
         Button createButton = new MButton(getString("uploadPic-create-button")).withListener(clickEvent -> {
             if (termField.getValue().isEmpty())
                 Notification.show(getString("uploadPic-notification-no-term"));
             else {
-                addNewPiktogram(receiverImage.stream.toByteArray(), receiverAudio.stream.toByteArray(), termField.getValue(), termField_en.getValue(),
+                addNewPiktogram(receiverImage.stream.toByteArray(), receiverAudio.stream.toByteArray(), receiverVideo.stream.toByteArray(), termField.getValue(), termField_en.getValue(),
                       termField_ro.getValue(), termField_ru.getValue());
                 Notification.show(getString("uploadPic-notification-successfully-saved"), Notification.Type.ASSISTIVE_NOTIFICATION);
                 build(contentLayout, viewChangeEvent);
@@ -114,11 +130,12 @@ public class UploadPicView extends AbstractSimView implements View {
         content.setComponentAlignment(createButton, Alignment.BOTTOM_CENTER);
     }
 
-    private void addNewPiktogram(byte[] bytesImage, byte[] bytesAudio, String term, String term_en, String term_ro, String term_ru) {
+    private void addNewPiktogram(byte[] bytesImage, byte[] bytesAudio, byte[] bytesVideo, String term, String term_en, String term_ro, String term_ru) {
 
         Piktogram piktogramAdd = new Piktogram();
         piktogramAdd.setBytesImage(bytesImage);
         piktogramAdd.setBytesAudio(bytesAudio);
+        piktogramAdd.setBytesVideo(bytesVideo);
         piktogramAdd.setTerm(term);
         piktogramAdd.setTerm_en(term_en);
         piktogramAdd.setTerm_ro(term_ro);

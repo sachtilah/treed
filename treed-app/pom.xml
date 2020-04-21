@@ -36,6 +36,11 @@
             <artifactId>treed-api</artifactId>
             <version>${treed.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+            <version>2.3.2</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>software.netcore</groupId>-->
             <!--<artifactId>treed-puzzle</artifactId>-->
@@ -76,7 +81,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-server</artifactId>
+            <version>8.5.0</version>
+        </dependency>
         <!-- apache common mails dependencies -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -91,12 +100,12 @@
         <dependency>
             <groupId>org.vaadin.addon</groupId>
             <artifactId>easyuploads</artifactId>
-            <version>8.0.0</version>
+            <version>8.0.1</version>
         </dependency>
        <dependency>
           <groupId>com.vaadin</groupId>
           <artifactId>vaadin-spring</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.1</version>
        </dependency>
        <dependency>
           <groupId>org.vaadin.addons</groupId>

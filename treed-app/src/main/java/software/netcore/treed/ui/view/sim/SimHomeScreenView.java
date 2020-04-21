@@ -73,11 +73,11 @@ public class SimHomeScreenView extends AbstractSimView implements View {
             verticalLayout.addComponent(clauseButton);
             verticalLayout.setComponentAlignment(clauseButton, Alignment.MIDDLE_CENTER);
         }
-        Button clauseButton = new Button("kinect");
-        clauseButton.addClickListener((Button.ClickListener) event ->
-              getUI().getNavigator().navigateTo(KinectView.VIEW_NAME));
-        verticalLayout.addComponent(clauseButton);
-        verticalLayout.setComponentAlignment(clauseButton, Alignment.MIDDLE_CENTER);
+        //Button clauseButton = new Button("kinect");
+        //clauseButton.addClickListener((Button.ClickListener) event ->
+          //    getUI().getNavigator().navigateTo(KinectView.VIEW_NAME));
+        //verticalLayout.addComponent(clauseButton);
+        //verticalLayout.setComponentAlignment(clauseButton, Alignment.MIDDLE_CENTER);
 
         if (verticalLayout.getComponentCount() == 0) {
             contentLayout.add(new MVerticalLayout()
