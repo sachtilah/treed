@@ -100,8 +100,10 @@ public class GameView extends AbstractSimView implements View {
                int gridRow = 0;
                grid.removeAllComponents();
                Piktogram iterPic = iteratorPic.next();
-               grid.addComponent(new Image("", new StreamResource((StreamResource.StreamSource) () ->
-                     new ByteArrayInputStream(iterPic.getBytesImage()), "")), 0, gridRow);
+               Image image = new Image("", new StreamResource((StreamResource.StreamSource) () ->
+                     new ByteArrayInputStream(iterPic.getBytesImage()), ""));
+               grid.addComponent(image, 0, gridRow);
+               grid.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
                gridRow++;
                try {
                   if(iterPic.getBytesAudio() != null) {
@@ -115,6 +117,7 @@ public class GameView extends AbstractSimView implements View {
                      audio.setSource(resource);
                      audio.play();
                      grid.addComponent(audio, 0, gridRow);
+                     grid.setComponentAlignment(audio, Alignment.MIDDLE_CENTER);
                      gridRow++;
                   }
                } catch (IOException ex) {
@@ -133,11 +136,20 @@ public class GameView extends AbstractSimView implements View {
                      video.setSource(resource);
                      video.play();
                      grid.addComponent(video, 0, gridRow);
+                     grid.setComponentAlignment(video, Alignment.MIDDLE_CENTER);
                      gridRow++;
                   }
                } catch (IOException ex) {
                   ex.printStackTrace();
                }
+
+               Button picButton = new MButton(getString("gameView-show-pic"));
+               picButton.addClickListener((Button.ClickListener) event ->
+                     getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME));
+               grid.addComponent(picButton, 0, gridRow);
+               grid.setComponentAlignment(picButton, Alignment.BOTTOM_CENTER);
+               gridRow++;
+
 
                int finalGridRow = gridRow;
 
@@ -151,10 +163,11 @@ public class GameView extends AbstractSimView implements View {
                field.addValueChangeListener((HasValue.ValueChangeListener<String>) valueChangeEvent -> {
                   if (iterPic.getTerm().equals(valueChangeEvent.getValue())) {
                      grid.removeComponent(valueChangeEvent.getComponent());
-                     grid.addComponent(new Label(iterPic.getTerm()),0, finalGridRow);
+                     Label label = new Label(iterPic.getTerm());
+                     grid.addComponent(label, 0, finalGridRow);
                      c[0]++;
                      grid.getComponent(0, finalGridRow).setStyleName(ValoTheme.LABEL_SUCCESS);
-                     grid.setComponentAlignment(grid.getComponent(0, finalGridRow), Alignment.MIDDLE_CENTER);
+                     grid.setComponentAlignment(label, Alignment.BOTTOM_CENTER);
                      if (c[0] == clause.getPiktograms().size()) {
                         Notification notification = new Notification(getString("gameView-notification-win"));
                         notification.show(getString("gameView-notification-win"));
@@ -177,6 +190,7 @@ public class GameView extends AbstractSimView implements View {
 
 */
                   grid.addComponent(field, 0, gridRow);
+                  grid.setComponentAlignment(field, Alignment.BOTTOM_CENTER);
                   mainGrid.addComponent(grid, i, j);
                if(i<columns-1)
                   i++;
