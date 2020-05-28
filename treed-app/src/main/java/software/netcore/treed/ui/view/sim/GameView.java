@@ -3,14 +3,11 @@ package software.netcore.treed.ui.view.sim;
 import com.vaadin.data.HasValue;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.ExternalResource;
-import com.vaadin.server.Page;
 import com.vaadin.server.Resource;
 import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import lombok.extern.slf4j.Slf4j;
 
 import org.vaadin.viritin.button.MButton;
@@ -86,7 +83,6 @@ public class GameView extends AbstractSimView implements View {
             GridLayout mainGrid = new GridLayout(columns, rows);
             mainGrid.removeAllComponents();
 
-
             Iterable<Piktogram> piktograms = clause.getPiktograms();
             final Collection<Piktogram> piktogramCollection = new ArrayList<>();
             for (Piktogram piktogram : piktograms)
@@ -106,16 +102,21 @@ public class GameView extends AbstractSimView implements View {
                grid.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
                gridRow++;
                try {
-                  if(iterPic.getBytesAudio() != null) {
-                     File outputFile = new File("C:/ProgramData/Treed/audio/" + iterPic.getTerm() + ".mp3");
+                  if(iterPic.getBytesAudio().length != 0) {
+                     File outputFile = new File("C:/ProgramData/Treed/" + iterPic.getTerm() + ".mp3");
                      FileOutputStream fileoutputstream = new FileOutputStream(outputFile);
                      fileoutputstream.write(iterPic.getBytesAudio());
                      fileoutputstream.close();
 
                      Audio audio = new Audio();
-                     final Resource resource = new ExternalResource("C:/ProgramData/Treed/audio/" + iterPic.getTerm() + ".mp3");
+                     final Resource resource = new ExternalResource("file:///D:/Škola/treed/piktograms/audio/" + iterPic.getTerm() + ".mp3");
                      audio.setSource(resource);
                      audio.play();
+                     audio.setShowControls(true);
+                     audio.setVisible(true);
+                     audio.setAutoplay(true);
+                     audio.setHtmlContentAllowed(true);
+                     audio.setAltText("NEPREHRAAM");
                      grid.addComponent(audio, 0, gridRow);
                      grid.setComponentAlignment(audio, Alignment.MIDDLE_CENTER);
                      gridRow++;
@@ -125,14 +126,14 @@ public class GameView extends AbstractSimView implements View {
                }
 
                try {
-                  if(iterPic.getBytesVideo() != null) {
-                     File outputFile = new File("C:/ProgramData/Treed/audio/" + iterPic.getTerm() + ".mp4");
+                  if(iterPic.getBytesVideo().length != 0) {
+                     File outputFile = new File("C:/ProgramData/Treed/" + iterPic.getTerm() + ".mp4");
                      FileOutputStream fileoutputstream = new FileOutputStream(outputFile);
                      fileoutputstream.write(iterPic.getBytesVideo());
                      fileoutputstream.close();
 
                      Video video = new Video();
-                     final Resource resource = new ExternalResource("C:/ProgramData/Treed/audio/" + iterPic.getTerm() + ".mp4");
+                     final Resource resource = new ExternalResource("C:\\ProgramData\\Treed\\" + iterPic.getTerm() + ".mp4");
                      video.setSource(resource);
                      video.play();
                      grid.addComponent(video, 0, gridRow);
@@ -144,8 +145,20 @@ public class GameView extends AbstractSimView implements View {
                }
 
                Button picButton = new MButton(getString("gameView-show-pic"));
-               picButton.addClickListener((Button.ClickListener) event ->
-                     getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME));
+               picButton.addClickListener(clickEvent -> {
+                       //SignLanguageView signLanguageView = new SignLanguageView();
+                        //signLanguageView.run();
+                  try {
+                     String path = new File("").getAbsolutePath() + "\\treed-app\\src\\main\\resources\\model\\hummy.exe";
+                     File file = new File(path);
+                     if (! file.exists()) {
+                        throw new IllegalArgumentException("The file " + path + " does not exist");
+                     }
+                     Process p = Runtime.getRuntime().exec(file.getAbsolutePath());
+                  } catch (IOException e) {
+                     e.printStackTrace();
+                  }
+                     });
                grid.addComponent(picButton, 0, gridRow);
                grid.setComponentAlignment(picButton, Alignment.BOTTOM_CENTER);
                gridRow++;

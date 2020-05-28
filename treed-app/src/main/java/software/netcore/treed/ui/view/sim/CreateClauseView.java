@@ -2,12 +2,20 @@ package software.netcore.treed.ui.view.sim;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ExternalResource;
+import com.vaadin.server.Resource;
 import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+import sun.audio.AudioPlayer;
+
 import software.netcore.treed.business.sim.PiktogramService;
 import software.netcore.treed.business.sim.ClauseService;
 import software.netcore.treed.data.schema.sim.Clause;
@@ -16,6 +24,7 @@ import software.netcore.treed.data.schema.sim.Piktogram;
 import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -105,13 +114,15 @@ public class CreateClauseView extends AbstractSimView implements View {
                                     counterImage++;
                                     gridRow++;
 
-                                    if (iterPic.getBytesAudio() != null) {
+                                    if (iterPic.getBytesAudio().length != 0) {
+
+
                                         grid.addComponent(new Audio("", new StreamResource((StreamResource.StreamSource) () ->
-                                              new ByteArrayInputStream(iterPic.getBytesAudio()), "")), 0, gridRow);
+                                              new ByteArrayInputStream(iterPic.getBytesAudio()), iterPic.getTerm())), 0, gridRow);
                                         counterAudio++;
                                         gridRow++;
                                     }
-                                    if (iterPic.getBytesVideo() != null) {
+                                    if (iterPic.getBytesVideo().length != 0) {
                                         grid.addComponent(new Video("", new StreamResource((StreamResource.StreamSource) () ->
                                               new ByteArrayInputStream(iterPic.getBytesVideo()), "")), 0, gridRow);
                                         counterVideo++;
@@ -120,16 +131,13 @@ public class CreateClauseView extends AbstractSimView implements View {
                                 }
                                 if (iterPic.getTerm().equals(words[counter])) {
                                     grid.addComponent(new Label(words[counter]), 0, gridRow);
+                                    grid.setComponentAlignment(grid.getComponent(0, gridRow), Alignment.MIDDLE_CENTER);
                                     counter++;
                                     gridRow++;
                                 }
-                                if (!iteratorPic.hasNext()) {
-                                    isMissing = true;
-                                }
-
+                                
                                 if (gridRow >= 2) {
                                     mainGrid.addComponent(grid, i, j);
-                                    System.out.println(i + ", " + j + ": " + iterPic.getTerm());
                                     break;
                                 }
                             }

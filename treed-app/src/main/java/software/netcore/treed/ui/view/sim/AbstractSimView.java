@@ -25,12 +25,12 @@ public abstract class AbstractSimView extends AbstractRestrictedEnterView {
         Account account = AuthenticationProvider.getLoggedAccount();
 
         MenuBar menuBar = new MenuBar();
-        menuBar.addItem("Home", command -> getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME));
-        menuBar.addItem("Upload", command -> getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
+        menuBar.addItem(getString("navigationBar-home-button"), command -> getUI().getNavigator().navigateTo(SimHomeScreenView.VIEW_NAME));
+        menuBar.addItem(getString("navigationBar-upload-button"), command -> getUI().getNavigator().navigateTo(UploadPicView.VIEW_NAME));
 
 //        if (Objects.nonNull(account) && AccountRole.TEACHER.equals(account.getRole())) {
-            menuBar.addItem("Create clause", command -> getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
-            menuBar.addItem("Edit clause", command -> getUI().getNavigator().navigateTo(EditClauseView.VIEW_NAME));
+            menuBar.addItem(getString("navigationBar-create-clause-button"), command -> getUI().getNavigator().navigateTo(CreateClauseView.VIEW_NAME));
+            menuBar.addItem(getString("navigationBar-edit-clause-button"), command -> getUI().getNavigator().navigateTo(EditClauseView.VIEW_NAME));
 //        }
 
         return new MHorizontalLayout()
@@ -45,7 +45,7 @@ public abstract class AbstractSimView extends AbstractRestrictedEnterView {
                                         .withListener(event -> getUI().getNavigator().navigateTo(TreedDashboard.VIEW_NAME)))
                                 .add(menuBar)
                                 .add(new MButton()
-                                        .withCaption("Logout")
+                                        .withCaption(getString("navigationBar-logout-button"))
                                         .withIcon(VaadinIcons.SIGN_OUT)
                                         .withStyleName(ValoTheme.BUTTON_BORDERLESS)
                                         .withListener(event -> AuthenticationProvider.logout()), Alignment.MIDDLE_RIGHT)

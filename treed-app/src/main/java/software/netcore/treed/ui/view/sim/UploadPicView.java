@@ -2,10 +2,14 @@ package software.netcore.treed.ui.view.sim;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.StreamResource;
+import com.vaadin.shared.ui.PreloadMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.gwtav.ContentLengthConnectorResource;
+import org.vaadin.gwtav.GwtVideo;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MVerticalLayout;
@@ -17,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
@@ -96,25 +101,45 @@ public class UploadPicView extends AbstractSimView implements View {
         final Upload uploadVideo = new Upload();
         uploadVideo.setCaption(getString("uploadPic-select-video-caption"));
         ComponentUploader receiverVideo = new ComponentUploader();
-        uploadVideo.setReceiver(receiverVideo);
+            uploadVideo.setReceiver(receiverVideo);
         uploadVideo.addSucceededListener((Upload.SucceededListener) succeededEvent ->{
+            /*GwtVideo video = new GwtVideo();
+            video.setPreload(PreloadMode.NONE);
+            video.setWidth("240px");
+            video.setHeight("135px");
+            ClassResource videoResource = new ClassResource(receiverVideo.toString());
+            video.setSource(videoResource);
+*/
             Video video = new Video("", new StreamResource((StreamResource.StreamSource) () ->
                   new ByteArrayInputStream(receiverVideo.stream.toByteArray()), succeededEvent.getFilename()));
+            video.setWidth("200px");
+            video.setHeight("150px");
             content.addComponent(video);
             content.setComponentAlignment(video, Alignment.MIDDLE_CENTER);
             uploadVideo.setCaption(succeededEvent.getFilename());
-            video.play();
         });
         content.addComponent(uploadVideo);
         content.setComponentAlignment(uploadVideo, Alignment.MIDDLE_CENTER);
 
+        byte[] empty = new byte[0];
 
         Button createButton = new MButton(getString("uploadPic-create-button")).withListener(clickEvent -> {
-            if (termField.getValue().isEmpty())
+            if (termField.getValue().isEmpty()) {
                 Notification.show(getString("uploadPic-notification-no-term"));
-            else {
-                addNewPiktogram(receiverImage.stream.toByteArray(), receiverAudio.stream.toByteArray(), receiverVideo.stream.toByteArray(), termField.getValue(), termField_en.getValue(),
-                      termField_ro.getValue(), termField_ru.getValue());
+            } else {
+                if (receiverAudio.stream == null && receiverVideo.stream != null) {
+                    addNewPiktogram(receiverImage.stream.toByteArray(), empty, receiverVideo.stream.toByteArray(), termField.getValue(), termField_en.getValue(),
+                          termField_ro.getValue(), termField_ru.getValue());
+                } else if (receiverVideo.stream == null && receiverAudio.stream != null) {
+                    addNewPiktogram(receiverImage.stream.toByteArray(), receiverAudio.stream.toByteArray(), empty, termField.getValue(), termField_en.getValue(),
+                          termField_ro.getValue(), termField_ru.getValue());
+                } else if (receiverAudio.stream == null && receiverVideo.stream == null) {
+                    addNewPiktogram(receiverImage.stream.toByteArray(), empty, empty, termField.getValue(), termField_en.getValue(),
+                          termField_ro.getValue(), termField_ru.getValue());
+                } else {
+                    addNewPiktogram(receiverImage.stream.toByteArray(), receiverAudio.stream.toByteArray(), receiverVideo.stream.toByteArray(), termField.getValue(), termField_en.getValue(),
+                          termField_ro.getValue(), termField_ru.getValue());
+                }
                 Notification.show(getString("uploadPic-notification-successfully-saved"), Notification.Type.ASSISTIVE_NOTIFICATION);
                 build(contentLayout, viewChangeEvent);
             }

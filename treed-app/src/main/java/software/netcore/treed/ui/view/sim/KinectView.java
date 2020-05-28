@@ -1,5 +1,4 @@
 package software.netcore.treed.ui.view.sim;
-/*
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -12,27 +11,25 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 import java.util.Date;
 
 import edu.ufl.digitalworlds.j4k.J4KSDK;
-
 import edu.ufl.digitalworlds.j4k.Skeleton;
 import lombok.SneakyThrows;
 import software.netcore.treed.business.sim.ClauseService;
-*/
-/*
+
 @SpringView(name = software.netcore.treed.ui.view.sim.KinectView.VIEW_NAME)
 public class KinectView extends AbstractSimView implements View {
 
-   static class KinectView2 extends J4KSDK {
+   static class Kinect extends J4KSDK {
 
       int counter = 0;
       long time = 0;
-
 
       @SneakyThrows
       @Override
       public void onSkeletonFrameEvent(boolean[] skeleton_tracked, float[] positions, float[] orientations, byte[] joint_status) {
 
-         for(int i = 0; i<this.getMaxNumberOfSkeletons(); i++)
-               Skeleton.getSkeleton(i, skeleton_tracked, positions,orientations,joint_status,this);
+         for (int i = 0; i < this.getMaxNumberOfSkeletons(); i++) {
+            Skeleton.getSkeleton(i, skeleton_tracked, positions, orientations, joint_status, this);
+         }
 
          //System.out.println("A new skeleton frame was received: " + skeleton_tracked + ", " + positions + ", " + orientations + ", " + joint_status);
       }
@@ -62,7 +59,7 @@ public class KinectView extends AbstractSimView implements View {
          }
 
          System.out.println("This program will run for 10 seconds.");
-         KinectView2 kinect = new KinectView2();
+         Kinect kinect = new Kinect();
          kinect.start(J4KSDK.COLOR | J4KSDK.DEPTH | J4KSDK.SKELETON);
 
          //Sleep for 10 seconds.
@@ -98,7 +95,7 @@ public class KinectView extends AbstractSimView implements View {
                   .add(new MLabel("No clause created yet."))
             , Alignment.TOP_CENTER);
 
-      KinectView2.doIt();
+      Kinect.doIt();
 
    }
-}*/
+}

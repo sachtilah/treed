@@ -66,7 +66,9 @@ public class RegistrationView extends AbstractFreeEnterView implements View {
         MButton backToLoginViewButton = new MButton()
                 .withCaption(getString("registration-back-to-login-button"))
                 .withStyleName(ValoTheme.BUTTON_LINK, ValoTheme.BUTTON_BORDERLESS, ValoTheme.BUTTON_TINY)
-                .withListener(event -> getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME));
+                .withListener(event ->{
+                    getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
+                });
 
         MButton createAccountButton = new MButton()
                 .withCaption(getString("registration-create-account-button"))
@@ -155,6 +157,9 @@ public class RegistrationView extends AbstractFreeEnterView implements View {
             Account acc = binder.getBean();
             boolean created = accountService.createAccount(acc);
             if (created) {
+                Notification notification = new Notification(getString("registration-notification-success"));
+                notification.show(getString("registration-notification-success"));
+                notification.setDelayMsec(5000);
                 getUI().getNavigator().navigateTo(LoginAttemptView.VIEW_NAME);
             } else {
                 Notification.show(getString("registration-notification-invalid"));
